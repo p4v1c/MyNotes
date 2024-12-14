@@ -17,8 +17,6 @@ seo:
   noindex: false # false (default) or true
 ---
 
-
-
 - Command Injection/Execution :
 ```sh
 #Both Unix and Windows supported

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Web/JWT.md",
+                "file": "blog/example/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "JWT"
+              "title": "index"
             }
           }
         ]
@@ -93,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/Web/JWT.md",
+                "file": "blog/example/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for JWT"
+              "title": "Backlinks for index"
             }
           },
           {
@@ -112,12 +112,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/Web/JWT.md",
+                "file": "blog/example/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from JWT"
+              "title": "Outgoing links from index"
             }
           },
           {
@@ -139,10 +139,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/Web/JWT.md"
+                "file": "blog/example/index.md"
               },
               "icon": "lucide-list",
-              "title": "Outline of JWT"
+              "title": "Outline of index"
             }
           }
         ]
@@ -164,23 +164,24 @@
   },
   "active": "13fa4e41588b390d",
   "lastOpenFiles": [
-    "notes/Web/Path traversal.md",
-    "notes/Web/SSRF.md",
+    "blog/_index.md",
+    "notes/_index.md",
+    "notes/Web/XXE Injection.md",
     "notes/Web/XSS.md",
+    "notes/Web/Wordpress.md",
     "notes/Web/Web Cache.md",
+    "notes/Web/SSRF.md",
+    "notes/Web/Path traversal.md",
+    "notes/Web/JWT.md",
+    "notes/Web/Graphsql.md",
+    "notes/Web/Git.md",
     "notes/Web/File Upload.md",
     "notes/Web/Deserialization.md",
-    "notes/Web/Authentication.md",
-    "notes/Web/Access Control.md",
-    "notes/Web/Graphsql.md",
-    "notes/Web/JWT.md",
     "notes/Web/Command injection.md",
-    "notes/Web/Wordpress.md",
-    "notes/Web/XXE Injection.md",
+    "notes/Web/Access Control.md",
+    "notes/Web/Authentication.md",
     "notes/Web/Race Condition.md",
-    "notes/Web/Git.md",
     "notes/Web/API Testing.md",
-    "notes/_index.md",
     "_index.md",
     "notes/Lab/HTB/Cicada.md",
     "notes/Lab/HTB/Caption.md",
@@ -197,7 +198,6 @@
     "notes/Assets/upload 7.png",
     "notes/Assets/upload 4.png",
     "notes/AD/AD CS.md",
-    "blog/example/index.md",
-    "blog/_index.md"
+    "blog/example/index.md"
   ]
 }
