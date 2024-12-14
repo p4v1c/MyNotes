@@ -26,6 +26,7 @@ seo:
 ```json
 "roleid":1 --> "roleid":2
 ```
+
 - You can add  `X-Original-URL`: `URL` or `X-Rewrite-URL` to override the URL in the original request .
 
 - You can also change the request method for example GET to POST 

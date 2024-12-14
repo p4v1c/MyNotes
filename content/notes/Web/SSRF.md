@@ -16,24 +16,12 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
-
-**Basic SSRF against the local server**
-
-- Basic SSRF : 
-![[SSRF1.png]]
-
-![[SSRF2.png]]
-
-**Basic SSRF against another back-end system**
-
-- Other easy case : 
-![[SSRF3.png]]
-
 **SSRF with blacklist-based input filter**
 
 `Bypass with double encoding `: https://owasp.org/www-community/Double_Encoding
+
 `BYpass with url structure` : 127.0.0.1 --> 127.1  https://highon.coffee/blog/ssrf-cheat-sheet/
+
 Localhost bypass:
 
 ```bash
@@ -137,16 +125,12 @@ Example :
     `http://localhost:80%2523@stock.weliketoshop.net/admin/delete?username=carlos`
 
 
-You can also proc a ssrf with an Open redirect . Check this link for a little reminder : https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection
-
- **Blind SSRF with out-of-band detection**
- 
-Lab : https://portswigger.net/web-security/ssrf/blind
-
-
-**Blind SSRF with Shellshock exploitation**
-
-Lab: https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation
+- You can also proc a ssrf with an Open redirect . Check this link for a little reminder : 
+https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection
 
 Resource : 
 https://portswigger.net/research/cracking-the-lens-targeting-https-hidden-attack-surface#remoteclient
+
+**URL validation bypass cheat sheet** : 
+
+https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet

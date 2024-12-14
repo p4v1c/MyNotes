@@ -16,9 +16,6 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
-
-
 - Introspection : 
 ```sql
 {
