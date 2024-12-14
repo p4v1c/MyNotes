@@ -20,7 +20,7 @@ seo:
 
 - Custom gadget java Deserialization :
 
-```
+```sh
 package com.rootme.serial;
 
 import java.io.*;
