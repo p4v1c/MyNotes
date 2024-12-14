@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dev on P4V1C</title>
+    <link>http://localhost:1313/notes/8-code/</link>
+    <description>Recent content in Dev on P4V1C</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>Copyright (c) 2020-2024 Thulite</copyright>
+    <lastBuildDate>Thu, 07 Sep 2023 16:06:50 +0200</lastBuildDate>
+    <atom:link href="http://localhost:1313/notes/8-code/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bash</title>
+      <link>http://localhost:1313/notes/8-code/bash/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/bash/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>C</title>
+      <link>http://localhost:1313/notes/8-code/c/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/c/</guid>
+      <description>&lt;h3 id=&#34;basic-structure-of-a-c-program&#34;&gt;Basic Structure of a C Program&lt;/h3&gt;&#xA;&lt;h4 id=&#34;1-including-standard-libraries&#34;&gt;1. Including Standard Libraries&lt;/h4&gt;&#xA;&lt;p&gt;Standard libraries in C provide a set of predefined functions for performing common operations, such as input/output, memory management, etc. To include a standard library, you use the &lt;code&gt;#include&lt;/code&gt; directive. For example, to include the standard input/output library &lt;code&gt;stdio.h&lt;/code&gt;:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>http://localhost:1313/notes/8-code/c-/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/c-/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Go</title>
+      <link>http://localhost:1313/notes/8-code/go/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/go/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>http://localhost:1313/notes/8-code/java/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/java/</guid>
+      <description>&lt;h2 id=&#34;1--basic-java-syntax&#34;&gt;1.  Basic Java Syntax&lt;/h2&gt;&#xA;&lt;h3 id=&#34;structure-of-a-java-program&#34;&gt;Structure of a Java Program&lt;/h3&gt;&#xA;&lt;p&gt;A Java program is structured around classes. Every Java program starts with at least one class, and there must be a &lt;code&gt;main&lt;/code&gt; method in one of these classes. The &lt;code&gt;main&lt;/code&gt; method is the entry point for the program&amp;rsquo;s execution.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Lua</title>
+      <link>http://localhost:1313/notes/8-code/lua/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/lua/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nodejs</title>
+      <link>http://localhost:1313/notes/8-code/nodejs/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/nodejs/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Php</title>
+      <link>http://localhost:1313/notes/8-code/php/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/php/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ruby</title>
+      <link>http://localhost:1313/notes/8-code/ruby/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/8-code/ruby/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

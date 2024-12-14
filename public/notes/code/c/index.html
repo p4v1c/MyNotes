@@ -1,0 +1,2051 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/code/c/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/code/c/">
+
+
+<title>C  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/code/c/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="C">
+  <meta property="og:description" content="Basic Structure of a C Program 1. Including Standard Libraries Standard libraries in C provide a set of predefined functions for performing common operations, such as input/output, memory management, etc. To include a standard library, you use the #include directive. For example, to include the standard input/output library stdio.h:">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C">
+  <meta name="twitter:description" content="Basic Structure of a C Program 1. Including Standard Libraries Standard libraries in C provide a set of predefined functions for performing common operations, such as input/output, memory management, etc. To include a standard library, you use the #include directive. For example, to include the standard input/output library stdio.h:">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/code/",
+       "name": "Dev",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "C",
+       "position": 4
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  <h3>On this page</h3>
+    <nav id="toc">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#basic-structure-of-a-c-program">Basic Structure of a C Program</a></li>
+        <li><a href="#variables-and-data-types">Variables and Data Types</a></li>
+        <li><a href="#flow-control">Flow Control</a></li>
+        <li><a href="#functions">Functions</a></li>
+        <li><a href="#arrays">Arrays</a></li>
+        <li><a href="#structures-and-unions">Structures and Unions</a></li>
+        <li><a href="#strings">Strings</a></li>
+        <li><a href="#file-handling">File Handling</a></li>
+        <li><a href="#preprocessor">Preprocessor</a></li>
+        <li><a href="#data-structures">Data Structures</a></li>
+        <li><a href="#error-handling">Error Handling</a></li>
+        <li><a href="#optimization-and-performance">Optimization and Performance</a></li>
+        <li><a href="#best-programming-practices">Best Programming Practices</a></li>
+        <li><a href="#using-third-party-libraries">Using Third-Party Libraries</a></li>
+      </ul>
+    </li>
+    <li><a href="#pointers-in-the-c-language">Pointers in the C Language</a>
+      <ul>
+        <li><a href="#what-is-a-pointer">What Is a Pointer?</a></li>
+        <li><a href="#pointer-declaration">Pointer Declaration</a></li>
+      </ul>
+    </li>
+    <li><a href="#assigning-values-to-a-pointer">Assigning Values to a Pointer</a></li>
+    <li><a href="#accessing-the-pointed-value">Accessing the Pointed Value</a></li>
+    <li><a href="#null-pointers">Null Pointers</a></li>
+    <li><a href="#pointers-to-arrays">Pointers to Arrays</a></li>
+    <li><a href="#pointer-operations">Pointer Operations</a></li>
+    <li><a href="#pointers-and-functions">Pointers and Functions</a></li>
+    <li><a href="#dynamic-memory-allocation">Dynamic Memory Allocation</a>
+      <ul>
+        <li><a href="#the-malloc-function">The <code>malloc</code> Function</a></li>
+        <li><a href="#using-pointers-with-malloc">Using Pointers with <code>malloc</code></a></li>
+        <li><a href="#memory-deallocation">Memory Deallocation</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>C</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				<details>
+    <summary>On this page</summary>
+    <div class="page-links">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#basic-structure-of-a-c-program">Basic Structure of a C Program</a></li>
+        <li><a href="#variables-and-data-types">Variables and Data Types</a></li>
+        <li><a href="#flow-control">Flow Control</a></li>
+        <li><a href="#functions">Functions</a></li>
+        <li><a href="#arrays">Arrays</a></li>
+        <li><a href="#structures-and-unions">Structures and Unions</a></li>
+        <li><a href="#strings">Strings</a></li>
+        <li><a href="#file-handling">File Handling</a></li>
+        <li><a href="#preprocessor">Preprocessor</a></li>
+        <li><a href="#data-structures">Data Structures</a></li>
+        <li><a href="#error-handling">Error Handling</a></li>
+        <li><a href="#optimization-and-performance">Optimization and Performance</a></li>
+        <li><a href="#best-programming-practices">Best Programming Practices</a></li>
+        <li><a href="#using-third-party-libraries">Using Third-Party Libraries</a></li>
+      </ul>
+    </li>
+    <li><a href="#pointers-in-the-c-language">Pointers in the C Language</a>
+      <ul>
+        <li><a href="#what-is-a-pointer">What Is a Pointer?</a></li>
+        <li><a href="#pointer-declaration">Pointer Declaration</a></li>
+      </ul>
+    </li>
+    <li><a href="#assigning-values-to-a-pointer">Assigning Values to a Pointer</a></li>
+    <li><a href="#accessing-the-pointed-value">Accessing the Pointed Value</a></li>
+    <li><a href="#null-pointers">Null Pointers</a></li>
+    <li><a href="#pointers-to-arrays">Pointers to Arrays</a></li>
+    <li><a href="#pointer-operations">Pointer Operations</a></li>
+    <li><a href="#pointers-and-functions">Pointers and Functions</a></li>
+    <li><a href="#dynamic-memory-allocation">Dynamic Memory Allocation</a>
+      <ul>
+        <li><a href="#the-malloc-function">The <code>malloc</code> Function</a></li>
+        <li><a href="#using-pointers-with-malloc">Using Pointers with <code>malloc</code></a></li>
+        <li><a href="#memory-deallocation">Memory Deallocation</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </details>
+
+			</nav>
+			<h3 id="basic-structure-of-a-c-program">Basic Structure of a C Program<a href="#basic-structure-of-a-c-program" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="1-including-standard-libraries">1. Including Standard Libraries<a href="#1-including-standard-libraries" class="anchor" aria-hidden="true">#</a> </h4>
+<p>Standard libraries in C provide a set of predefined functions for performing common operations, such as input/output, memory management, etc. To include a standard library, you use the <code>#include</code> directive. For example, to include the standard input/output library <code>stdio.h</code>:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="2-the-main-function-and-its-arguments">2. The main() Function and Its Arguments<a href="#2-the-main-function-and-its-arguments" class="anchor" aria-hidden="true">#</a> </h4>
+<p>The <code>main()</code> function is the starting point for any C program. It typically has the following signature:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li><code>int</code>: This is the data type returned by the <code>main()</code> function, typically used to indicate the program&rsquo;s exit status (0 for success, something else for an error).</li>
+<li><code>int argc</code>: This represents the number of command-line arguments passed to the program.</li>
+<li><code>char *argv[]</code>: This is an array of strings (an array of pointers) containing the arguments passed to the program.</li>
+</ul>
+<h3 id="variables-and-data-types">Variables and Data Types<a href="#variables-and-data-types" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="1-basic-data-types">1. Basic Data Types<a href="#1-basic-data-types" class="anchor" aria-hidden="true">#</a> </h4>
+<p>The C language offers various basic data types, including:</p>
+<ul>
+<li><code>int</code>: for integers.</li>
+<li><code>float</code>: for single-precision floating-point numbers.</li>
+<li><code>double</code>: for double-precision floating-point numbers.</li>
+<li><code>char</code>: for characters.</li>
+<li><code>void</code>: for the absence of a type.</li>
+</ul>
+<h4 id="2-variable-declaration">2. Variable Declaration<a href="#2-variable-declaration" class="anchor" aria-hidden="true">#</a> </h4>
+<p>To declare a variable, you specify the data type followed by the variable name. For example, to declare an integer variable named <code>age</code>:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">age</span><span class="p">;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="3-operators">3. Operators<a href="#3-operators" class="anchor" aria-hidden="true">#</a> </h4>
+<p>C supports various operators, including arithmetic operators (+, -, *, /, %), comparison operators (==, !=, &lt;, &gt;, &lt;=, &gt;=), and logical operators (&amp;&amp;, ||, !).</p>
+<h3 id="flow-control">Flow Control<a href="#flow-control" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="1-conditional-structures">1. Conditional Structures<a href="#1-conditional-structures" class="anchor" aria-hidden="true">#</a> </h4>
+<p>Conditional structures allow you to make decisions in your program. The most common ones are:</p>
+<ul>
+<li><code>if</code>: Executes a block of code if a condition is true.</li>
+<li><code>else if</code>: Used to evaluate multiple conditions.</li>
+<li><code>else</code>: Executed if none of the previous conditions are true.</li>
+</ul>
+<p>Example of using <code>if</code>:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span><span class="c1">// Code to execute if the condition is true 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">other_condition</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>     <span class="c1">// Code to execute if the other condition is true    
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			 <span class="c1">// Code to execute if none of the conditions are true }`
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="2-loops">2. Loops<a href="#2-loops" class="anchor" aria-hidden="true">#</a> </h4>
+<p>Loops allow you to execute a block of code repeatedly. Common loops include:</p>
+<ul>
+<li><code>for</code>: Used to perform an action a fixed number of times.</li>
+<li><code>while</code>: Executes a block of code as long as a condition is true.</li>
+<li><code>do-while</code>: Executes a block of code at least once and then repeats as long as a condition is true.</li>
+</ul>
+<p>Example of using a <code>for</code> loop:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">initialization</span><span class="p">;</span> <span class="n">condition</span><span class="p">;</span> <span class="n">update</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">//code to repeat
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="3-jump-statements">3. Jump Statements<a href="#3-jump-statements" class="anchor" aria-hidden="true">#</a> </h4>
+<p>Jump statements allow you to control the flow of program execution. Common ones include <code>break</code>, <code>continue</code>, and <code>goto</code>. <code>break</code> exits a loop, <code>continue</code> moves to the next iteration, and <code>goto</code> jumps to a specified label in the code.</p>
+<h3 id="functions">Functions<a href="#functions" class="anchor" aria-hidden="true">#</a> </h3>
+<h4 id="1-function-definition-and-invocation">1. Function Definition and Invocation<a href="#1-function-definition-and-invocation" class="anchor" aria-hidden="true">#</a> </h4>
+<p>In C, you can define your own functions. To do so, you need to specify the return data type, function name, and parameters.</p>
+<p>Example of declaring and defining a function:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>To call this function:</p>
+<p><code>int result = add(5, 3);</code></p>
+<h4 id="2-parameter-passing">2. Parameter Passing<a href="#2-parameter-passing" class="anchor" aria-hidden="true">#</a> </h4>
+<p>Parameters can be passed to a function by value (a copy of the value is passed) or by reference (a pointer is passed to the function).</p>
+<p>Example of passing by value:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">doubleValue</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>Example of passing by reference:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">doubleValue</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl"><span class="o">*</span><span class="n">x</span> <span class="o">=</span> <span class="o">*</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h4 id="3-recursive-functions">3. Recursive Functions<a href="#3-recursive-functions" class="anchor" aria-hidden="true">#</a> </h4>
+<p>A recursive function is a function that calls itself. It is used to solve recursive problems. Ensure there is a stopping condition to prevent infinite recursion.</p>
+<p>Example of a recursive function to calculate factorial:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span><span class="k">else</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="arrays">Arrays<a href="#arrays" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Array Declaration</strong> An array is a data structure that allows you to store a collection of values of the same type. To declare an array in C, you specify the data type followed by the array&rsquo;s name and its size in square brackets.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">array</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>// Declaration of an array of integers with a size of 5`</p>
+<p><strong>Accessing Array Elements</strong> Array elements are accessed by their index (position) in the array. Indexing typically starts at zero. For example, to access the third element of the array:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">third_element</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Multidimensional Arrays</strong> Multidimensional arrays are arrays of arrays and are often used to represent tabular data, such as matrices.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span> <span class="c1">// Declaration of a 3x3 matrix
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="structures-and-unions">Structures and Unions<a href="#structures-and-unions" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Structure Definition</strong> Structures allow you to create custom data types that group together multiple fields of different types.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Person</span> <span class="p">{</span>     
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>     
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">age</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Accessing Structure Members</strong> To access the members of a structure, use the dot operator <code>.</code></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">Person</span> <span class="n">person1</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="n">person1</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Using Unions</strong> Unions are similar to structures but share the same memory location for all their members. Only one member of a union can be used at a time.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">union</span> <span class="n">Data</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">integer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">real</span><span class="p">;</span> <span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h3 id="strings">Strings<a href="#strings" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>String Manipulation</strong> In C, strings are arrays of characters terminated by a null character (<code>\0</code>). You can manipulate them using various functions and operations.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">string</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&#34;Hello&#34;</span><span class="p">;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Library Functions for Strings</strong> The C language offers many library functions to work with strings, such as <code>strcpy</code>, <code>strcat</code>, <code>strlen</code>, etc. These functions are defined in the <code>string.h</code> library.</p>
+<h3 id="file-handling">File Handling<a href="#file-handling" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Opening, Reading, Writing, and Closing Files</strong> To work with files in C, you must open a file, read or write data, and then close the file to release resources.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">FILE</span> <span class="o">*</span><span class="n">file</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">file</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="s">&#34;myfile.txt&#34;</span><span class="p">,</span> <span class="s">&#34;r&#34;</span><span class="p">);</span> <span class="c1">// Read or write data here fclose(file);`
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p><strong>Manipulating File Streams</strong> Functions like <code>fopen</code>, <code>fclose</code>, <code>fprintf</code>, <code>fscanf</code>, etc., are used to manipulate file streams. The open modes (e.g., &ldquo;r&rdquo; for reading, &ldquo;w&rdquo; for writing) define the file&rsquo;s behavior.</p>
+<h3 id="preprocessor">Preprocessor<a href="#preprocessor" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Preprocessor Directives</strong> The C preprocessor performs transformations before compilation. It is controlled by directives such as <code>#define</code> (for macros), <code>#include</code> (for including header files), and <code>#ifdef</code> (for conditional sections).</p>
+<h3 id="data-structures">Data Structures<a href="#data-structures" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Linked Lists, Stacks, Queues, Trees, etc.</strong> Data structures such as linked lists, stacks, queues, trees, etc., are commonly used in programming. You need to define and implement their associated operations.</p>
+<h3 id="error-handling">Error Handling<a href="#error-handling" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Handling Exceptions and Errors</strong> Error handling in C often relies on checking function return codes and using the <code>errno</code> library to obtain error information.</p>
+<h3 id="optimization-and-performance">Optimization and Performance<a href="#optimization-and-performance" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Code Optimization Techniques</strong> Code optimization aims to improve the performance and efficiency of a C program. This includes using efficient loops, minimizing memory consumption, and more.</p>
+<p><strong>Code Profiling</strong> Code profiling involves analyzing a program&rsquo;s behavior to identify bottlenecks and areas of code that require optimization.</p>
+<h3 id="best-programming-practices">Best Programming Practices<a href="#best-programming-practices" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Comments and Documentation</strong> Adding clear comments and documentation to your code is essential for making it understandable and maintainable.</p>
+<p><strong>Coding Standards</strong> Following coding conventions, such as naming conventions, enhances code collaboration and readability.</p>
+<h3 id="using-third-party-libraries">Using Third-Party Libraries<a href="#using-third-party-libraries" class="anchor" aria-hidden="true">#</a> </h3>
+<p><strong>Using Third-Party Libraries for Specific Tasks</strong> In C, you can use third-party libraries to extend your program&rsquo;s functionality, whether for data manipulation, creating graphical interfaces, network communication, and more.</p>
+<h2 id="pointers-in-the-c-language">Pointers in the C Language<a href="#pointers-in-the-c-language" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Pointers are one of the most powerful features in the C language. They allow direct access to memory, manipulation of variable addresses, and the creation of complex data structures. Understanding pointers is crucial for becoming a proficient C programmer.</p>
+<h3 id="what-is-a-pointer">What Is a Pointer?<a href="#what-is-a-pointer" class="anchor" aria-hidden="true">#</a> </h3>
+<p>A pointer is a variable that stores the memory address of another variable. In other words, it &ldquo;points&rdquo; to a memory location where a value is stored. This value can be of any data type, such as an integer, character, or even another pointer.</p>
+<p>Pointers are powerful because they enable direct manipulation of memory, but they also require great care to avoid errors that can lead to program crashes or memory leaks.</p>
+<h3 id="pointer-declaration">Pointer Declaration<a href="#pointer-declaration" class="anchor" aria-hidden="true">#</a> </h3>
+<p>To declare a pointer in C, use the <code>*</code> operator. For example, to declare a pointer to an integer (<code>int</code>), use the following syntax:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>This creates a variable <code>ptr</code> that can store the memory address of a variable of type <code>int</code>.C</p>
+<h2 id="assigning-values-to-a-pointer">Assigning Values to a Pointer<a href="#assigning-values-to-a-pointer" class="anchor" aria-hidden="true">#</a> </h2>
+<p>A pointer must be initialized with the address of an existing variable. You can use the <code>&amp;</code> operator to obtain the memory address of a variable. For example:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">;</span> <span class="c1">// ptr points to variable x
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>Here, <code>ptr</code> is initialized with the memory address of <code>x</code>.</p>
+<h2 id="accessing-the-pointed-value">Accessing the Pointed Value<a href="#accessing-the-pointed-value" class="anchor" aria-hidden="true">#</a> </h2>
+<p>To access the value pointed to by a pointer, use the <code>*</code> operator. For example:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span> <span class="c1">// y takes the value of x (10)
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>In this example, <code>*ptr</code> retrieves the value stored at the memory address pointed to by <code>ptr</code>, which is the value of <code>x</code>.</p>
+<h2 id="null-pointers">Null Pointers<a href="#null-pointers" class="anchor" aria-hidden="true">#</a> </h2>
+<p>A pointer can also be defined as null by assigning it the special value <code>NULL</code>. A null pointer does not point to any memory address and is commonly used to indicate the absence of a value.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">// Null pointer
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h2 id="pointers-to-arrays">Pointers to Arrays<a href="#pointers-to-arrays" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Pointers are often used to manipulate arrays in C. An array is essentially a pointer to its first element. For example:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span> <span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">;</span> <span class="c1">// ptr points to the first element of the array
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>In this example, <code>ptr</code> points to the first value in <code>arr</code>, which means that <code>*ptr</code> is equivalent to <code>arr[0]</code>.</p>
+<h2 id="pointer-operations">Pointer Operations<a href="#pointer-operations" class="anchor" aria-hidden="true">#</a> </h2>
+<p>You can perform arithmetic operations on pointers, such as incrementing and decrementing. This allows you to traverse an array or access adjacent memory locations.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">;</span> <span class="c1">// ptr points to the first value ptr++; // Now points to the second value
+</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>Here, <code>ptr++</code> makes <code>ptr</code> point to the second value in <code>arr</code>.</p>
+<h2 id="pointers-and-functions">Pointers and Functions<a href="#pointers-and-functions" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Pointers are often used to pass memory addresses to functions, allowing direct modification of variables in the caller&rsquo;s memory. For example:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">increment</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>     
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>             <span class="c1">// Increment the value pointed to by x 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>  
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>     
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>     
+</span></span><span class="line"><span class="cl"><span class="nf">increment</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>  <span class="c1">// Pass the address of value to the function     
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>					<span class="c1">// After incrementing, value is now 6 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>``</p>
+<p>In this example, the <code>increment</code> function takes a pointer to an integer <code>x</code> as a parameter, allowing it to directly modify the value pointed to by <code>x</code>.</p>
+<h2 id="dynamic-memory-allocation">Dynamic Memory Allocation<a href="#dynamic-memory-allocation" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Dynamic memory allocation is a fundamental concept in C. It allows you to create data structures of variable size during program execution. This is particularly useful when the size of the data structure is not known in advance or when efficient memory management is required.</p>
+<h3 id="the-malloc-function">The <code>malloc</code> Function<a href="#the-malloc-function" class="anchor" aria-hidden="true">#</a> </h3>
+<p>To dynamically allocate memory, you use the <code>malloc</code> (memory allocation) function. This function allocates a block of memory of the specified size and returns a pointer to the beginning of this block. Here&rsquo;s how you can use it:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="o">*</span><span class="n">dynamicArray</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Dynamically allocate memory for an array of integers
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">dynamicArray</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="nf">malloc</span><span class="p">(</span><span class="n">size</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">dynamicArray</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Memory allocation error</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// Exit the program with an error code
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// You can now use dynamicArray as an array
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">dynamicArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dynamicArray</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Don&#39;t forget to free dynamically allocated memory when done
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">free</span><span class="p">(</span><span class="n">dynamicArray</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>In this example, <code>malloc</code> is used to dynamically allocate memory for an array of 5 integers. If the memory allocation is successful, <code>malloc</code> returns a pointer to the allocated memory, otherwise, it returns <code>NULL</code>. A check is performed to ensure that the allocation succeeded.</p>
+<h3 id="using-pointers-with-malloc">Using Pointers with <code>malloc</code><a href="#using-pointers-with-malloc" class="anchor" aria-hidden="true">#</a> </h3>
+<p>Once memory is allocated with <code>malloc</code>, you obtain a pointer to the start of the allocated block. You can use this pointer to access and manipulate the allocated memory. For example, you can store values in the dynamic array and retrieve them using this pointer.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">dynamicArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="n">dynamicArray</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span><span class="err">`</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>This stores the values 10 and 20 in the allocated memory.</p>
+<h3 id="memory-deallocation">Memory Deallocation<a href="#memory-deallocation" class="anchor" aria-hidden="true">#</a> </h3>
+<p>After you finish using dynamically allocated memory, it&rsquo;s crucial to release it using the <code>free</code> function. This prevents memory leaks and is essential for maintaining program performance.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">free</span><span class="p">(</span><span class="n">dynamicArray</span><span class="p">);</span></span></span></code></pre></div>
+  </figure>
+</div>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/lab/vulnlab/build/" class="stretched-link text-reset text-decoration-none">Build</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/code/c-/" class="stretched-link text-reset text-decoration-none">C&#43;&#43;</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

