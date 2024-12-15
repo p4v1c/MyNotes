@@ -16,7 +16,7 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
+## Emulation + Burp
 
 - Setup Genymotion & install Gapp . 
 ```
@@ -62,6 +62,28 @@ sudo pip3 install frida frida-tools objection
 - Create a file to place the js script that frida will run and run this command : 
 ```sh
 frida -U -f package_name_target -l fridascript.js
-frida -U -f com.mieleops.appwash -l fridascript.js 
+frida -U -f com.some.appdiscovery -l fridascript.js 
 ```
-- Example : https://play.google.com/store/apps/details?id=com.mieleops.appwash&hl=fr&pli=1
+- Example : https://play.google.com/store/apps/details?id=com.some.appdiscovery&hl=fr&pli=1
+
+##  App to apk
+
+- Check is devices detected :
+```sh
+adb shell pm list packages
+```
+
+- List package on the device : 
+```sh
+adb shell pm list packages
+```
+
+- Get the path of the package :
+```sh
+adb shell pm path com.example.someapp-2.apk
+```
+
+- Download the apk : 
+```
+adb pull /data/app/com.example.someapp-2.apk
+```
