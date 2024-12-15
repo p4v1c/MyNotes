@@ -50,10 +50,9 @@
 <meta property="og:url" content="http://localhost:1313/notes/web/ssrf/">
   <meta property="og:site_name" content="P4V1C">
   <meta property="og:title" content="SSRF">
-  <meta property="og:description" content="Basic SSRF against the local server
-Basic SSRF : ![[SSRF1.png]] ![[SSRF2.png]]
-Basic SSRF against another back-end system
-Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
+  <meta property="og:description" content="SSRF with blacklist-based input filter
+Bypass with double encoding : https://owasp.org/www-community/Double_Encoding
+BYpass with url structure : 127.0.0.1 –&gt; 127.1 https://highon.coffee/blog/ssrf-cheat-sheet/">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -62,10 +61,9 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SSRF">
-  <meta name="twitter:description" content="Basic SSRF against the local server
-Basic SSRF : ![[SSRF1.png]] ![[SSRF2.png]]
-Basic SSRF against another back-end system
-Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
+  <meta name="twitter:description" content="SSRF with blacklist-based input filter
+Bypass with double encoding : https://owasp.org/www-community/Double_Encoding
+BYpass with url structure : 127.0.0.1 –&gt; 127.1 https://highon.coffee/blog/ssrf-cheat-sheet/">
       <meta name="twitter:site" content="@getdoks">
 
     
@@ -324,19 +322,15 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li>
@@ -361,10 +355,6 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li class="active" >
@@ -610,6 +600,10 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
     <details>
       <summary>Dev</summary>
       <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
 
   <li>
       <a href="/notes/code/bash/">Bash</a>
@@ -1004,19 +998,15 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li>
@@ -1041,10 +1031,6 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li class="active" >
@@ -1292,6 +1278,10 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
       <ul class="list-unstyled list-nested">
 
   <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
+
+  <li>
       <a href="/notes/code/bash/">Bash</a>
   </li>
 
@@ -1397,21 +1387,10 @@ Other easy case : ![[SSRF3.png]] SSRF with blacklist-based input filter">
 			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
 				
 			</nav>
-			<p><strong>Basic SSRF against the local server</strong></p>
-<ul>
-<li>Basic SSRF :
-![[SSRF1.png]]</li>
-</ul>
-<p>![[SSRF2.png]]</p>
-<p><strong>Basic SSRF against another back-end system</strong></p>
-<ul>
-<li>Other easy case :
-![[SSRF3.png]]</li>
-</ul>
-<p><strong>SSRF with blacklist-based input filter</strong></p>
-<p><code>Bypass with double encoding </code>: https://owasp.org/www-community/Double_Encoding
-<code>BYpass with url structure</code> : 127.0.0.1 &ndash;&gt; 127.1  https://highon.coffee/blog/ssrf-cheat-sheet/
-Localhost bypass:</p>
+			<p><strong>SSRF with blacklist-based input filter</strong></p>
+<p><code>Bypass with double encoding </code>: https://owasp.org/www-community/Double_Encoding</p>
+<p><code>BYpass with url structure</code> : 127.0.0.1 &ndash;&gt; 127.1  https://highon.coffee/blog/ssrf-cheat-sheet/</p>
+<p>Localhost bypass:</p>
 
 
 
@@ -1540,13 +1519,14 @@ Localhost bypass:</p>
 <p><code>http://localhost:80%2523@stock.weliketoshop.net/admin/delete?username=carlos</code></p>
 </li>
 </ol>
-<p>You can also proc a ssrf with an Open redirect . Check this link for a little reminder : https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection</p>
-<p><strong>Blind SSRF with out-of-band detection</strong></p>
-<p>Lab : https://portswigger.net/web-security/ssrf/blind</p>
-<p><strong>Blind SSRF with Shellshock exploitation</strong></p>
-<p>Lab: https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation</p>
+<ul>
+<li>You can also proc a ssrf with an Open redirect . Check this link for a little reminder :
+https://portswigger.net/web-security/ssrf/lab-ssrf-filter-bypass-via-open-redirection</li>
+</ul>
 <p>Resource :
 https://portswigger.net/research/cracking-the-lens-targeting-https-hidden-attack-surface#remoteclient</p>
+<p><strong>URL validation bypass cheat sheet</strong> :</p>
+<p>https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet</p>
 
 			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
 				</div>

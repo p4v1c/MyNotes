@@ -322,19 +322,15 @@
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li>
@@ -359,10 +355,6 @@
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li>
@@ -608,6 +600,10 @@
     <details>
       <summary>Dev</summary>
       <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
 
   <li>
       <a href="/notes/code/bash/">Bash</a>
@@ -1002,19 +998,15 @@
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li>
@@ -1039,10 +1031,6 @@
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li>
@@ -1290,6 +1278,10 @@
       <ul class="list-unstyled list-nested">
 
   <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
+
+  <li>
       <a href="/notes/code/bash/">Bash</a>
   </li>
 
@@ -1444,7 +1436,7 @@ https://jwt.io/</li>
 <p><strong>Injecting self-signed JWTs via the jwk parameter</strong></p>
 <ul>
 <li>
-<p>We automatically generate a new RSA key pair :</p>
+<p>We automatically generate a new RSA key pair</p>
 </li>
 <li>
 <p><strong>Attack</strong>, then select <strong>Embedded JWK</strong>. When prompted, select your newly generated RSA key and click <strong>OK</strong>.</p>
@@ -1502,9 +1494,20 @@ https://beeceptor.com/mock-api/</p>
 <p>Create a New Symmetric key Null bytes encoded in base64 for k parameter :</p>
 </li>
 <li>
-<p>Then change the kid value like this :</p>
+<p>Then change the kid value :</p>
 </li>
 </ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">../../../../../../../../dev/null</span></span></code></pre></div>
+  </figure>
+</div>
 <p><code>Make sure to try every possible lfi for the kid like double encoding etc . And don't forget to sign the key </code></p>
 <p><strong>JWT authentication bypass via algorithm confusion</strong></p>
 <ul>

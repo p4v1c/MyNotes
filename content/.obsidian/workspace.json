@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Web/Cors.md",
+                "file": "notes/Web/Graphsql.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cors"
+              "title": "Graphsql"
             }
           }
         ],
@@ -207,11 +207,18 @@
   },
   "active": "fe0433737b5d2ff4",
   "lastOpenFiles": [
+    "notes/Web/Web Cache.md",
+    "privacy.md",
+    "_index.md",
     "notes/Web/CSRF.md",
+    "notes/Web/Graphsql.md",
+    "notes/Web/Wordpress.md",
+    "notes/Web/SSRF.md",
+    "notes/Web/JWT.md",
+    "notes/Web/File Upload.md",
     "notes/Web/Cors.md",
     "notes/Web/Command injection.md",
     "notes/Pwn-Reverse/Android-Reverse.md",
-    "notes/Web/Web Cache.md",
     "notes/Ressources/Link.md",
     "notes/Code/ASM.md",
     "notes/Code/C.md",
@@ -226,13 +233,6 @@
     "blog/example/index.md",
     "blog/_index.md",
     "notes/_index.md",
-    "notes/Web/XXE Injection.md",
-    "notes/Web/XSS.md",
-    "notes/Web/Wordpress.md",
-    "notes/Web/SSRF.md",
-    "notes/Web/Path traversal.md",
-    "notes/Web/JWT.md",
-    "notes/Web/Graphsql.md",
     "notes/Assets/jwt6.png",
     "notes/Assets/JWT.png",
     "notes/Assets/Race Condition.png",

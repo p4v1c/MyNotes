@@ -226,25 +226,19 @@
         <priority>0.5</priority>
       </url>
       <url>
-        <loc>http://localhost:1313/notes/web/access-control/</loc>
-        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-      </url>
-      <url>
-        <loc>http://localhost:1313/notes/web/api-testing/</loc>
-        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-      </url>
-      <url>
-        <loc>http://localhost:1313/notes/web/authentication/</loc>
-        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-      </url>
-      <url>
         <loc>http://localhost:1313/notes/web/command-injection/</loc>
+        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+      </url>
+      <url>
+        <loc>http://localhost:1313/notes/web/cors/</loc>
+        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+      </url>
+      <url>
+        <loc>http://localhost:1313/notes/web/csrf/</loc>
         <lastmod>2023-09-07T16:06:50+02:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
@@ -281,12 +275,6 @@
       </url>
       <url>
         <loc>http://localhost:1313/notes/web/path-traversal/</loc>
-        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-      </url>
-      <url>
-        <loc>http://localhost:1313/notes/web/race-conditon/</loc>
         <lastmod>2023-09-07T16:06:50+02:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
@@ -396,6 +384,12 @@
       <url>
         <loc>http://localhost:1313/notes/pwn-reverse/chall/</loc>
         <lastmod>2023-09-07T16:12:03+02:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+      </url>
+      <url>
+        <loc>http://localhost:1313/notes/code/asm/</loc>
+        <lastmod>2023-09-07T16:06:50+02:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
       </url>

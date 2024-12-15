@@ -50,7 +50,7 @@
 <meta property="og:url" content="http://localhost:1313/notes/pwn-reverse/android-emulation/">
   <meta property="og:site_name" content="P4V1C">
   <meta property="og:title" content="Android Emulation">
-  <meta property="og:description" content="Setup Genymotion &amp; install Gapp . adb devices adb connect 127.0.0.1:6555 adb shell settings put global http_proxy localhost:3333 adb reverse tcp:3333 tcp:6767Generate a new certificate with burp and apply this command on it : openssl x509 -inform DER -in burp.der -out burp.pemopenssl x509 -inform PEM -subject_hash_old -in burp.pem | head -1Name of certificate must a the same value from the last command plus .0 : mv burp.pem 9a5ba575.0 adb root &amp;&amp; adb remount adb push 9a5ba575.0 /sdcard/ adb shell mv /sdcard/9a5ba575.0 /system/etc/security/cacerts/ chmod 644 /system/etc/security/cacerts/9a5ba575.0Bypass SSL pinning : https://codeshare.frida.re/@akabe1/frida-multiple-unpinning/ https://github.com/frida/frida">
+  <meta property="og:description" content="Emulation &#43; Burp Setup Genymotion &amp; install Gapp . adb devices adb connect 127.0.0.1:6555 adb shell settings put global http_proxy localhost:3333 adb reverse tcp:3333 tcp:6767Generate a new certificate with burp and apply this command on it : openssl x509 -inform DER -in burp.der -out burp.pemopenssl x509 -inform PEM -subject_hash_old -in burp.pem | head -1Name of certificate must a the same value from the last command plus .0 : mv burp.pem 9a5ba575.0 adb root &amp;&amp; adb remount adb push 9a5ba575.0 /sdcard/ adb shell mv /sdcard/9a5ba575.0 /system/etc/security/cacerts/ chmod 644 /system/etc/security/cacerts/9a5ba575.0Bypass SSL pinning : https://codeshare.frida.re/@akabe1/frida-multiple-unpinning/ https://github.com/frida/frida">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="notes">
@@ -59,7 +59,7 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Android Emulation">
-  <meta name="twitter:description" content="Setup Genymotion &amp; install Gapp . adb devices adb connect 127.0.0.1:6555 adb shell settings put global http_proxy localhost:3333 adb reverse tcp:3333 tcp:6767Generate a new certificate with burp and apply this command on it : openssl x509 -inform DER -in burp.der -out burp.pemopenssl x509 -inform PEM -subject_hash_old -in burp.pem | head -1Name of certificate must a the same value from the last command plus .0 : mv burp.pem 9a5ba575.0 adb root &amp;&amp; adb remount adb push 9a5ba575.0 /sdcard/ adb shell mv /sdcard/9a5ba575.0 /system/etc/security/cacerts/ chmod 644 /system/etc/security/cacerts/9a5ba575.0Bypass SSL pinning : https://codeshare.frida.re/@akabe1/frida-multiple-unpinning/ https://github.com/frida/frida">
+  <meta name="twitter:description" content="Emulation &#43; Burp Setup Genymotion &amp; install Gapp . adb devices adb connect 127.0.0.1:6555 adb shell settings put global http_proxy localhost:3333 adb reverse tcp:3333 tcp:6767Generate a new certificate with burp and apply this command on it : openssl x509 -inform DER -in burp.der -out burp.pemopenssl x509 -inform PEM -subject_hash_old -in burp.pem | head -1Name of certificate must a the same value from the last command plus .0 : mv burp.pem 9a5ba575.0 adb root &amp;&amp; adb remount adb push 9a5ba575.0 /sdcard/ adb shell mv /sdcard/9a5ba575.0 /system/etc/security/cacerts/ chmod 644 /system/etc/security/cacerts/9a5ba575.0Bypass SSL pinning : https://codeshare.frida.re/@akabe1/frida-multiple-unpinning/ https://github.com/frida/frida">
       <meta name="twitter:site" content="@getdoks">
 
     
@@ -318,19 +318,15 @@
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li>
@@ -355,10 +351,6 @@
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li>
@@ -604,6 +596,10 @@
     <details>
       <summary>Dev</summary>
       <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
 
   <li>
       <a href="/notes/code/bash/">Bash</a>
@@ -998,19 +994,15 @@
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li>
@@ -1035,10 +1027,6 @@
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li>
@@ -1286,6 +1274,10 @@
       <ul class="list-unstyled list-nested">
 
   <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
+
+  <li>
       <a href="/notes/code/bash/">Bash</a>
   </li>
 
@@ -1380,7 +1372,13 @@
 		
 		<nav class="docs-toc d-none d-xl-block col-xl-3" aria-label="Secondary navigation">
 			<div class="page-links">
-  
+  <h3>On this page</h3>
+    <nav id="toc">
+  <ul>
+    <li><a href="#emulation--burp">Emulation + Burp</a></li>
+    <li><a href="#app-to-apk">App to apk</a></li>
+  </ul>
+</nav>
 </div>
 
 		</nav>
@@ -1389,9 +1387,21 @@
 			<h1>Android Emulation</h1>
 			
 			<nav class="toc-mobile d-xl-none" aria-label="Quaternary navigation">
-				
+				<details>
+    <summary>On this page</summary>
+    <div class="page-links">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#emulation--burp">Emulation + Burp</a></li>
+    <li><a href="#app-to-apk">App to apk</a></li>
+  </ul>
+</nav>
+    </div>
+  </details>
+
 			</nav>
-			<ul>
+			<h2 id="emulation--burp">Emulation + Burp<a href="#emulation--burp" class="anchor" aria-hidden="true">#</a> </h2>
+<ul>
 <li>Setup Genymotion &amp; install Gapp .</li>
 </ul>
 
@@ -1500,12 +1510,69 @@ https://github.com/frida/frida</p>
     <span class="title"></span>
   </figcaption>
   <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">frida -U -f package_name_target -l fridascript.js
-</span></span><span class="line"><span class="cl">frida -U -f com.mieleops.appwash -l fridascript.js </span></span></code></pre></div>
+</span></span><span class="line"><span class="cl">frida -U -f com.some.appdiscovery -l fridascript.js </span></span></code></pre></div>
   </figure>
 </div>
 <ul>
-<li>Example : https://play.google.com/store/apps/details?id=com.mieleops.appwash&amp;hl=fr&amp;pli=1</li>
+<li>Example : https://play.google.com/store/apps/details?id=com.some.appdiscovery&amp;hl=fr&amp;pli=1</li>
 </ul>
+<h2 id="app-to-apk">App to apk<a href="#app-to-apk" class="anchor" aria-hidden="true">#</a> </h2>
+<ul>
+<li>Check is devices detected :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">adb shell pm list packages</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>List package on the device :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">adb shell pm list packages</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Get the path of the package :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">adb shell pm path com.example.someapp-2.apk</span></span></code></pre></div>
+  </figure>
+</div>
+<ul>
+<li>Download the apk :</li>
+</ul>
+
+
+
+<div class="expressive-code">
+  <figure class="frame is-terminal not-content">
+  <figcaption class="header">
+    <span class="title"></span>
+  </figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">adb pull /data/app/com.example.someapp-2.apk</span></span></code></pre></div>
+  </figure>
+</div>
 
 			<div class="page-footer-meta d-flex flex-column flex-md-row justify-content-between">
 				</div>
@@ -1532,7 +1599,7 @@ https://github.com/frida/frida</p>
 			<div class="card-body d-flex justify-content-end">
 				<div class="d-flex flex-column">
 					<div class="text-body-secondary">Next</div>
-					<a href="/notes/web/api-testing/" class="stretched-link text-reset text-decoration-none">API Testing</a>
+					<a href="/notes/ressources/arch-setup/" class="stretched-link text-reset text-decoration-none">Arch-Setup</a>
 				</div>
 				<div class="d-flex flex-column justify-content-center">
 					<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

