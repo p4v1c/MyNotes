@@ -45,26 +45,21 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
-      - name: Install dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
-      - name: Build production website
+      - name: Build and Serve Site
         env:
           # For maximum backward compatibility with Hugo modules
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
           TZ: America/Los_Angeles
         run: |
-          npm run \
-            -- \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+          hugo server \
+            --baseURL "${{ steps.pages.outputs.base_url }}/" \
+            --bind "0.0.0.0" \
+            --appendPort=false \
+            --disableLiveReload=true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -81,3 +76,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      
