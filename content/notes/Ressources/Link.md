@@ -174,3 +174,5 @@ https://github.com/zigoo0/JSONBee
 https://arxiv.org/abs/2207.11171
 
 https://ide.kaitai.io/
+
+https://www.gremwell.com/firefox-xss-302
