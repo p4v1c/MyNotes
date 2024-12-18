@@ -176,3 +176,9 @@ https://arxiv.org/abs/2207.11171
 https://ide.kaitai.io/
 
 https://www.gremwell.com/firefox-xss-302
+
+psudohash
+
+hashmob
+
+https://github.com/zmap/zmap : zmap

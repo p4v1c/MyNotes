@@ -30,3 +30,4 @@ query%7b__schema%0a%7bqueryType%7bname%7dmutationType%7bname%7dsubscriptionType%
 ```
 
 
+- Tools : `InQL graph scanner` 
