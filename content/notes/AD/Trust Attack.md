@@ -14,7 +14,7 @@ seo:
   robots: "" # custom robot tags (optional)
 ---
 
-#### **Trust  Bidirectional**
+## Trust  Bidirectional
 
 To perform this attack after compromising a child domain, we need the following:
 
@@ -103,6 +103,7 @@ winrs -r:trusteddc.trusted.vl cmd
 /
 Enter-PSSession trusteddc.trusted.vl
 ```
+
 Other option:  
 
 Execute a cmd in the remote machine with [PsExec](https://docs.microsoft.com/en-us/sysinternals/downloads/psexec):

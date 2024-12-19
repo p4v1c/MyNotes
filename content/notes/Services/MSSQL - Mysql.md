@@ -17,8 +17,7 @@ seo:
   noindex: false # false (default) or true
 ---
 
-
-**Mysql**
+## Mysql
 
 - Upload file when root : 
 ```sql
@@ -36,7 +35,8 @@ SHOW GRANTS FOR CURRENT_USER;
 select system_user();
 ```
 
-**MSSQL**
+## MSSQL
+
 - Enable xp_cmdshell with sp_configure
 ```sh
 EXEC sp_configure 'show advanced options', '1'

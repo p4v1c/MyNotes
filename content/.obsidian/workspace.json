@@ -41,20 +41,6 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Web/Command injection.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Command injection"
-            }
-          },
-          {
-            "id": "fe0433737b5d2ff4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "notes/Web/CSRF.md",
                 "mode": "source",
                 "source": false
@@ -64,7 +50,7 @@
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -205,34 +191,34 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "fe0433737b5d2ff4",
+  "active": "341edf8cb02dad8d",
   "lastOpenFiles": [
-    "notes/Ressources/Link.md",
-    "notes/Web/Graphsql.md",
-    "notes/AD/Ntlm relay.md",
-    "notes/Web/_index.md",
-    "notes/Web/CSRF.md",
-    "notes/Web/Web Cache.md",
-    "privacy.md",
-    "_index.md",
-    "notes/Web/Wordpress.md",
-    "notes/Web/SSRF.md",
-    "notes/Web/JWT.md",
-    "notes/Web/File Upload.md",
     "notes/Web/Cors.md",
     "notes/Web/Command injection.md",
-    "notes/Pwn-Reverse/Android-Reverse.md",
-    "notes/Code/ASM.md",
+    "notes/Services/SNMP.md",
+    "notes/Services/SMTP.md",
+    "notes/Services/RTSP.md",
+    "notes/Services/Rsync.md",
+    "notes/Services/RPCbind.md",
+    "notes/Services/MSSQL - Mysql.md",
+    "notes/Services/LDAP.md",
+    "notes/Services/IIS.md",
+    "notes/Services/FTP.md",
+    "notes/Services/_index.md",
     "notes/Code/C.md",
-    "notes/Code/Bash.md",
-    "notes/Code/Nodejs.md",
-    "notes/Code/Php.md",
-    "notes/Code/Ruby.md",
-    "notes/Code/Lua.md",
-    "notes/Code/Java.md",
     "notes/Code/Go.md",
-    "notes/Code/C++.md",
-    "blog/example/index.md",
+    "notes/Code/Bash.md",
+    "notes/Code/_index.md",
+    "notes/AD/Trust Attack.md",
+    "notes/AD/Transferring file.md",
+    "notes/AD/Tickets.md",
+    "notes/AD/Pivot.md",
+    "notes/AD/Phishing.md",
+    "notes/AD/Password looting.md",
+    "notes/AD/Ntlm relay.md",
+    "notes/AD/Linux.md",
+    "notes/AD/KrbRelaiUp.md",
+    "notes/AD/Kerberoast-Asreproast.md",
     "notes/Assets/jwt6.png",
     "notes/Assets/JWT.png",
     "notes/Assets/Race Condition.png",

@@ -17,7 +17,7 @@ seo:
   noindex: false # false (default) or true
 ---
 
-
+## FTP
 - SSH port open + credential   :
 Check if your are able to upload files  ,  if you can create a .ssh folder and upload a authorized_keys file in it .
 

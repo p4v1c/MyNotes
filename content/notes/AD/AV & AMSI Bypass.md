@@ -13,12 +13,13 @@ seo:
   canonical: "" # custom canonical URL (optional)
   robots: "" # custom robot tags (optional)
 ---
-
+## AMSI 
 Ressources: 
 
 https://amsi.fail/
 https://github.com/0xb11a1/yetAnotherObfuscator/releases
 
+## AV 
 - Disable AV :
 ```sh
 Set-MpPreference -DisableRealtimeMonitoring $true

