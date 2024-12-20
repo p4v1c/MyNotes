@@ -126,6 +126,7 @@ pwnfox: https://github.com/yeswehack/PwnFox
 https://github.com/spaze/hashes
 
 https://www.thc.org/segfault/
+https://www.thc.org/
 
 https://nip.io/
 
@@ -184,3 +185,5 @@ hashmob
 https://github.com/zmap/zmap : zmap
 
 requestrepc
+
+https://editor.swagger.io/

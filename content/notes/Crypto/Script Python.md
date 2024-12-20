@@ -52,6 +52,10 @@ var="0xc"
 print(int(var,16))
 ```
 
+**Bytes to string :** 
+```sh
+'Hello World'.encode().hex()
+```
 ### Base64 Encoding
 
 Python, after importing the base64 module with `import base64`, you can use the `base64.b64encode()` function. Remember to decode the hex first as the challenge description states.
@@ -101,14 +105,13 @@ XOR (Exclusive OR) is a bitwise operator that returns 0 if the bits are the same
 
 **XOR Properties:**
 
-
 | A   | B   | Output |
 | --- | --- | ------ |
 | 0   | 0   | 0      |
 | 0   | 1   | 1      |
 | 1   | 0   | 1      |
 | 1   | 1   | 0      |
-
+|     |     |        |
 
 - **Commutative:** A ⊕ B = B ⊕ A
 - **Associative:** A ⊕ (B ⊕ C) = (A ⊕ B) ⊕ C
@@ -118,8 +121,6 @@ XOR (Exclusive OR) is a bitwise operator that returns 0 if the bits are the same
 In Python, you can use XOR to encrypt and decrypt data, and these properties are essential for understanding how XOR-based encryption works.
 
 Here's a practical example:
-
-
 
 ```python 
 #XORing each character of the string "crypto" with the integer 13 
@@ -136,5 +137,3 @@ else:
 	i=i+1
 print(flag)
 ```
-
-

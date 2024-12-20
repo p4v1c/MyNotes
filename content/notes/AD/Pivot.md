@@ -27,7 +27,7 @@ seo:
 - **Usage** : Redirige un port de la machine distante vers un port sur votre machine locale.
 		- **Exemple** : `ssh -R 4000:127.0.0.1:3000 johndoe@192.168.1.100`
 			
-      ssh -R1080: pentest@10.0.1.26 -N
+      ssh -R1080: pentest@10.10.10.10 -N
 
 ## Chisel / Proxychain
 

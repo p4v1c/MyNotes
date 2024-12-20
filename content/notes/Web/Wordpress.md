@@ -17,9 +17,7 @@ seo:
   noindex: false # false (default) or true
 ---
 
-
-
 - User enumeration : 
 ```sh
-curl https://rec-mesavantages-sociaux.int.sncf.fr/wp-json/wp/v2/users | jq -r '.[].slug'
+curl https://website.fr/wp-json/wp/v2/users | jq -r '.[].slug'
 ```
