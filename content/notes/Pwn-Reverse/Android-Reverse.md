@@ -70,7 +70,7 @@ frida -U -f com.some.appdiscovery -l fridascript.js
 
 - Check is devices detected :
 ```sh
-adb shell pm list packages
+adb devices
 ```
 
 - List package on the device : 
