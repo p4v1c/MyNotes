@@ -233,3 +233,25 @@ ip -s -s neigh flush all
 ```sh
 sudo lsof -i:<port_number>
 ```
+
+##### Git
+
+- Set up :
+```sh
+ssh-keygen -t rsa -b 4096 -C "wesh@wesh.com"
+git clone git@github.com:username/repository.git
+git init
+git remote add origin git@github.com:username/repository.git
+```
+
+- Test ssh connection : 
+```sh
+ssh -T git@github.com
+```
+
+- Push :
+```sh
+git add .
+git commit -m "New data"
+git push origin main
+```
