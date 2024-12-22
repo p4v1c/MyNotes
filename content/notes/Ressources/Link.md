@@ -187,3 +187,5 @@ https://github.com/zmap/zmap : zmap
 requestrepc
 
 https://editor.swagger.io/
+
+https://blog.vidocsecurity.com/blog/escalation-of-debug-mode-in-django/

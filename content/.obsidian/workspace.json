@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/AD/Tickets.md",
+                "file": "notes/Ressources/Command linux.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tickets"
+              "title": "Command linux"
             }
           }
         ],
@@ -193,14 +193,17 @@
   },
   "active": "341edf8cb02dad8d",
   "lastOpenFiles": [
+    "notes/Ressources/Debian-Setup.md",
+    "notes/Ressources/Link.md",
+    "notes/AD/Discovery.md",
+    "notes/Ressources/Command linux.md",
+    "notes/Web/SSRF.md",
+    "notes/Ressources/Arch-Setup.md",
+    "notes/AD/Tickets.md",
     "notes/AD/Pivot.md",
     "notes/Web/Wordpress.md",
-    "notes/Ressources/Link.md",
     "notes/Ressources/Tmux config file.md",
-    "notes/Ressources/Debian-Setup.md",
     "notes/Ressources/KVM.md",
-    "notes/Ressources/Command linux.md",
-    "notes/Ressources/Arch-Setup.md",
     "notes/Ressources/_index.md",
     "notes/Web/Cors.md",
     "notes/Web/CSRF.md",
@@ -217,9 +220,6 @@
     "notes/Web/Command injection.md",
     "notes/Services/SNMP.md",
     "notes/Services/SMTP.md",
-    "notes/Services/RTSP.md",
-    "notes/Services/Rsync.md",
-    "notes/Services/RPCbind.md",
     "notes/Assets/jwt6.png",
     "notes/Assets/JWT.png",
     "notes/Assets/Race Condition.png",

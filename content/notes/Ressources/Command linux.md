@@ -17,7 +17,6 @@ seo:
   noindex: false # false (default) or true
 ---
 
-
 ##### Introduction à awk
 
 awk est utilisé pour manipuler des données structurées en lignes et colonnes. Il peut effectuer des opérations de filtrage, de transformation, et de calcul sur des fichiers texte.
@@ -227,4 +226,10 @@ ip -s -s neigh flush all
 - Passer de maj a minuscule :
 ```sh
  cat fichier.txt | tr '[:upper:]' '[:lower:]' > fichier_minuscule.txt
+```
+
+##### Check Port 
+
+```sh
+sudo lsof -i:<port_number>
 ```
