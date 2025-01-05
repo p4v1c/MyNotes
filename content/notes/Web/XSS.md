@@ -16,7 +16,9 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
+- XSS Cheat sheet (Portswigger)
+https://portswigger.net/web-security/cross-site-scripting/cheat-sheet
 
+- CSP ressources:
+https://csp-evaluator.withgoogle.com/ 
 
-CSP ressources:
-https://csp-evaluator.withgoogle.com/

@@ -93,6 +93,7 @@ windapsearch -d <Domain Name> --dc-ip <Domain Controller IP> -U | tee windapsear
 smbclient //10.10.196.22/SYSVOL -U library
 smbclient \\\\$t\\SYSVOL -U baby2/library
 smbclient.py 'DOMAIN'/'USER':'PASSWORD'@'DOMAIN_CONTROLLER'
+smbclientng -u "" -p "" --host "ip" -d "domain.local
 ```
 
 ```sh

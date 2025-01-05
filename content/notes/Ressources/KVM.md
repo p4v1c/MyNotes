@@ -16,7 +16,13 @@ seo:
   robots: "" # custom robot tags (optional)
   noindex: false # false (default) or true
 ---
+- Just Follow this tuto : 
+https://www.youtube.com/watch?v=Zei8i9CpAn0
 
+- Start the network for the vm :
 ```sh
 sudo virsh net-start default
 ```
+
+- Here is to crack Office :
+https://github.com/massgravel/Microsoft-Activation-Scripts

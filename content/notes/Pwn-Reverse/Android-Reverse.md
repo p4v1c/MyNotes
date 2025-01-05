@@ -80,7 +80,7 @@ adb shell pm list packages
 
 - Get the path of the package :
 ```sh
-adb shell pm path com.example.someapp-2.apk
+adb shell pm path com.example.someapp
 ```
 
 - Download the apk : 
