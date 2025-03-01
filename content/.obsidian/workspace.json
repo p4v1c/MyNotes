@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Ressources/KVM.md",
+                "file": "notes/Wifi/Evil Twin.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "KVM"
+              "title": "Evil Twin"
             }
           }
         ]
@@ -164,10 +164,23 @@
   },
   "active": "292e7fe35e6d7ae0",
   "lastOpenFiles": [
+    "notes/Wifi/Deauth.md",
+    "notes/Wifi/Evil Twin.md",
+    "notes/Wifi/Untitled.md",
+    "notes/Web/JWT.md",
+    "notes/Wifi/_index.md",
+    "notes/Web/Command injection.md",
+    "notes/Wifi/Android-Reverse.md",
+    "notes/Web/XSS.md",
+    "notes/_index.md",
+    "notes/Wifi/_index 1.md",
+    "notes/_index 1.md",
+    "notes/Web/_index.md",
+    "notes/Wifi",
+    "notes/Ressources/KVM.md",
+    "Wifi",
     "notes/AD/Password looting.md",
     "notes/AD/Local Privilege escalation/Linux.md",
-    "notes/Ressources/KVM.md",
-    "notes/Web/XSS.md",
     "notes/Web/Web Cache.md",
     "notes/AD/Discovery.md",
     "notes/AD/Hash stealing.md",
@@ -179,17 +192,6 @@
     "notes/Ressources/Tmux config file.md",
     "notes/Code/ASM.md",
     "notes/Code/Bash.md",
-    "notes/Code/Lua.md",
-    "notes/Code/Nodejs.md",
-    "notes/Code/Php.md",
-    "notes/Code/Ruby.md",
-    "notes/Pwn-Reverse/Android-Reverse.md",
-    "notes/Web/Cors.md",
-    "notes/Web/Command injection.md",
-    "notes/Web/Graphsql.md",
-    "notes/Web/File Upload.md",
-    "notes/Web/SSRF.md",
-    "notes/AD/Tickets.md",
     "notes/my",
     "notes/Assets/jwt6.png",
     "notes/Assets/JWT.png",
