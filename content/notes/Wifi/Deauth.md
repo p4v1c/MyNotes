@@ -32,7 +32,9 @@ ifconfig wlp0s20f3 up
 
 - Capture mac address with AiroDump : 
 ```sh
-airodump-ng -c 1 wlp0s20f3 
+airodump-ng -c 1 wlp0s20f3mon
+airodump-ng --bssid WIFI -w capture wlp0s20f3mon
+airodump-ng wlp0s20f3mon --essid "name"
 ```
 
 Grab the mac address of the router and the victim .
