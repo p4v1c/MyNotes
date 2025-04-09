@@ -56,6 +56,12 @@ print(int(var,16))
 ```sh
 'Hello World'.encode().hex()
 ```
+
+**Decimal to hex**
+
+```python
+print(hex(152))
+```
 ### Base64 Encoding
 
 Python, after importing the base64 module with `import base64`, you can use the `base64.b64encode()` function. Remember to decode the hex first as the challenge description states.

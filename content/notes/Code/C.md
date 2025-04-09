@@ -83,9 +83,12 @@ Example of using `if`:
 
 ```c
 if (condition) {// Code to execute if the condition is true 
-} else if (other_condition) {
-} else {     // Code to execute if the other condition is true    
-			 // Code to execute if none of the conditions are true }`
+}
+else if(other_condition)
+{
+} 
+else {     // Code to execute if the other condition is true    
+}	 // Code to execute if none of the conditions are true }`
 ```
 
 
@@ -120,14 +123,12 @@ In C, you can define your own functions. To do so, you need to specify the retur
 Example of declaring and defining a function:
 
 ```c
-int add(int a, int b) {     return a + b; }
+int add(int a, int b) { 
+	return a + b; 
+}
 ```
 
-
 To call this function:
-
-
-
 `int result = add(5, 3);`
 
 #### 2. Parameter Passing
@@ -138,7 +139,7 @@ Example of passing by value:
 
 ```c
 void doubleValue(int x) {
-x = x * 2; 
+	x = x * 2; 
 }
 ```
 
@@ -193,7 +194,6 @@ int third_element = array[2];
 int matrix[3][3]; // Declaration of a 3x3 matrix
 ```
 
-
 ### Structures and Unions
 
 **Structure Definition** Structures allow you to create custom data types that group together multiple fields of different types.
@@ -203,18 +203,14 @@ struct Person {
 char name[50];     
 int age; 
 }
-
 ```
 
-
 **Accessing Structure Members** To access the members of a structure, use the dot operator `.`
-
 
 ```c
 struct Person person1; 
 person1.age = 25;
 ```
-
 
 **Using Unions** Unions are similar to structures but share the same memory location for all their members. Only one member of a union can be used at a time.
 
@@ -223,7 +219,6 @@ union Data {
 int integer;
 double real; }
 ```
-
 
 ### Strings
 
@@ -287,31 +282,24 @@ Pointers are one of the most powerful features in the C language. They allow dir
 A pointer is a variable that stores the memory address of another variable. In other words, it "points" to a memory location where a value is stored. This value can be of any data type, such as an integer, character, or even another pointer.
 
 Pointers are powerful because they enable direct manipulation of memory, but they also require great care to avoid errors that can lead to program crashes or memory leaks.
-
 ### Pointer Declaration
 
 To declare a pointer in C, use the `*` operator. For example, to declare a pointer to an integer (`int`), use the following syntax:
-
 
 ```c
 int *ptr;
 ```
 
-
 This creates a variable `ptr` that can store the memory address of a variable of type `int`.C
-
 ## Assigning Values to a Pointer
 
 A pointer must be initialized with the address of an existing variable. You can use the `&` operator to obtain the memory address of a variable. For example:
-
 
 ```c 
 int x = 10; int *ptr = &x; // ptr points to variable x
 ```
 
-
 Here, `ptr` is initialized with the memory address of `x`.
-
 ## Accessing the Pointed Value
 
 To access the value pointed to by a pointer, use the `*` operator. For example:
@@ -320,9 +308,7 @@ To access the value pointed to by a pointer, use the `*` operator. For example:
 int y = *ptr; // y takes the value of x (10)
 ```
 
-
 In this example, `*ptr` retrieves the value stored at the memory address pointed to by `ptr`, which is the value of `x`.
-
 ## Null Pointers
 
 A pointer can also be defined as null by assigning it the special value `NULL`. A null pointer does not point to any memory address and is commonly used to indicate the absence of a value.
@@ -331,18 +317,16 @@ A pointer can also be defined as null by assigning it the special value `NULL`. 
 int *ptr = NULL; // Null pointer
 ```
 
-
 ## Pointers to Arrays
 
 Pointers are often used to manipulate arrays in C. An array is essentially a pointer to its first element. For example:
 
 ```c
-int arr[5] = {1, 2, 3, 4, 5}; int *ptr = arr; // ptr points to the first element of the array
+int arr[5] = {1, 2, 3, 4, 5}; 
+int *ptr = arr; // ptr points to the first element of the array
 ```
 
-
 In this example, `ptr` points to the first value in `arr`, which means that `*ptr` is equivalent to `arr[0]`.
-
 ## Pointer Operations
 
 You can perform arithmetic operations on pointers, such as incrementing and decrementing. This allows you to traverse an array or access adjacent memory locations.
@@ -366,12 +350,9 @@ int value = 5;
 increment(&value);  // Pass the address of value to the function     
 					// After incrementing, value is now 6 
 }
-
 ```
-``
 
 In this example, the `increment` function takes a pointer to an integer `x` as a parameter, allowing it to directly modify the value pointed to by `x`.
-
 ## Dynamic Memory Allocation
 
 Dynamic memory allocation is a fundamental concept in C. It allows you to create data structures of variable size during program execution. This is particularly useful when the size of the data structure is not known in advance or when efficient memory management is required.
