@@ -16,6 +16,8 @@ seo:
   robots: ""
   noindex: false
 ---
+# Vim
+
 ## 🚀 BASIC MOVEMENT
 
 | Command    | What it does                                 |
@@ -96,3 +98,18 @@ seo:
 | `x`               | Delete selected **columns**                    |
 | `d`               | Delete selected **block**                      |
 | `r<char>`         | Replace block with a single character          |
+
+- Config file :
+
+```sh
+set number              " Line numbers
+set relativenumber      " Relative lines
+set clipboard=unnamed   " Use system clipboard
+set tabstop=4           " Tabs = 4 spaces
+set shiftwidth=4
+set expandtab
+syntax on               " Highlight code
+set hlsearch incsearch  " Highlight + incremental search
+```
+
+# NeoVim
