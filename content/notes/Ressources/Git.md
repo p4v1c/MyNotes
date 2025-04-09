@@ -47,6 +47,17 @@ git branch -r # in remote
 git branch -a # all
 ```
 
+- Merge : 
+```sh
+git merge feature/todo
+```
+
+- if conflicts →  You must fix every files with conflics :
+```sh
+#  conflics solves
+git add <fichiers corrigés>
+git commit
+```
 ### SSH
 
 #### Without Config file 
@@ -88,6 +99,7 @@ git clone git@github.com:your-user/project.git
 ```
 
 #### With a config file 
+
 - Create a config file : 
 ```sh
 nano ~/.ssh/config
@@ -133,3 +145,37 @@ git push
 ```sh
 git push -u origin feature/my-new-branch
 ```
+
+### .gitignore
+
+The `.gitignore` file tells Git which files or folders to **ignore** (not track or commit).
+
+- Create a file named `.gitignore` in your project root:
+
+```sh
+# Node
+node_modules/
+.env
+dist/
+*.log
+
+# macOS
+.DS_Store
+
+# Vim swap files
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+```
+
+`.gitignore` **does not remove** files that are already tracked!
+
+- If you already committed a file and want Git to stop tracking it:
+```sh
+git rm --cached fichier
+```
+
+- Git Ignore generator :
+https://mrkandreev.name/snippets/gitignore-generator/
