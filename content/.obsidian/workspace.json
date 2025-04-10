@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Ressources/Git.md",
+                "file": "notes/Ressources/Vim.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Git"
+              "title": "Vim"
             }
           }
         ]
@@ -165,6 +165,8 @@
   },
   "active": "15fed07b431f979a",
   "lastOpenFiles": [
+    "notes/Web/_index.md",
+    "notes/Ressources/Git.md",
     "notes/Ressources/KVM.md",
     "notes/Ressources/Command linux.md",
     "notes/Ressources/Debian-Setup.md",
@@ -172,7 +174,6 @@
     "notes/Ressources/Tmux config file.md",
     "notes/Ressources/Vim.md",
     "notes/Ressources/Link.md",
-    "notes/Ressources/Git.md",
     "notes/Code/Database.md",
     "notes/Code/Bash.md",
     "Untitled.md",
@@ -190,7 +191,6 @@
     "notes/Code/Java.md",
     "notes/Code/C.md",
     "notes/Ressources/_index.md",
-    "notes/AD/Local Privilege escalation/Windows.md",
     "notes/Wifi",
     "Wifi",
     "notes/my",

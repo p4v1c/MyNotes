@@ -99,6 +99,18 @@ seo:
 | `d`               | Delete selected **block**                      |
 | `r<char>`         | Replace block with a single character          |
 
+- Substitution :
+```sh
+Ctrl+v
+:%s/:.*//
+```
+Don't forget to press `Esc`
+
+**`:%s`** → applies the substitution to **all lines** in the file.
+**`:`** → matches the literal colon character.
+**`.*`** → matches **everything that comes after** the colon.
+**`//`** → replaces the matched text with nothing (i.e., deletes it).
+
 - Config file :
 
 ```sh
@@ -113,3 +125,6 @@ set hlsearch incsearch  " Highlight + incremental search
 ```
 
 # NeoVim
+
+- Resource config file :
+https://github.com/ntk148v/neovim-config/tree/master?tab=readme-ov-file#2-installation
